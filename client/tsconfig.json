@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "outDir": "./dist",
+    "strict": true,
+    "sourceMap": true,
+    "noImplicitAny": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "module": "commonjs",
+    "target": "es6",
+    "lib": ["es2016", "dom"],
+    "jsx": "react",
+    "typeRoots": ["node_modules/@types", "src/types"],
+    "resolveJsonModule": true,
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
+    "baseUrl": ".",
+    "paths": {
+      "Components/*": ["src/components/*"],
+      "Types/*": ["src/types/*"],
+      "Root*": ["src/*"]
+    }
+  },
+  "include": ["./src/**/*"],
+  "exclude": ["node_modules"],
+}
