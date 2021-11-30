@@ -1,6 +1,8 @@
 import React from 'react';
 import './styles.css';
+//TODO: Alias
 import word from '../../../../public/images/word.svg';
+import download from '../../../../public/images/download.svg';
 
 export const FileContainer: React.FC = ({ children }) => {
     return (
@@ -26,7 +28,7 @@ export const File = () => {
                 Updated 50 minutes ago
             </div>
             <div className='file_container_item__controls'>
-                <button>d</button>
+                <button><img src={download} alt="onlyoffice_download" onClick={() => alert(1)} /></button>
                 <button>Edit in ONLYOFFICE</button>
             </div>
         </div>
