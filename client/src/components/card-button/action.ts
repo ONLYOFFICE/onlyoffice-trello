@@ -9,10 +9,11 @@ export function getCardButton(
     {
       icon: props.baseUrl,
       text: "ONLYOFFICE",
+      condition: 'signedIn',
       callback: (t: Trello.PowerUp.IFrame) =>
         t.modal({
           title: "ONLYOFFICE",
-          url: `/card-button.html`,
+          url: `/card-button`,
           fullscreen: true,
         }),
     },

@@ -2,6 +2,8 @@ import React, { Suspense } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { TrelloProvider, TrelloStore } from "Root/context";
 
+import { File, FileContainer } from "Components/card-button/file/File";
+
 const CardButton = React.lazy(
   () => import("./components/card-button/CardButton")
 );
@@ -15,13 +17,35 @@ function TrelloRouter() {
       <Suspense fallback={<div style={{ margin: "6px" }}>Loading..</div>}>
         <Router basename="/">
           <Switch>
-            <Route exact path="/card-button.html">
+            <Route exact path="/card-button">
               <CardButton />
             </Route>
-            <Route exact path="/show-settings.html">
+            <Route exact path="/show-settings">
               <Settings />
             </Route>
-            <Route>Home</Route>
+            <Route>
+              <FileContainer>
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+                <File />
+              </FileContainer>
+            </Route>
           </Switch>
         </Router>
       </Suspense>
