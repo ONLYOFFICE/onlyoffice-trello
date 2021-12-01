@@ -1,0 +1,24 @@
+.info-container {
+    width: 100%;
+    height: auto;
+    min-height: 9rem;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    overflow-y: scroll;
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns: 0.5fr 20fr 0.5fr;
+    grid-template-rows: 0.75fr 1fr 0.75fr;
+    align-items: center;
+    justify-content: center;
+}
+
+.info-container__item__main {
+    grid-column-start: 0;
+    grid-column-end: 3;
+    justify-self: start;
+}
+
+.info-container__item__icon {
+    margin-left: 0.45rem;
+    margin-right: 0.45rem;
+}

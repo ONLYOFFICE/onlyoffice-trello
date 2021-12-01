@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { TrelloProvider, TrelloStore } from "Root/context";
 
 import { File, FileContainer } from "Components/card-button/file/File";
+import { Header } from "Components/card-button/header/Header";
+import { Info } from "Components/card-button/info/Info";
 
 const CardButton = React.lazy(
   () => import("./components/card-button/CardButton")
@@ -24,27 +26,31 @@ function TrelloRouter() {
               <Settings />
             </Route>
             <Route>
-              <FileContainer>
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-                <File />
-              </FileContainer>
+              <div style={{ margin: "1rem 3rem 0 3rem" }}>
+                <Header />
+                <Info />
+                <FileContainer>
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                  <File />
+                </FileContainer>
+              </div>
             </Route>
           </Switch>
         </Router>

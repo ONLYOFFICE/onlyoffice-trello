@@ -1,0 +1,33 @@
+#searchbar_container {
+  display: flex;
+  width: 40%;
+}
+
+#searchbar_container > * {
+  margin: 0;
+}
+
+#searchbar_container__input {
+  padding: 10px;
+  font-size: 17px;
+  border: 0.5px solid #E5E5E5;
+  float: left;
+  background-color: #fafbfc;
+  border: 0px;
+  margin-bottom: 0px;
+}
+
+#searchbar_container__btn,
+#searchbar_container__btn:hover,
+#searchbar_container__btn:focus {
+  position: relative;
+  transform: translateX(-8%);
+  float: left;
+  padding: 10px;
+  background-color: #fafbfc;
+  font-size: 17px;
+  border: 2px solid #e5e5e5;
+  border-left: none;
+  cursor: pointer;
+  outline: none;
+}
