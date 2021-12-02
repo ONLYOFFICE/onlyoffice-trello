@@ -1,0 +1,7 @@
+.onlyoffice-main-container {
+    margin: 1rem 3rem 0 3rem;
+    display: flex;
+    height: 90vh;
+    max-height: 90vh;
+    flex-direction: column;
+}

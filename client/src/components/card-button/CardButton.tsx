@@ -4,6 +4,11 @@ import { Trello } from "Types/trello";
 import { observer } from "mobx-react-lite";
 
 import "./styles.css";
+import { FileContainer } from "./file/File";
+import { Header } from "./header/Header";
+import { Info } from "./info/Info";
+import { File } from "./file/File";
+import { Main } from "./main/Main";
 
 const CardButton = observer(() => {
   const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
@@ -81,22 +86,30 @@ const CardButton = observer(() => {
   return (
     <div id="container">
       {isEditor && store.authorization && store.onlyofficeSettings.ds ? (
-          <iframe
-            src={`${process.env.BACKEND_HOST}/onlyoffice/editor?token=${store.editorTokenJwt}&epayload=${store.editorPayloadJwt}&config=${store.editorConfigJwt}`}
-            style={{
-              display: "block",
-              overflow: "auto",
-              height: "100vh",
-              width: "100vw",
-              border: "none",
-            }}
-            name="iframeEditor"
-            id="iframeEditor"
-          />
+        <iframe
+          src={`${process.env.BACKEND_HOST}/onlyoffice/editor?token=${store.editorTokenJwt}&epayload=${store.editorPayloadJwt}&config=${store.editorConfigJwt}`}
+          style={{
+            display: "block",
+            overflow: "auto",
+            height: "100vh",
+            width: "100vw",
+            border: "none",
+          }}
+          name="iframeEditor"
+          id="iframeEditor"
+        />
       ) : (
         <>
-          <p>ONLYOFFICE</p>
-          {files.map((file) => {
+          <Main>
+            <Header />
+            <Info />
+            <FileContainer>
+              {files.map((file) => {
+                return <File key={file.id} file={file}/>
+              })}
+            </FileContainer>
+          </Main>
+          {/* {files.map((file) => {
             return (
               <div
                 key={file.id}
@@ -113,7 +126,7 @@ const CardButton = observer(() => {
                 </button>
               </div>
             );
-          })}
+          })} */}
         </>
       )}
     </div>

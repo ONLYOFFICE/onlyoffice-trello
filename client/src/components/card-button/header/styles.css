@@ -1,0 +1,18 @@
+.onlyoffice-header {
+  display: flex;
+  justify-content: space-between;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.onlyoffice-header > img {
+  width: 10rem;
+  height: 3rem;
+}
+
+@media all and (max-width: 582px) {
+  .onlyoffice-header {
+    justify-content: center;
+    flex-direction: column;
+  }
+}

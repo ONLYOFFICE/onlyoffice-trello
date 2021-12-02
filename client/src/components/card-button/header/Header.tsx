@@ -1,16 +1,12 @@
 import React from "react";
 import logo from "../../../../public/images/logo.svg";
 import { Searchbar } from "../searchbar/Searchbar";
+import "./styles.css";
 
 export const Header = () => {
   return (
     <div
-      style={{
-        display: "flex",
-        justifyContent: "space-between",
-        height: "auto",
-        marginBottom: "1rem",
-      }}
+      className="onlyoffice-header"
     >
       <img src={logo} />
       <Searchbar />

@@ -5,16 +5,23 @@ import "./styles.css";
 
 export const Info = () => {
   return (
-    <div className="info-container">
-      <img className="info-container__item__icon" src={info} />
-      <b style={{ justifySelf: "start" }}>
-        ONLYOFFICE Power-Up is suitable for files less than 5 MB
-      </b>
-      <img className="info-container__item__icon" src={cross} />
-      <p className="info-container__item__main">
-        Only files below this limit can be opened here. .....
-      </p>
-      <b className="info-container__item__main">Never show again</b>
+    <div className="info-container" style={{ position: "relative" }}>
+      <div className="info-container__top">
+        <img
+          className="info-container__item__icon"
+          style={{ marginLeft: "1rem", marginRight: "0.5rem", width: "1rem" }}
+          src={info}
+        />
+        <b className="info-container__item__main-text">
+          ONLYOFFICE Power-Up is suitable for files less than 5 MB
+        </b>
+        <img
+          className="info-container__item__icon"
+          style={{ paddingRight: "1rem", width: "0.5rem" }}
+          src={cross}
+        />
+      </div>
+      <a className="info-container__item__bottom">Never show again</a>
     </div>
   );
 };

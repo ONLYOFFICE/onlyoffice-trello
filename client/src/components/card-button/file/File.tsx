@@ -10,20 +10,22 @@ export const FileContainer: React.FC = ({ children }) => {
     <>
       <div className="file_header">
         <h2>Files</h2>
-        <Dropdown />
+        <div>
+          <Dropdown />
+        </div>
       </div>
       <div className="file_container">{children}</div>
     </>
   );
 };
 
-export const File = () => {
+export const File: React.FC<{ file?: any }> = (props) => {
   const [isMobile, setIsMobile] = useState(() => {
-    return window.innerWidth == 745;
+    return window.innerWidth == 941;
   });
   useEffect(() => {
     const onResize = () => {
-      setIsMobile(window.innerWidth <= 745);
+      setIsMobile(window.innerWidth <= 941);
     };
     window.addEventListener("resize", onResize);
 
@@ -35,13 +37,21 @@ export const File = () => {
     <div className="file_container_item">
       {!isMobile ? (
         <>
-          <div className="file_container_item__main">
+          <div className="file_container_item__main" style={{maxWidth: '50%'}}>
             <img src={word} />
-            <h2>File.docx</h2>
+            <h2>
+              {
+                "File.docx"
+              }
+            </h2>
           </div>
-          <div className="file_container_item__size">4.72kB</div>
-          <div className="file_container_item__updated">
-            Updated 50 minutes ago
+          <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
+            <p className="file_container_item__main__text__item" style={{marginRight: '4rem'}}>
+              4.72kB
+            </p>
+            <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
+              50 minutes ago
+            </p>
           </div>
         </>
       ) : (
@@ -49,10 +59,16 @@ export const File = () => {
           <div className="file_container_item__main">
             <img src={word} />
             <div className="file_container_item__main_mobile">
-              <h2>File.docx</h2>
-              <div>
-                <p className="file_container_item__main__text__item">4.72kB</p>
+              <h2>
+                {
+                  "File.docx"
+                }
+              </h2>
+              <div className="file_container_item__main__text">
                 <p className="file_container_item__main__text__item">
+                  4.72kB
+                </p>
+                <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
                   Updated 50 minutes ago
                 </p>
               </div>
