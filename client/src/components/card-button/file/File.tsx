@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import "./styles.css";
 //TODO: Alias
-import word from "../../../../public/images/word.svg";
 import download from "../../../../public/images/download.svg";
+import { getIconByExt } from "../../../utils/file";
 import { Dropdown } from "../dropdown/Dropdown";
 
 export const FileContainer: React.FC = ({ children }) => {
@@ -34,6 +34,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
       window.removeEventListener("resize", onResize);
     };
   }, []);
+  const extIcon = getIconByExt(props.file.name.split('.')[1]);
   return (
     <div className="file_container_item">
       {!isMobile ? (
@@ -42,7 +43,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
             className="file_container_item__main"
             style={{ maxWidth: "50%" }}
           >
-            <img src={word} />
+            <img src={extIcon} />
             <h2>{props.file.name}</h2>
           </div>
           <div
@@ -62,9 +63,9 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
       ) : (
         <>
           <div className="file_container_item__main">
-            <img src={word} />
+            <img src={extIcon} />
             <div className="file_container_item__main_mobile">
-              <h2>{"File.docx"}</h2>
+              <h2>{props.file.name}</h2>
               <div className="file_container_item__main__text">
                 <p className="file_container_item__main__text__item">4.72kB</p>
                 <p className="file_container_item__main__text__item file_container_item__main__text__item_long">

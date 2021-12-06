@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select, { components } from "react-select";
+import { useStore } from "../../../context";
 import "./styles.css";
 
 const tOptions = [
@@ -19,7 +20,17 @@ const CheckIcon = () => {
 };
 
 const Menu = (props: any) => {
-  const [selected, setSelected] = useState<0 | 1 | 2>(0);
+  const store = useStore();
+
+  const [selected, setSelected] = useState<null | "ASC" | "DESC">(() => {
+    return store.filters.sortOrder || null;
+  });
+
+  const handleSortOrder = (order: "ASC" | "DESC") => {
+    store.filters.sortOrder = order;
+    setSelected(order);
+  };
+
   return (
     <>
       <components.Menu {...props}>
@@ -27,16 +38,22 @@ const Menu = (props: any) => {
           <div>{props.children}</div>
           <hr />
           <div>
-            <button onClick={() => setSelected(1)} className="dropdown-button">
+            <button
+              onClick={() => handleSortOrder("ASC")}
+              className="dropdown-button"
+            >
               Ascending
-              <div style={{width: '10%'}}>
-                {selected == 1 && <CheckIcon />}
+              <div style={{ width: "10%" }}>
+                {selected == "ASC" && <CheckIcon />}
               </div>
             </button>
-            <button onClick={() => setSelected(2)} className="dropdown-button">
+            <button
+              onClick={() => handleSortOrder("DESC")}
+              className="dropdown-button"
+            >
               Descending
-              <div style={{width: '10%'}}>
-                {selected == 2 && <CheckIcon />}
+              <div style={{ width: "10%" }}>
+                {selected == "DESC" && <CheckIcon />}
               </div>
             </button>
           </div>
@@ -47,10 +64,21 @@ const Menu = (props: any) => {
 };
 
 export const Dropdown = () => {
+  const store = useStore();
+
   const [selected, setSelected] = useState<{
     value: string;
     label: string;
-  } | null>(null);
+  } | null>(() => {
+    return tOptions.find((opt) => opt.value === store.filters.sortBy) || null;
+  });
+
+  const handleSortType = (type: { value: string; label: string } | null) => {
+    setSelected(type);
+    if (type?.value) {
+      store.filters.sortBy = type.value as "name" | "size" | "type" | "modified" | undefined;
+    }
+  };
   return (
     <div style={{ display: "flex" }}>
       <Select
@@ -59,14 +87,14 @@ export const Dropdown = () => {
           control: (css) => {
             return {
               ...css,
-              width: '10rem',
-            }
-          }
+              width: "10rem",
+            };
+          },
         }}
         options={tOptions}
         defaultValue={selected}
         isSearchable={false}
-        onChange={setSelected}
+        onChange={handleSortType}
         components={{ Menu }}
       />
     </div>

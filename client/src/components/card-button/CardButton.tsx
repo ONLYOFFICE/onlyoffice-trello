@@ -5,10 +5,12 @@ import { observer } from "mobx-react-lite";
 
 import "./styles.css";
 import { FileContainer } from "./file/File";
+import { isExtensionSupported } from "../../utils/file";
 import { Header } from "./header/Header";
 import { Info } from "./info/Info";
 import { File } from "./file/File";
 import { Main } from "./main/Main";
+import { getComparator } from "../../utils/sort";
 
 const CardButton = observer(() => {
   const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
@@ -48,6 +50,7 @@ const CardButton = observer(() => {
       store.editorConfigJwt = "";
       store.editorPayloadJwt = "";
       store.editorTokenJwt = "";
+      store.filters = {};
     };
   }, []);
 
@@ -105,9 +108,35 @@ const CardButton = observer(() => {
             <Header />
             <Info />
             <FileContainer>
-              {files.map((file) => {
-                return <File key={file.id} handleDownload={handleDownload} file={file}/>
-              })}
+              {store.filters.sortBy && store.filters.sortOrder ? (
+                <>
+                  {files.sort((getComparator(store.filters.sortBy)?.(store.filters.sortOrder))).map((file) => {
+                    if (!isExtensionSupported(file.name.split(".")[1]))
+                      return null;
+                    return (
+                      <File
+                        key={file.id}
+                        handleDownload={handleDownload}
+                        file={file}
+                      />
+                    );
+                  })}
+                </>
+              ) : (
+                <>
+                  {files.map((file) => {
+                    if (!isExtensionSupported(file.name.split(".")[1]))
+                      return null;
+                    return (
+                      <File
+                        key={file.id}
+                        handleDownload={handleDownload}
+                        file={file}
+                      />
+                    );
+                  })}
+                </>
+              )}
             </FileContainer>
           </Main>
         </>

@@ -5,6 +5,11 @@ import { Trello } from "Types/trello";
 class TrelloStore {
   authorization: string = "";
   activeCard: string = "";
+  filters: {
+    search?: string;
+    sortBy?: "name" | "size" | "type" | "modified";
+    sortOrder?: 'ASC' | 'DESC';
+  } = {};
   onlyofficeSettings: {
     ds: string;
     secret: string;
