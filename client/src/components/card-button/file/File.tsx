@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import dateFormat from 'dateformat';
 import "./styles.css";
 //TODO: Alias
 import download from "../../../../public/images/download.svg";
@@ -56,7 +57,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
               4.72kB
             </p>
             <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
-              50 minutes ago
+              {dateFormat(props.file.date, 'd/m/yy HH:MM')}
             </p>
           </div>
         </>
@@ -69,7 +70,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
               <div className="file_container_item__main__text">
                 <p className="file_container_item__main__text__item">4.72kB</p>
                 <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
-                  Updated 50 minutes ago
+                  {dateFormat(props.file.date, 'd/m/yy HH:MM')}
                 </p>
               </div>
             </div>
