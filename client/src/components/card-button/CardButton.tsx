@@ -113,6 +113,8 @@ const CardButton = observer(() => {
                   {files.sort((getComparator(store.filters.sortBy)?.(store.filters.sortOrder))).map((file) => {
                     if (!isExtensionSupported(file.name.split(".")[1]))
                       return null;
+                    if (store.filters.search && !file.name.includes(store.filters.search))
+                      return null;
                     return (
                       <File
                         key={file.id}
@@ -126,6 +128,8 @@ const CardButton = observer(() => {
                 <>
                   {files.map((file) => {
                     if (!isExtensionSupported(file.name.split(".")[1]))
+                      return null;
+                    if (store.filters.search && !file.name.includes(store.filters.search))
                       return null;
                     return (
                       <File
