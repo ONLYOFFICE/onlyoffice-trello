@@ -8,9 +8,11 @@ class TrelloStore {
   onlyofficeSettings: {
     ds: string;
     secret: string;
+    header: string;
   } = {
     ds: "",
     secret: "",
+    header: "Authorization",
   };
   editorTokenJwt: string = "";
   editorPayloadJwt: string = "";

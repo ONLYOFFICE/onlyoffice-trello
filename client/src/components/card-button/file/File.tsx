@@ -20,7 +20,7 @@ export const FileContainer: React.FC = ({ children }) => {
 };
 
 //TODO: Types
-export const File: React.FC<{ file: any }> = (props) => {
+export const File: React.FC<{ file: any, handleDownload: (attachment: string, filename: string) => Promise<void> }> = (props) => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth <= 941;
   });
@@ -81,7 +81,7 @@ export const File: React.FC<{ file: any }> = (props) => {
             <img src={download} alt="onlyoffice_download" />
           </a>
         </button>
-        <button>Edit in ONLYOFFICE</button>
+        <button onClick={() => props.handleDownload(props.file.id, props.file.name)}>Edit in ONLYOFFICE</button>
       </div>
     </div>
   );

@@ -13,6 +13,19 @@
     justify-content: center;
 }
 
+@keyframes zoom-out {
+    0% {
+      transform: scale(1, 1);
+    }
+    100% {
+      transform: scale(0, 0);
+    }
+  }
+
+.info-container_close {
+    animation: zoom-out 1.125s ease-in-out;
+}
+
 .info-container__top {
     display: flex;
     justify-content: space-between;
@@ -21,13 +34,20 @@
 
 .info-container__item__bottom {
     align-self: center;
-    font-size: 0.75rem;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #0052CC;
 }
 
 .info-container__item__main-text {
     font-size: 1rem;
     width: 100%;
     margin-left: 0.5rem;
+}
+
+.info-container__item__icon {
+    cursor: pointer;
 }
 
 @media all and (max-width: 583px) {
@@ -44,6 +64,6 @@
 
 @media all and (max-width: 411px) {
     .info-container__item__main-text {
-        font-size: 0.7rem;
+        font-size: 0.8rem;
     }
 }

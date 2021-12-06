@@ -12,12 +12,14 @@ const Settings: React.FC = observer(() => {
         const value = await Promise.all([
           store.trello.get("board", "shared", "docs_address"),
           store.trello.get("board", "shared", "docs_jwt"),
+          store.trello.get("board", "shared", "docs_header"),
         ]);
         runInAction(() => {
           store.onlyofficeSettings.ds =
             value[0] || "http://<documentserver_host>:<documentserver:port>/";
           store.onlyofficeSettings.secret = value[1];
-        })
+          store.onlyofficeSettings.header = value[2];
+        });
         await store.trello.sizeTo("#inner-settings-panel");
       } catch {
         store.trello.alert({
@@ -43,6 +45,12 @@ const Settings: React.FC = observer(() => {
           "docs_jwt",
           store.onlyofficeSettings.secret
         ),
+        store.trello.set(
+          "board",
+          "shared",
+          "docs_header",
+          store.onlyofficeSettings.header
+        ),
       ]);
       store.trello.alert({
         message: "🍉 Saved fruit!",
@@ -66,13 +74,29 @@ const Settings: React.FC = observer(() => {
         <input
           type="text"
           value={store.onlyofficeSettings.ds}
-          onChange={(e) => (runInAction(() => store.onlyofficeSettings.ds = e.target.value))}
+          onChange={(e) =>
+            runInAction(() => (store.onlyofficeSettings.ds = e.target.value))
+          }
         />
         <p>JWT Secret</p>
         <input
           type="text"
           value={store.onlyofficeSettings.secret}
-          onChange={(e) => (runInAction(() => store.onlyofficeSettings.secret = e.target.value))}
+          onChange={(e) =>
+            runInAction(
+              () => (store.onlyofficeSettings.secret = e.target.value)
+            )
+          }
+        />
+        <p>JWT Header</p>
+        <input
+          type="text"
+          value={store.onlyofficeSettings.header}
+          onChange={(e) =>
+            runInAction(
+              () => (store.onlyofficeSettings.header = e.target.value)
+            )
+          }
         />
         <button onClick={handleSave}>Save</button>
       </div>

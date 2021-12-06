@@ -8,7 +8,7 @@ export const Header = () => {
     <div
       className="onlyoffice-header"
     >
-      <img src={logo} />
+      <img src={logo} style={{cursor: 'pointer'}} onClick={() => window.open('https://www.onlyoffice.com/')} />
       <Searchbar />
     </div>
   );

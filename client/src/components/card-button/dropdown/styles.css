@@ -1,70 +1,38 @@
+.dropdown-button {
+  background-color: #fff;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 4rem;
+  cursor: pointer;
+}
 
-.file_header__dropdown {
-    position: relative;
-    display: inline-block;
-  }
+.checkicon {
+  display:inline-block;
+  width: 22px;
+  height:22px;
+  -ms-transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
 
-  .file_header__dropdown__btn{
-    pointer-events: none;
-    position: relative;
-    cursor: pointer;
-    border: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
+.checkicon_base {
+  position: absolute;
+  width:3px;
+  height:3px;
+  background-color:#ccc;
+  left:8px;
+  top:12px;
+}
 
-  .file_header__dropdown__content {
-    opacity: 0;
-    position: absolute;
-    right: 0.5rem;
-    background-color: #f9f9f9;
-    min-width: 160px;
-    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    transition: all 0.1s ease-in-out;
-    z-index: -10000;
-  }
+.checkicon_tip {
+  position: absolute;
+  width:3px;
+  height:9px;
+  background-color:#ccc;
+  left:11px;
+  top:6px;
+}
 
-  .file_header__dropdown__content a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-    transition: all 1s ease-in-out;
-  }
-
-  .file_header__dropdown__content a:hover {
-    background-color: #f1f1f1
-  }
-
-  .file_header__dropdown:hover .file_header__dropdown__content {
-    opacity: 1;
-    z-index: 1;
-  }
-
-  .file_header__dropdown_arrow{
-    position:relative;
-    display:block;
-    z-index: -1;
-    margin-left: 0.4rem;
-    top: -0.15rem;;
-  }
-
-  .file_header__dropdown_arrow:before,
-  .file_header__dropdown_arrow:after{
-    pointer-events: auto;
-    position:absolute;
-    display:block;
-    content:"";
-    border:6px solid transparent;
-  }
-
-  .file_header__dropdown_arrow:before{
-    top:0;
-    border-top-color: black;
-  }
-
-  .file_header__dropdown_arrow:after{
-    top:-2.5px;
-    border-top-color:#fff;
-  }

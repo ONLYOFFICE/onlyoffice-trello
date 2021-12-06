@@ -1,11 +1,22 @@
-import React from "react";
+import React, { useState } from "react";
 import info from "../../../../public/images/info.svg";
 import cross from "../../../../public/images/cross.svg";
 import "./styles.css";
 
 export const Info = () => {
+  const [closed, setClosed] = useState(() => {
+    return !!localStorage.getItem("onlyoffice_info_closed") || false;
+  });
+  if (closed) return null;
+  const handleClose = () => {
+    const infoContainer = document.getElementById('onlyoffice_info_container');
+    infoContainer?.classList.add('info-container_close');
+    setTimeout(() => {
+      setClosed(true);
+    }, 1000);
+  }
   return (
-    <div className="info-container" style={{ position: "relative" }}>
+    <div id='onlyoffice_info_container' className="info-container" style={{ position: "relative" }}>
       <div className="info-container__top">
         <img
           className="info-container__item__icon"
@@ -19,9 +30,18 @@ export const Info = () => {
           className="info-container__item__icon"
           style={{ paddingRight: "1rem", width: "0.5rem" }}
           src={cross}
+          onClick={handleClose}
         />
       </div>
-      <a className="info-container__item__bottom">Never show again</a>
+      <a
+        className="info-container__item__bottom"
+        onClick={() => {
+          localStorage.setItem("onlyoffice_info_closed", "true");
+          handleClose();
+        }}
+      >
+        Never show again
+      </a>
     </div>
   );
 };

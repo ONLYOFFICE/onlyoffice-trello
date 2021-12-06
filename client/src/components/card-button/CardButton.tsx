@@ -19,6 +19,7 @@ const CardButton = observer(() => {
     store.trello.get("board", "shared").then((res) => {
       store.onlyofficeSettings.secret = res["docs_jwt"] || "";
       store.onlyofficeSettings.ds = res["docs_address"];
+      store.onlyofficeSettings.header = res["docs_header"];
     });
 
     const rest = store.trello.getRestApi() as any;
@@ -105,28 +106,10 @@ const CardButton = observer(() => {
             <Info />
             <FileContainer>
               {files.map((file) => {
-                return <File key={file.id} file={file}/>
+                return <File key={file.id} handleDownload={handleDownload} file={file}/>
               })}
             </FileContainer>
           </Main>
-          {/* {files.map((file) => {
-            return (
-              <div
-                key={file.id}
-                id={file.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <a href={file.url}>{file.name}</a>
-                <button onClick={() => handleDownload(file.id, file.name)}>
-                  Open in ONLYOFFICE
-                </button>
-              </div>
-            );
-          })} */}
         </>
       )}
     </div>
