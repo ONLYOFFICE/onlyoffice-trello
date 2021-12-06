@@ -19,9 +19,10 @@ export const FileContainer: React.FC = ({ children }) => {
   );
 };
 
-export const File: React.FC<{ file?: any }> = (props) => {
+//TODO: Types
+export const File: React.FC<{ file: any }> = (props) => {
   const [isMobile, setIsMobile] = useState(() => {
-    return window.innerWidth == 941;
+    return window.innerWidth <= 941;
   });
   useEffect(() => {
     const onResize = () => {
@@ -37,16 +38,20 @@ export const File: React.FC<{ file?: any }> = (props) => {
     <div className="file_container_item">
       {!isMobile ? (
         <>
-          <div className="file_container_item__main" style={{maxWidth: '50%'}}>
+          <div
+            className="file_container_item__main"
+            style={{ maxWidth: "50%" }}
+          >
             <img src={word} />
-            <h2>
-              {
-                "File.docx"
-              }
-            </h2>
+            <h2>{props.file.name}</h2>
           </div>
-          <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
-            <p className="file_container_item__main__text__item" style={{marginRight: '4rem'}}>
+          <div
+            style={{ display: "flex", maxWidth: "40%", marginRight: "4rem" }}
+          >
+            <p
+              className="file_container_item__main__text__item"
+              style={{ marginRight: "4rem" }}
+            >
               4.72kB
             </p>
             <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
@@ -59,15 +64,9 @@ export const File: React.FC<{ file?: any }> = (props) => {
           <div className="file_container_item__main">
             <img src={word} />
             <div className="file_container_item__main_mobile">
-              <h2>
-                {
-                  "File.docx"
-                }
-              </h2>
+              <h2>{"File.docx"}</h2>
               <div className="file_container_item__main__text">
-                <p className="file_container_item__main__text__item">
-                  4.72kB
-                </p>
+                <p className="file_container_item__main__text__item">4.72kB</p>
                 <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
                   Updated 50 minutes ago
                 </p>
@@ -78,7 +77,9 @@ export const File: React.FC<{ file?: any }> = (props) => {
       )}
       <div className="file_container_item__controls">
         <button>
-          <img src={download} alt="onlyoffice_download" />
+          <a href={props.file.url} download>
+            <img src={download} alt="onlyoffice_download" />
+          </a>
         </button>
         <button>Edit in ONLYOFFICE</button>
       </div>

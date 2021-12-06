@@ -514,6 +514,7 @@ export namespace Trello {
             name: string;
             previews: Preview[];
             url: string;
+            [key: string]: any,
         }
 
         interface BadgesInfo {
