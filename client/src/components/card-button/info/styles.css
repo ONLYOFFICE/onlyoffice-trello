@@ -2,8 +2,7 @@
     width: 100%;
     flex-grow: 0;
     flex-shrink: 0;
-    max-height: 20%;
-    min-height: 5rem;
+    height: 5rem;
     box-shadow: 0px 4px 20px rgba(9, 30, 66, 0.2);
     border-radius: 3px;
     overflow-y: scroll;
@@ -15,15 +14,72 @@
 
 @keyframes zoom-out {
     0% {
-      transform: scale(1, 1);
+      height: 5rem;
+    }
+    5% {
+        height: 4.75rem;
+    }
+    10% {
+        height: 4.5rem;
+    }
+    15% {
+        height: 4.25rem;
+    }
+    20%{
+       height: 4rem;
+    }
+    25% {
+        height: 3.75rem;
+    }
+    30%{
+       height: 3.5rem;
+    }
+    35%{
+        height: 3.25rem;
+    }
+    40% {
+        height: 3rem;
+    }
+    45% {
+        height: 2.75rem;
+    }
+    50%{
+        height: 2.5rem;
+    }
+    55%{
+        height: 2.25rem;
+    }
+    60%{
+        height: 2rem;
+    }
+    65% {
+        height: 1.75rem;
+    }
+    70%{
+        height: 1.5rem;
+    }
+    75%{
+        height: 1.25rem;
+    }
+    80% {
+        height: 1rem;
+    }
+    85% {
+        height: 0.75rem;
+    }
+    90% {
+        height: 0.5rem;
+    }
+    95% {
+        height: 0.25rem;
     }
     100% {
-      transform: scale(0, 0);
+      height: 0;
     }
   }
 
 .info-container_close {
-    animation: zoom-out 1.125s ease-in-out;
+    animation: zoom-out 510ms ease-in-out;
 }
 
 .info-container__top {

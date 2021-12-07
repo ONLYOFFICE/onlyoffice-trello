@@ -13,7 +13,7 @@ export const Info = () => {
     infoContainer?.classList.add('info-container_close');
     setTimeout(() => {
       setClosed(true);
-    }, 1000);
+    }, 500);
   }
   return (
     <div id='onlyoffice_info_container' className="info-container" style={{ position: "relative" }}>
