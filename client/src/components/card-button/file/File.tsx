@@ -54,7 +54,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
               className="file_container_item__main__text__item"
               style={{ marginRight: "4rem" }}
             >
-              4.72kB
+              {(props.file.bytes / 1000000).toFixed(2)} MB
             </p>
             <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
               {dateFormat(props.file.date, 'd/m/yy HH:MM')}
@@ -68,7 +68,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
             <div className="file_container_item__main_mobile">
               <h2>{props.file.name}</h2>
               <div className="file_container_item__main__text">
-                <p className="file_container_item__main__text__item">4.72kB</p>
+                <p className="file_container_item__main__text__item">{(props.file.bytes / 1000000).toFixed(2)} MB</p>
                 <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
                   {dateFormat(props.file.date, 'd/m/yy HH:MM')}
                 </p>
@@ -83,7 +83,11 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
             <img src={download} alt="onlyoffice_download" />
           </a>
         </button>
-        <button onClick={() => props.handleDownload(props.file.id, props.file.name)}>Edit in ONLYOFFICE</button>
+        {
+          parseFloat((props.file.bytes / 1000000).toFixed(2)) < 3 ?
+            <button onClick={() => props.handleDownload(props.file.id, props.file.name)}>Edit in ONLYOFFICE</button> :
+            null
+        }
       </div>
     </div>
   );

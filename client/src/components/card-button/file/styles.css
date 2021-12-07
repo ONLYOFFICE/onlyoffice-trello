@@ -110,7 +110,7 @@
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  max-width: 4rem;
+  max-width: 5rem;
 }
 
 .file_container_item__main__text__item_long {

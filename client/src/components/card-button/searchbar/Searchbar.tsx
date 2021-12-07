@@ -5,7 +5,7 @@ import { useStore } from "../../../context";
 
 export const Searchbar = () => {
   const store = useStore();
-  const [query, setQuery] = useState<string | undefined>();
+  const [query, setQuery] = useState<string>('');
   const handlePress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       store.filters.search = query;

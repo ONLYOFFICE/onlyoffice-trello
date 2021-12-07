@@ -24,7 +24,7 @@ export const Info = () => {
           src={info}
         />
         <b className="info-container__item__main-text">
-          ONLYOFFICE Power-Up is suitable for files less than 5 MB
+          ONLYOFFICE Power-Up is suitable for files less than 3 MB
         </b>
         <img
           className="info-container__item__icon"

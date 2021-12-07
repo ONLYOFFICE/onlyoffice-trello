@@ -11,6 +11,7 @@ import { Info } from "./info/Info";
 import { File } from "./file/File";
 import { Main } from "./main/Main";
 import { getComparator } from "../../utils/sort";
+import { generateOAuthHeader } from "../../utils/oauth";
 
 const CardButton = observer(() => {
   const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
@@ -35,6 +36,7 @@ const CardButton = observer(() => {
           .catch(() => {
             console.error("Authorization failed");
           });
+
       } else {
         store.authorization = token;
       }
@@ -42,7 +44,22 @@ const CardButton = observer(() => {
 
     store.trello.card("id", "attachments").then(async (card: any) => {
       store.activeCard = card.id;
-      setFiles(card.attachments);
+      const options = {
+        method: 'GET',
+        url: `https://api.trello.com/1/cards/${card.id}/attachments`
+      };
+      const token = await rest.getToken();
+      const auth = generateOAuthHeader(options, rest.appKey, rest.t.secret, token);
+
+      const resp = await fetch(options.url, {
+        headers: {
+          Authorization: auth.Authorization,
+        }
+      });
+
+      const attachments = await resp.json();
+
+      setFiles(attachments);
     });
 
     return () => {
