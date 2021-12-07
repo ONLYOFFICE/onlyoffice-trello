@@ -37,10 +37,25 @@ const sortModified = (
     }
 };
 
+const sortSize = (
+    order: 'ASC' | 'DESC'
+) => {
+    return (f1: Trello.PowerUp.Attachment,
+        f2: Trello.PowerUp.Attachment) => {
+            if (f1.bytes && f2.bytes) {
+                if (f1.bytes < f2.bytes) return order === 'DESC' ? 1 : -1;
+                if (f1.bytes > f2.bytes) return order === 'DESC' ? -1 : 1;
+                return 0;
+            }
+            return 0;
+        }
+}
+
 const comparators = new Map([
     ['name', sortNames],
     ['type', sortTypes],
-    ['modified', sortModified]
+    ['modified', sortModified],
+    ['size', sortSize],
 ]);
 
 export const getComparator = (type: "name" | "size" | "type" | "modified") => {
