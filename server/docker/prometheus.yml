@@ -3,4 +3,4 @@ global:
 scrape_configs:
   - job_name: "onlyoffice"
     static_configs:
-      - targets: ["63ec-89-36-76-52.ngrok.io"]
+      - targets: ["4a54-152-89-163-22.ngrok.io"]

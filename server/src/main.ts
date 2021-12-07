@@ -13,29 +13,29 @@ import { NotFoundExceptionFilter } from '@filters/notfound';
 
 async function main() {
   process.env.UV_THREADPOOL_SIZE = cpus().length.toString();
-  const aggregatorRegistry = new AggregatorRegistry();
+  // const aggregatorRegistry = new AggregatorRegistry();
 
   if (cluster.isPrimary) {
-    const metricsServer = express();
+    // const metricsServer = express();
 
     for (let cpu = 0; cpu < cpus().length; cpu++) {
       cluster.fork();
     }
 
-    metricsServer.get(
-      '/metrics',
-      async (_: Request, res: Response) => {
-        const metrics = await aggregatorRegistry.clusterMetrics();
-        res.set('Content-Type', aggregatorRegistry.contentType);
-        res.send(metrics);
-      },
-    );
+    // metricsServer.get(
+    //   '/metrics',
+    //   async (_: Request, res: Response) => {
+    //     const metrics = await aggregatorRegistry.clusterMetrics();
+    //     res.set('Content-Type', aggregatorRegistry.contentType);
+    //     res.send(metrics);
+    //   },
+    // );
 
     cluster.on('exit', () => {
       cluster.fork();
     });
 
-    metricsServer.listen(process.env.METRICS_SERVER_PORT || 3001);
+    // metricsServer.listen(process.env.METRICS_SERVER_PORT || 3001);
   } else {
     const server = await NestFactory.create<NestExpressApplication>(
       ServerModule,

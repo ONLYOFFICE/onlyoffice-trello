@@ -25,10 +25,11 @@ export class EditorVerificationMiddleware implements NestMiddleware {
 
       this.logger.debug(ep.ds);
 
-      const epayload = new EditorPayload(ep.secret, ep.ds);
+      const epayload = new EditorPayload(ep.secret, ep.ds, ep.header);
 
       req.headers[this.constants.HEADER_DOCSERVER_URL] = epayload.ds;
       req.headers[this.constants.HEADER_DOCSERVER_SECRET] = epayload.secret;
+      req.headers[this.constants.HEADER_DOCSERVER_HEADERNAME] = epayload.header;
 
       next();
     } catch (err) {

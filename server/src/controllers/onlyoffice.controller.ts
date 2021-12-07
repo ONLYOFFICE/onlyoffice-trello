@@ -41,6 +41,7 @@ export class OnlyofficeController {
     private validationUtils: ValidatorUtils,
   ) {}
 
+  //TODO: Forward auth headers from the client
   @Post('callback')
   async callback(
     @Query('token') token: string,
@@ -60,7 +61,8 @@ export class OnlyofficeController {
         vjwt.attachment,
         vjwt.filename,
       );
-      const dsToken = (req.headers['auth'] as string).split('Bearer ')[1];
+      this.logger.debug(req.headers);
+      const dsToken = (req.headers[req.query.header.toString().toLowerCase()] as string).split('Bearer ')[1];
       const secret = req.query.secret as string || '';
 
       await this.securityService.verify(dsToken, secret);
@@ -89,6 +91,7 @@ export class OnlyofficeController {
         req.headers[this.constants.HEADER_DOCSERVER_SECRET]!.toString();
       const ds = req.headers[this.constants.HEADER_DOCSERVER_URL]!.toString();
       const jwt = req.headers[this.constants.HEADER_RAW_JWT]!.toString();
+      const header = req.headers[this.constants.HEADER_DOCSERVER_HEADERNAME]!.toString();
 
       if (!this.validationUtils.validURL(ds))
         throw new Error('Invalid document server url');
@@ -137,7 +140,7 @@ export class OnlyofficeController {
           url: `${process.env.SERVER_HOST}${FileController.baseRoute}/download?token=${downloadToken}`,
         },
         editorConfig: {
-          callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?token=${jwt}&secret=${secret}`,
+          callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?token=${jwt}&secret=${secret}&header=${header}`,
           user: {
             id: me.data?.id,
             name: me.data?.username || 'Anonymous',

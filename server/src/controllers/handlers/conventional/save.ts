@@ -9,7 +9,6 @@ import { FilePayload } from '@models/payloads';
 import { RegistryService } from '@services/registry.service';
 import { OAuthUtil } from '@utils/oauth';
 import { FileService } from '@services/file.service';
-import { join } from 'path';
 import { RedisCacheService } from '@services/redis.service';
 import { Constants } from '@utils/const';
 

@@ -12,6 +12,7 @@ export class Constants {
   public readonly HEADER_FILENAME: string = 'ONLYOFFICE_FILENAME';
   public readonly HEADER_DOCSERVER_URL: string = 'ONLYOFFICE_DS';
   public readonly HEADER_DOCSERVER_SECRET: string = 'ONLYOFFICE_DS_SECRET';
+  public readonly HEADER_DOCSERVER_HEADERNAME: string = 'ONLYOFFICE_DS_HEADER';
 
   public readonly PREFIX_DOWNLOAD_TOKEN_CACHE: string = 'download_token';
   public readonly PREFIX_DOC_KEY_CACHE: string = 'docKey';

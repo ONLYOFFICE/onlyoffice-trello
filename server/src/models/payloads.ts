@@ -32,9 +32,11 @@ export class FilestorePayload {
 export class EditorPayload {
   public readonly secret: string;
   public readonly ds: string;
-  constructor(secret: string, ds: string) {
-    if (!ds) throw new Error('Invalid editor payload parameters');
+  public readonly header: string;
+  constructor(secret: string, ds: string, header: string) {
+    if (!ds && !header) throw new Error('Invalid editor payload parameters');
     this.secret = secret || '';
     this.ds = ds;
+    this.header = header;
   }
 }
