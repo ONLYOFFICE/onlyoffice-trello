@@ -154,6 +154,7 @@
 
 @media all and (max-width: 582px) {
   .file_container_item {
+    margin-top: 1rem;
     display: block;
   }
 }

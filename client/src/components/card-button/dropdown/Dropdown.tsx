@@ -91,6 +91,7 @@ export const Dropdown = () => {
             };
           },
         }}
+        closeMenuOnSelect={false}
         options={tOptions}
         defaultValue={selected}
         isSearchable={false}

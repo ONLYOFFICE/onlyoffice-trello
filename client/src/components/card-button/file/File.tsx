@@ -57,7 +57,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
               {(props.file.bytes / 1000000).toFixed(2)} MB
             </p>
             <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
-              {dateFormat(props.file.date, 'd/m/yy HH:MM')}
+              {dateFormat(props.file.date, 'dd/m/yy HH:MM')}
             </p>
           </div>
         </>
@@ -70,7 +70,7 @@ export const File: React.FC<{ file: any, handleDownload: (attachment: string, fi
               <div className="file_container_item__main__text">
                 <p className="file_container_item__main__text__item">{(props.file.bytes / 1000000).toFixed(2)} MB</p>
                 <p className="file_container_item__main__text__item file_container_item__main__text__item_long">
-                  {dateFormat(props.file.date, 'd/m/yy HH:MM')}
+                  {dateFormat(props.file.date, 'dd/m/yy HH:MM')}
                 </p>
               </div>
             </div>
