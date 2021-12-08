@@ -24,6 +24,7 @@ func (t ConfigType) Validate() error {
 	}
 }
 
+// TODO: Custom validtors
 type Config struct {
 	Address string `mapstructure:"SERVER_ADDRESS" validate:"required"`
 	Secret  string `mapstructure:"SERVER_SECRET" validate:"required"`

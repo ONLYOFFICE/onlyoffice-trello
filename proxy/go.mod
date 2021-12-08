@@ -4,6 +4,7 @@ go 1.17
 
 require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
+	go.uber.org/zap v1.19.1
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
 
@@ -21,6 +22,8 @@ require (
 	github.com/spf13/jwalterweatherman v1.1.0 // indirect
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.2.0 // indirect
+	go.uber.org/atomic v1.9.0 // indirect
+	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
 	gopkg.in/ini.v1 v1.63.2 // indirect
@@ -29,6 +32,7 @@ require (
 
 require (
 	github.com/go-playground/validator/v10 v10.9.0
+	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.9.0
 	golang.org/x/text v0.3.6 // indirect
 )
