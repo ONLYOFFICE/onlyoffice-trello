@@ -1,34 +1,37 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
+	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
+	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
 	proxy "github.com/ONLYOFFICE/onlyoffice-trello/internal"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg/handlers"
-	"go.uber.org/zap"
 )
 
 func main() {
-	logger, _ := zap.NewProduction()
+	logger := internal.GetLogger()
+
+	c, err := config.NewConfig(config.ConfigParameters{
+		Filename: "config.yml",
+		Type:     config.ConfigYml,
+	})
+
+	if err != nil {
+		logger.Fatal(err.Error())
+		os.Exit(1)
+	}
 
 	handlers.Bootstrap()
 
 	mux := proxy.NewRouter(logger)
-	// TODO: Fix paths
-	// config, err := config.NewConfig(config.ConfigParameters{
-	// 	Filename: ".env",
-	// 	Type:     config.ConfigEnv,
-	// })
-
-	// if err != nil {
-	// 	logger.Fatal(err.Error())
-	// 	os.Exit(1)
-	// }
 
 	server := http.Server{
-		Addr:         ":8888",
+		Addr:         fmt.Sprintf("%s:%d", c.Server.Host, c.Server.Port),
 		Handler:      mux,
 		ReadTimeout:  7 * time.Second,
 		WriteTimeout: 10 * time.Second,

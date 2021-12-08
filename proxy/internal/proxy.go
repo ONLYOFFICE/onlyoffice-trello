@@ -13,7 +13,7 @@ type ProxyParameters struct {
 	To        string `validate:"required"`
 	Protocol  string `validate:"required"`
 	Path      string `validate:"required"`
-	AuthValue string `validate:"required"`
+	AuthValue string
 }
 
 func (pp *ProxyParameters) Validate() error {

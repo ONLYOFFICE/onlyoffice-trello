@@ -3,36 +3,63 @@ package internal
 import (
 	"net/http"
 	"sync"
+
+	"github.com/go-playground/validator/v10"
+	"go.uber.org/zap"
 )
 
 var _locker = &sync.Mutex{}
 var _registryContainer *ProxyRegistry
 
-type ProxyRegistry struct {
-	locker   *sync.Mutex
-	handlers map[string]http.HandlerFunc
+// TODO: Proper Methods validation
+type ProxyRegistryParam struct {
+	Path   string `validate:"required"`
+	Method string `validate:"required"`
 }
 
-func GetRegistry() *ProxyRegistry {
+func (prp *ProxyRegistryParam) Validate() error {
+	validator := validator.New()
+
+	return validator.Struct(prp)
+}
+
+type ProxyRegistry struct {
+	logger   *zap.Logger
+	handlers map[ProxyRegistryParam]http.HandlerFunc
+}
+
+func _getRegistry() *ProxyRegistry {
 	if _registryContainer == nil {
 		_locker.Lock()
 		defer _locker.Unlock()
+		logger, _ := zap.NewProduction()
 		if _registryContainer == nil {
 			_registryContainer = &ProxyRegistry{
-				locker:   &sync.Mutex{},
-				handlers: make(map[string]http.HandlerFunc),
+				logger:   logger,
+				handlers: make(map[ProxyRegistryParam]http.HandlerFunc),
 			}
 		}
 	}
+
 	return _registryContainer
 }
 
-func (pr *ProxyRegistry) GetHandlers() map[string]http.HandlerFunc {
-	return pr.handlers
+func GetHandlers() map[ProxyRegistryParam]http.HandlerFunc {
+	return _getRegistry().handlers
 }
 
-func (pr *ProxyRegistry) RegisterHandler(path string, hander http.HandlerFunc) {
-	pr.locker.Lock()
-	defer pr.locker.Unlock()
-	pr.handlers[path] = hander
+func GetLogger() *zap.Logger {
+	return _getRegistry().logger
+}
+
+func RegisterHandler(params ProxyRegistryParam, handler http.HandlerFunc) error {
+	container := _getRegistry()
+	err := params.Validate()
+	if err != nil {
+		return err
+	}
+	_locker.Lock()
+	defer _locker.Unlock()
+	container.handlers[params] = handler
+	return nil
 }

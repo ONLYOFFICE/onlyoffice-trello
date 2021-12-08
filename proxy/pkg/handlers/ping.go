@@ -8,27 +8,26 @@ import (
 
 var _ = NewPingHandler()
 
-type PingHandler struct {
-	Path string
-}
+type PingHandler struct{}
 
 type PingResponse struct {
-	Health bool `json:"health"`
+	Ping bool `json:"ping"`
 }
 
 func NewPingHandler() bool {
-	handler := &PingHandler{
-		Path: "/ping",
-	}
+	handler := &PingHandler{}
 
-	internal.GetRegistry().RegisterHandler(handler.Path, handler.GetPing)
+	internal.RegisterHandler(internal.ProxyRegistryParam{
+		Path:   "/ping",
+		Method: http.MethodGet,
+	}, handler.GetPing)
 
 	return true
 }
 
 func (dh *PingHandler) GetPing(w http.ResponseWriter, r *http.Request) {
 	response := &PingResponse{
-		Health: true,
+		Ping: true,
 	}
 	internal.ResponseOK(w, response)
 }

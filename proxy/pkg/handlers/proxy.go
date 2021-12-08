@@ -10,8 +10,7 @@ import (
 var _ = NewProxyHandler()
 
 type ProxyHandler struct {
-	Path string
-	rp   *httputil.ReverseProxy
+	rp *httputil.ReverseProxy
 }
 
 func NewProxyHandler() bool {
@@ -19,7 +18,7 @@ func NewProxyHandler() bool {
 		To:        "trello.com",
 		Protocol:  "https",
 		Path:      "/",
-		AuthValue: " ",
+		AuthValue: "",
 	})
 
 	if err != nil {
@@ -27,15 +26,19 @@ func NewProxyHandler() bool {
 	}
 
 	ph := &ProxyHandler{
-		Path: "/proxy",
-		rp:   prx,
+		rp: prx,
 	}
 
-	internal.GetRegistry().RegisterHandler(ph.Path, ph.GetProxy)
+	params := internal.ProxyRegistryParam{
+		Path:   "/proxy",
+		Method: http.MethodGet,
+	}
+
+	internal.RegisterHandler(params, ph.DoProxy)
 
 	return true
 }
 
-func (ph *ProxyHandler) GetProxy(w http.ResponseWriter, r *http.Request) {
+func (ph *ProxyHandler) DoProxy(w http.ResponseWriter, r *http.Request) {
 	ph.rp.ServeHTTP(w, r)
 }

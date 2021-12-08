@@ -5,8 +5,16 @@ import (
 	"fmt"
 )
 
-var ErrConfigInitialization = errors.New("proxy config initialization error")
-var ErrConfigInvalidType = errors.New("proxy config invalid type error")
+type ErrConfigInitialization struct {
+	Reason string
+}
+
+func (e *ErrConfigInitialization) Error() string {
+	return fmt.Sprintf("config initialization error: %q", e.Reason)
+}
+
+var ErrConfigUnmarshalling = errors.New("config unmarshalling error")
+var ErrConfigInvalidType = errors.New("config invalid type error")
 
 var ErrProxyFallbackValidation = errors.New("proxy fallback validation error")
 

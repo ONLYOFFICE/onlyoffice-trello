@@ -15,24 +15,24 @@ func TestNewConfig(t *testing.T) {
 		{
 			name: "OK: Valid config from .env",
 			params: ConfigParameters{
-				Filename: ".env",
-				Type:     ConfigEnv,
+				Filename: "mock.yml",
+				Type:     ConfigYml,
 			},
 			withErr: false,
 		},
 		{
-			name: "Failure: No such .env file",
+			name: "Failure: No such .yml file",
 			params: ConfigParameters{
-				Filename: "hehe.env",
-				Type:     ConfigEnv,
+				Filename: "none.yml",
+				Type:     ConfigYml,
 			},
 			withErr: true,
 		},
 		{
 			name: "Failure: No such file type",
 			params: ConfigParameters{
-				Filename: ".env",
-				Type:     "yaml",
+				Filename: "mock.yml",
+				Type:     "env",
 			},
 			withErr: true,
 		},

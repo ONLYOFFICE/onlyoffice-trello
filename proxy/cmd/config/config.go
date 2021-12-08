@@ -12,27 +12,27 @@ import (
 type ConfigType string
 
 const (
-	ConfigEnv ConfigType = "env"
+	ConfigYml ConfigType = "yml"
 )
 
 func (t ConfigType) Validate() error {
 	switch t {
-	case ConfigEnv:
+	case ConfigYml:
 		return nil
 	default:
 		return internal.ErrConfigInvalidType
 	}
 }
 
-// TODO: Custom validtors
-type Config struct {
-	Address string `mapstructure:"SERVER_ADDRESS" validate:"required"`
-	Secret  string `mapstructure:"SERVER_SECRET" validate:"required"`
+type ServerConfiguration struct {
+	Host   string `validate:"required"`
+	Port   int    `validate:"required"`
+	Secret string `validate:"required"`
 }
 
-type ConfigParameters struct {
-	Filename string
-	Type     ConfigType
+// TODO: Custom validtors
+type Config struct {
+	Server ServerConfiguration
 }
 
 func (c *Config) Validate() error {
@@ -41,12 +41,14 @@ func (c *Config) Validate() error {
 	return validator.Struct(c)
 }
 
-// TODO: Add configuration via flags
+type ConfigParameters struct {
+	Filename string
+	Type     ConfigType
+}
+
+/// TODO: Flags
 func NewConfig(params ConfigParameters) (Config, error) {
 	var config Config
-
-	_, b, _, _ := runtime.Caller(0)
-	dir := filepath.Dir(b)
 
 	err := params.Type.Validate()
 
@@ -54,23 +56,34 @@ func NewConfig(params ConfigParameters) (Config, error) {
 		return config, err
 	}
 
+	_, b, _, _ := runtime.Caller(0)
+	dir := filepath.Dir(b)
+
 	viper.AddConfigPath(dir)
+
 	viper.SetConfigFile(params.Filename)
 	viper.SetConfigType(string(params.Type))
+
 	viper.AutomaticEnv()
 
 	err = viper.ReadInConfig()
 
 	if err != nil {
-		return config, internal.ErrConfigInitialization
+		return config, &internal.ErrConfigInitialization{
+			Reason: err.Error(),
+		}
 	}
 
+	viper.SetDefault("server.host", "127.0.0.1")
+	viper.SetDefault("server.port", 8080)
+	viper.SetDefault("server.secret", "proxy_secret")
+
 	if err = viper.Unmarshal(&config); err != nil {
-		return config, internal.ErrConfigInitialization
+		return config, internal.ErrConfigUnmarshalling
 	}
 
 	if err = config.Validate(); err != nil {
-		return config, internal.ErrConfigInitialization
+		return config, err
 	}
 
 	return config, nil

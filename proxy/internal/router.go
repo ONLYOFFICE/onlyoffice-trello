@@ -6,14 +6,14 @@ import (
 )
 
 func NewRouter(logger *zap.Logger) *mux.Router {
-	logger.Debug("Registering a new router")
+	logger.Info("Registering routes")
 	r := mux.NewRouter()
 
-	for path, handler := range GetRegistry().GetHandlers() {
-		r.HandleFunc(path, handler)
+	for params, handler := range GetHandlers() {
+		r.HandleFunc(params.Path, handler).Methods(params.Method)
 	}
 
-	logger.Debug("Router registration is done")
+	logger.Info("Successfully registered routes")
 
 	return r
 }
