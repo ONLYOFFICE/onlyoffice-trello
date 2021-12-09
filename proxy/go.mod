@@ -34,6 +34,7 @@ require (
 
 require (
 	github.com/go-playground/validator/v10 v10.9.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/spf13/viper v1.9.0
 	golang.org/x/text v0.3.6 // indirect

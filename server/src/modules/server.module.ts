@@ -8,17 +8,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 
 import { OnlyofficeController } from '@controllers/onlyoffice.controller';
-import { FileController } from '@controllers/file.controller';
 import { FileService } from '@services/file.service';
 import { SecurityService } from '@services/security.service';
 import { RegistryService } from '@services/registry.service';
 import { OAuthUtil } from '@utils/oauth';
 import { Constants } from '@utils/const';
 import { FileUtils } from '@utils/file';
-import { DownloadVerificationMiddleware } from '@middlewares/download';
 import { EditorVerificationMiddleware } from '@middlewares/editor';
 import { TokenVerificationMiddleware } from '@middlewares/token';
-import { UploadVerificationMiddleware } from '@middlewares/upload';
 import { ConventionalHandlersModule } from '@controllers/handlers/conventional.module';
 import { TestController } from '@controllers/test.controller';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -52,8 +49,8 @@ import { PrometheusController } from '@controllers/prometheus.controller';
   ],
   controllers:
     process.env.IS_DEVELOPMENT === '1'
-      ? [FileController, OnlyofficeController, TestController, PrometheusController]
-      : [FileController, OnlyofficeController, PrometheusController],
+      ? [OnlyofficeController, TestController, PrometheusController]
+      : [OnlyofficeController, PrometheusController],
   providers: [
     FileService,
     SecurityService,
@@ -80,10 +77,6 @@ import { PrometheusController } from '@controllers/prometheus.controller';
 export class ServerModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
-      .apply(UploadVerificationMiddleware)
-      .forRoutes(`${FileController.baseRoute}/upload`)
-      .apply(DownloadVerificationMiddleware)
-      .forRoutes(`${FileController.baseRoute}/download`)
       .apply(TokenVerificationMiddleware)
       .forRoutes(
         `${OnlyofficeController.baseRoute}/editor`,

@@ -12,6 +12,7 @@ import (
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
 	endpoints "github.com/ONLYOFFICE/onlyoffice-trello/http"
+	"github.com/ONLYOFFICE/onlyoffice-trello/http/middleware"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	"github.com/didip/tollbooth"
 	"github.com/didip/tollbooth/limiter"
@@ -59,6 +60,7 @@ func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
 		})
 
 	mux := tollbooth.LimitHandler(lmt, router)
+	router.Use(middleware.JwtMiddleware)
 
 	server := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port),

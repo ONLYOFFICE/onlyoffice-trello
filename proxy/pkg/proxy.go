@@ -8,12 +8,13 @@ import (
 	"golang.org/x/net/http2"
 )
 
+type ProxyParametersHeader struct{}
+
 // TODO: Custom validators
 type ProxyParameters struct {
-	To        string `validate:"required"`
-	Protocol  string `validate:"required"`
-	Path      string `validate:"required"`
-	AuthValue string
+	To        string `json:"to" validate:"required"`
+	Path      string `json:"path" validate:"required"`
+	AuthValue string `json:"authvalue"`
 }
 
 func (pp *ProxyParameters) Validate() error {
@@ -35,17 +36,18 @@ func NewProxy(fallback ProxyParameters) (*httputil.ReverseProxy, error) {
 	proxy := &httputil.ReverseProxy{
 		Transport: tr,
 		Director: func(req *http.Request) {
-			params, ok := req.Context().Value("X-Proxy-Params").(*ProxyParameters)
+			var key ProxyParametersHeader
+			params, ok := req.Context().Value(key).(ProxyParameters)
 
 			if !ok || params.Validate() != nil {
-				params = &fallback
+				params = fallback
 			}
 
 			req.Header.Add("X-Forwarded-Host", req.Host)
 			req.Header.Add("X-Origin-Host", params.To)
 			req.Header.Add("Authorization", params.AuthValue)
 			req.Host = params.To
-			req.URL.Scheme = params.Protocol
+			req.URL.Scheme = "https"
 			req.URL.Host = params.To
 			req.URL.Path = params.Path
 			req.Close = true

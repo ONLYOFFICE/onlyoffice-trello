@@ -12,7 +12,6 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 
-import { FileController } from '@controllers/file.controller';
 import { SecurityService } from '@services/security.service';
 import { FileService } from '@services/file.service';
 import { Constants } from '@utils/const';
@@ -113,15 +112,11 @@ export class OnlyofficeController {
         },
       });
 
-      const downloadToken = this.constants.PREFIX_DOWNLOAD_TOKEN_CACHE + new Date().getTime().toString();
-      await this.cacheManager.set(
-        downloadToken,
-        JSON.stringify({
-          attachment: attachment,
-          filename: filename,
-        }),
-        this.constants.SECURITY_INTERNAL_TOKENS_EXP,
-      );
+      const downloadToken = await this.securityService.sign({
+        to: "api.trello.com",
+        path: `/1/cards/${card}/attachments/${attachment}/download/${filename}`,
+        authvalue: authHeader.Authorization,
+      }, process.env.PROXY_SECRET);
 
       let docKey = await this.cacheManager.get(`${this.constants.PREFIX_DOC_KEY_CACHE}_${attachment}`);
 
@@ -137,7 +132,7 @@ export class OnlyofficeController {
         document: {
           ...config.document,
           key: docKey,
-          url: `${process.env.SERVER_HOST}${FileController.baseRoute}/download?token=${downloadToken}`,
+          url: `${process.env.PROXY_ADDRESS}?token=${downloadToken}`,
         },
         editorConfig: {
           callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?token=${jwt}&secret=${secret}&header=${header}`,

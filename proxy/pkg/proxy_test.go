@@ -18,7 +18,6 @@ func TestNewProxy(t *testing.T) {
 			name: "OK: Valid Proxy",
 			params: ProxyParameters{
 				To:        "google.com",
-				Protocol:  "https",
 				Path:      "/",
 				AuthValue: "",
 			},
@@ -47,7 +46,6 @@ func TestProxyRequest(t *testing.T) {
 
 	proxy, err := NewProxy(ProxyParameters{
 		To:        "httpbin.org",
-		Protocol:  "https",
 		Path:      "/get",
 		AuthValue: "",
 	})
