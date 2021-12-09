@@ -31,10 +31,10 @@ func (ph ProxyHandler) GetHandle() http.HandlerFunc {
 
 func NewProxyHandler() bool {
 	prx, err := pkg.NewProxy(pkg.ProxyParameters{
-		To:        "trello.com",
+		To:        "api.trello.com",
 		Protocol:  "https",
-		Path:      "/",
-		AuthValue: "",
+		Path:      "/1/cards/618d312127da4b34e73ac639/attachments",
+		AuthValue: `OAuth oauth_consumer_key="d37bc2f33dcb4996b6fb046d8e4df087",oauth_token="bfe95684ed54d90b81e48f3131184a3df3c390721f3266d4553745367c8700f9",oauth_signature_method="HMAC-SHA1",oauth_timestamp="1638951717",oauth_nonce="TCVnqUXI09A",oauth_version="1.0",oauth_signature="T%2F%2FniDNXNO6kWAW%2B3Te37YHFncQ%3D"`,
 	})
 
 	if err != nil {

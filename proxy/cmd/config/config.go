@@ -28,6 +28,7 @@ type ServerConfiguration struct {
 	Host   string `validate:"required"`
 	Port   int    `validate:"required"`
 	Secret string `validate:"required"`
+	Limit  int    `validate:"required"`
 }
 
 // TODO: Custom validtors

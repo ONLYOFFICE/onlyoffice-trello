@@ -13,6 +13,8 @@ import (
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
 	endpoints "github.com/ONLYOFFICE/onlyoffice-trello/http"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
+	"github.com/didip/tollbooth"
+	"github.com/didip/tollbooth/limiter"
 	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
@@ -42,10 +44,21 @@ func main() {
 
 func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
 	endpoints.Wire()
-	mux := mux.NewRouter()
-	pkg.WireHandlers(mux)
+	router := mux.NewRouter()
+	pkg.WireHandlers(router)
 
 	// TODO: Logging middleware
+
+	lmt := tollbooth.NewLimiter(float64(config.Server.Limit), &limiter.ExpirableOptions{
+		DefaultExpirationTTL: 1 * time.Second,
+	}).
+		SetIPLookups([]string{"RemoteAddr", "X-Forwarded-For", "X-Real-IP"}).
+		SetMethods([]string{"GET"}).
+		SetOnLimitReached(func(w http.ResponseWriter, r *http.Request) {
+			w.WriteHeader(http.StatusServiceUnavailable)
+		})
+
+	mux := tollbooth.LimitHandler(lmt, router)
 
 	server := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port),
