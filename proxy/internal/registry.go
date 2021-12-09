@@ -2,12 +2,12 @@ package internal
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"reflect"
 	"sync"
 
 	"github.com/gorilla/mux"
-	"go.uber.org/zap"
 )
 
 var _registry *Registry
@@ -24,7 +24,6 @@ type Service interface {
 }
 
 type Registry struct {
-	logger   *zap.Logger
 	handlers map[reflect.Type]Handler
 	services map[reflect.Type]Service
 	types    []reflect.Type
@@ -34,10 +33,8 @@ func _GetRegistry() *Registry {
 	if _registry == nil {
 		_locker.Lock()
 		defer _locker.Unlock()
-		logger, _ := zap.NewProduction()
 		if _registry == nil {
 			_registry = &Registry{
-				logger:   logger,
 				handlers: make(map[reflect.Type]Handler),
 				services: make(map[reflect.Type]Service),
 			}
@@ -105,9 +102,9 @@ func RegistryRegisterService(s Service) error {
 // TODO: Generic interface
 func RegistryWireHandlers(mux *mux.Router) {
 	r := _GetRegistry()
-	r.logger.Info("Registering all routes")
+	log.Println("Registering all routes")
 	for _, t := range r.handlers {
-		r.logger.Sugar().Infof("Registering route of type %v", t)
+		log.Println(fmt.Sprintf("Registering route of type %v", t))
 		mux.HandleFunc(t.GetPath(), t.GetHandle()).Methods(t.GetMethod())
 	}
 }

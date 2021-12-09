@@ -36,3 +36,5 @@ coverage
 !.vscode/extensions.json
 
 .env
+
+config.yml
