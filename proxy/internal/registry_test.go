@@ -5,47 +5,67 @@ import (
 	"testing"
 )
 
-// TODO: Fix with proper validations
+type _MockHandler struct {
+	path   string
+	method string
+}
+
+func (_mh _MockHandler) GetPath() string {
+	return _mh.path
+}
+
+func (_mh _MockHandler) GetMethod() string {
+	return _mh.method
+}
+
+func (_mh _MockHandler) GetHandle() http.HandlerFunc {
+	return func(rw http.ResponseWriter, r *http.Request) {
+		rw.WriteHeader(http.StatusOK)
+	}
+}
+
 func TestRegistrateHandler(t *testing.T) {
 	t.Parallel()
 
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("true"))
-	}
-
 	tests := []struct {
 		name    string
-		handler http.HandlerFunc
-		params  ProxyRegistryParam
+		handler _MockHandler
+		remove  bool
 		withErr bool
 	}{
 		{
-			name:    "OK: Valid Handler",
-			handler: handler,
-			params: ProxyRegistryParam{
-				Path:   "/",
-				Method: http.MethodGet,
+			name: "OK: Valid Handler",
+			handler: _MockHandler{
+				path:   "/",
+				method: http.MethodGet,
 			},
+			remove:  false,
 			withErr: false,
 		},
-		// TODO: Fix
 		{
-			name:    "Failure: No Path Parameter",
-			handler: handler,
-			params: ProxyRegistryParam{
-				Method: http.MethodGet,
+			name: "Failure: Handler Already Exists",
+			handler: _MockHandler{
+				path:   "/",
+				method: http.MethodGet,
 			},
-			withErr: false,
+			remove:  false,
+			withErr: true,
 		},
-		// TODO: Fix
 		{
-			name:    "Failure: No Method Parameter",
-			handler: handler,
-			params: ProxyRegistryParam{
-				Path: "/",
+			name: "Failure: No Path Parameter",
+			handler: _MockHandler{
+				method: http.MethodGet,
 			},
-			withErr: false,
+			remove:  true,
+			withErr: true,
+		},
+		{
+			name: "Failure: No Method Parameter",
+			handler: _MockHandler{
+				path: "/",
+			},
+			remove:  true,
+			withErr: true,
 		},
 	}
 
@@ -53,30 +73,12 @@ func TestRegistrateHandler(t *testing.T) {
 		tt := test
 
 		t.Run(tt.name, func(t *testing.T) {
-			params := ProxyRegistryParam{
-				Path:   "/testing",
-				Method: http.MethodGet,
+			if tt.remove {
+				RegistryRemoveAllRegisteredHandlers()
 			}
-
-			if actualErr := RegisterHandler(params, handler); (actualErr != nil) != tt.withErr {
+			if actualErr := RegistryRegisterHandler(tt.handler); (actualErr != nil) != tt.withErr {
 				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
 		})
-	}
-}
-
-func TestGetHandlers(t *testing.T) {
-	handler := func(w http.ResponseWriter, r *http.Request) {
-		w.WriteHeader(http.StatusOK)
-		w.Write([]byte("true"))
-	}
-
-	RegisterHandler(ProxyRegistryParam{
-		Path:   "/",
-		Method: http.MethodGet,
-	}, handler)
-
-	if len(GetHandlers()) != 1 {
-		t.Fatalf("Invalid number of registered handlers")
 	}
 }

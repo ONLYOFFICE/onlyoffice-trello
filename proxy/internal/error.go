@@ -16,13 +16,15 @@ func (e *ErrConfigInitialization) Error() string {
 var ErrConfigUnmarshalling = errors.New("config unmarshalling error")
 var ErrConfigInvalidType = errors.New("config invalid type error")
 
-var ErrProxyFallbackValidation = errors.New("proxy fallback validation error")
-
-type ErrSwitchingProtocols struct {
-	Protocol string
-	Reason   string
+type ErrRegistry struct {
+	Reason string
 }
 
-func (e *ErrSwitchingProtocols) Error() string {
-	return fmt.Sprintf("cannot switch protocol %q: %q", e.Protocol, e.Reason)
+func (e *ErrRegistry) Error() string {
+	return fmt.Sprintf("registry error: %q", e.Reason)
 }
+
+var ErrRegistryRegistration = errors.New("handler type already exists")
+var ErrRegistryInvalidInput = errors.New("registry received an invalid input")
+var ErrRegistryInvalidHandler = errors.New("registry received an invalid handler")
+var ErrRegistryNoHandler = errors.New("handler does not exist")

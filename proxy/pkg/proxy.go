@@ -1,4 +1,4 @@
-package internal
+package pkg
 
 import (
 	"net/http"
@@ -24,16 +24,13 @@ func (pp *ProxyParameters) Validate() error {
 
 func NewProxy(fallback ProxyParameters) (*httputil.ReverseProxy, error) {
 	if err := fallback.Validate(); err != nil {
-		return nil, ErrProxyFallbackValidation
+		return nil, err
 	}
 
 	tr := &http.Transport{}
 	err := http2.ConfigureTransport(tr)
 	if err != nil {
-		return nil, &ErrSwitchingProtocols{
-			Protocol: "HTTP2",
-			Reason:   err.Error(),
-		}
+		return nil, err
 	}
 	proxy := &httputil.ReverseProxy{
 		Transport: tr,

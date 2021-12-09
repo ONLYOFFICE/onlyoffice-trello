@@ -8,27 +8,25 @@ import (
 	"time"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
-	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
-	proxy "github.com/ONLYOFFICE/onlyoffice-trello/internal"
-	"github.com/ONLYOFFICE/onlyoffice-trello/pkg/handlers"
+	endpoints "github.com/ONLYOFFICE/onlyoffice-trello/http"
+	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
+	"github.com/gorilla/mux"
 )
 
 func main() {
-	logger := internal.GetLogger()
-
 	c, err := config.NewConfig(config.ConfigParameters{
 		Filename: "config.yml",
 		Type:     config.ConfigYml,
 	})
 
 	if err != nil {
-		logger.Fatal(err.Error())
 		os.Exit(1)
 	}
 
-	handlers.Bootstrap()
+	endpoints.Wire()
 
-	mux := proxy.NewRouter(logger)
+	mux := mux.NewRouter()
+	pkg.WireHandlers(mux)
 
 	server := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", c.Server.Host, c.Server.Port),
