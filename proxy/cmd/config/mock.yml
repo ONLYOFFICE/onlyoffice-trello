@@ -3,3 +3,7 @@ server:
   port: 8080
   secret: "mock"
   limit: 10
+proxy:
+  to: "google.com"
+  path: "/"
+  authvalue: ""

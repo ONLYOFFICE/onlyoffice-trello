@@ -4,10 +4,9 @@ import (
 	"net/http"
 	"net/http/httputil"
 
+	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 )
-
-var _ = NewProxyHandler()
 
 type ProxyHandler struct {
 	path   string
@@ -29,15 +28,21 @@ func (ph ProxyHandler) GetHandle() http.HandlerFunc {
 	}
 }
 
-func NewProxyHandler() bool {
+func NewProxyHandler(rc *pkg.RegistryContainer) *ProxyHandler {
+	var config config.Config
+
+	if err := rc.GetService(&config); err != nil {
+		return nil
+	}
+
 	prx, err := pkg.NewProxy(pkg.ProxyParameters{
-		To:        "trello.com",
-		Path:      "/",
-		AuthValue: "",
+		To:        config.Proxy.To,
+		Path:      config.Proxy.Path,
+		AuthValue: config.Proxy.AuthValue,
 	})
 
 	if err != nil {
-		return false
+		return nil
 	}
 
 	ph := &ProxyHandler{
@@ -46,5 +51,5 @@ func NewProxyHandler() bool {
 		rp:     prx,
 	}
 
-	return pkg.RegisterHandler(ph) == nil
+	return ph
 }

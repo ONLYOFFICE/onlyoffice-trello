@@ -3,3 +3,7 @@ server:
   port: 8080
   secret: "proxy_secret"
   limit: 10
+proxy:
+  to: "google.com"
+  path: "/"
+  authvalue: ""

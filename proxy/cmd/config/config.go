@@ -5,6 +5,7 @@ import (
 	"runtime"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
+	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	"github.com/go-playground/validator/v10"
 	"github.com/spf13/viper"
 )
@@ -34,6 +35,7 @@ type ServerConfiguration struct {
 // TODO: Custom validtors
 type Config struct {
 	Server ServerConfiguration
+	Proxy  pkg.ProxyParameters
 }
 
 func (c *Config) Validate() error {

@@ -11,7 +11,7 @@ import (
 	"time"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
-	endpoints "github.com/ONLYOFFICE/onlyoffice-trello/http"
+	endpoint "github.com/ONLYOFFICE/onlyoffice-trello/http"
 	"github.com/ONLYOFFICE/onlyoffice-trello/http/middleware"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	"github.com/didip/tollbooth"
@@ -44,9 +44,19 @@ func main() {
 }
 
 func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
-	endpoints.Wire()
+	container := pkg.NewRegistryContainer()
+	container.RegisterService(config)
+	container.RegisterService(*logger)
+
 	router := mux.NewRouter()
-	pkg.WireHandlers(router)
+
+	prhandler := endpoint.NewProxyHandler(container)
+	phandler := endpoint.NewPingHandler()
+
+	aprhandler := middleware.Adapt(prhandler.GetHandle(), middleware.GetJwtMiddleware(config))
+
+	router.HandleFunc(prhandler.GetPath(), aprhandler.ServeHTTP).Methods(prhandler.GetMethod())
+	router.HandleFunc(phandler.GetPath(), phandler.GetHandle()).Methods(phandler.GetMethod())
 
 	// TODO: Logging middleware
 
@@ -60,15 +70,14 @@ func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
 		})
 
 	mux := tollbooth.LimitHandler(lmt, router)
-	router.Use(middleware.JwtMiddleware)
 
 	server := http.Server{
 		Addr:         fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port),
-		Handler:      mux,
-		ReadTimeout:  7 * time.Second,
-		WriteTimeout: 10 * time.Second,
+		ReadTimeout:  2 * time.Millisecond,
+		WriteTimeout: 4 * time.Second,
 		IdleTimeout:  120 * time.Second,
 		ErrorLog:     log.Default(),
+		Handler:      http.TimeoutHandler(mux, 4*time.Second, "Proxy timeout\n"),
 	}
 
 	errC := make(chan error, 1)

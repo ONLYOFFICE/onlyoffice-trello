@@ -2,30 +2,15 @@ package internal
 
 import (
 	"fmt"
-	"log"
-	"net/http"
 	"reflect"
 	"sync"
-
-	"github.com/gorilla/mux"
 )
 
 var _registry *Registry
 var _locker = &sync.Mutex{}
 
-type Handler interface {
-	GetPath() string
-	GetMethod() string
-	GetHandle() http.HandlerFunc
-}
-
-type Service interface {
-	GetName() string
-}
-
 type Registry struct {
-	handlers map[reflect.Type]Handler
-	services map[reflect.Type]Service
+	services map[reflect.Type]interface{}
 	types    []reflect.Type
 }
 
@@ -35,8 +20,7 @@ func _GetRegistry() *Registry {
 		defer _locker.Unlock()
 		if _registry == nil {
 			_registry = &Registry{
-				handlers: make(map[reflect.Type]Handler),
-				services: make(map[reflect.Type]Service),
+				services: make(map[reflect.Type]interface{}),
 			}
 		}
 	}
@@ -44,53 +28,11 @@ func _GetRegistry() *Registry {
 	return _registry
 }
 
-func _ValidateHandler(h Handler) error {
-	p := h.GetPath()
-	if len(p) == 0 {
-		return ErrRegistryInvalidHandler
-	}
-	m := h.GetMethod()
-	switch m {
-	case http.MethodGet, http.MethodPost, http.MethodPut, http.MethodDelete, http.MethodPatch, http.MethodOptions, http.MethodHead:
-		return nil
-	default:
-		return ErrRegistryInvalidHandler
-	}
-}
-
-func RegistryRegisterHandler(h Handler) error {
-	r := _GetRegistry()
-	t := reflect.TypeOf(h)
-	if _, exists := r.handlers[t]; exists {
-		return ErrRegistryRegistration
-	}
-	err := _ValidateHandler(h)
-	if err != nil {
-		return err
-	}
-	r.handlers[t] = h
-	r.types = append(r.types, t)
-	return nil
-}
-
-func RegistryRemoveRegisterHandler(h Handler) error {
-	r := _GetRegistry()
-	t := reflect.TypeOf(h)
-	if _, exists := r.handlers[t]; !exists {
-		return ErrRegistryNoHandler
-	}
-	delete(r.handlers, t)
-	return nil
-}
-
-func RegistryRemoveAllRegisteredHandlers() {
-	r := _GetRegistry()
-	r.handlers = make(map[reflect.Type]Handler)
-}
-
-func RegistryRegisterService(s Service) error {
+func RegistryRegisterService(s interface{}) error {
 	r := _GetRegistry()
 	t := reflect.TypeOf(s)
+	_locker.Lock()
+	defer _locker.Unlock()
 	if _, exists := r.services[t]; exists {
 		return ErrRegistryRegistration
 	}
@@ -99,14 +41,9 @@ func RegistryRegisterService(s Service) error {
 	return nil
 }
 
-// TODO: Generic interface
-func RegistryWireHandlers(mux *mux.Router) {
+func RegistryRemoveServices() {
 	r := _GetRegistry()
-	log.Println("Registering all routes")
-	for _, t := range r.handlers {
-		log.Println(fmt.Sprintf("Registering route of type %v", t))
-		mux.HandleFunc(t.GetPath(), t.GetHandle()).Methods(t.GetMethod())
-	}
+	r.services = make(map[reflect.Type]interface{})
 }
 
 func RegistryGetService(service interface{}) error {

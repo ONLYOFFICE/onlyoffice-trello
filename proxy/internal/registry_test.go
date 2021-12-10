@@ -1,70 +1,39 @@
 package internal
 
 import (
-	"net/http"
 	"testing"
 )
 
-type _MockHandler struct {
-	path   string
-	method string
+type _MockService struct {
+	name string
 }
 
-func (_mh _MockHandler) GetPath() string {
-	return _mh.path
+func (_ms _MockService) GetName() string {
+	return _ms.name
 }
 
-func (_mh _MockHandler) GetMethod() string {
-	return _mh.method
-}
-
-func (_mh _MockHandler) GetHandle() http.HandlerFunc {
-	return func(rw http.ResponseWriter, r *http.Request) {
-		rw.WriteHeader(http.StatusOK)
-	}
-}
-
-func TestRegistrateHandler(t *testing.T) {
+func TestRegistrateService(t *testing.T) {
 	t.Parallel()
+
+	RegistryRemoveServices()
 
 	tests := []struct {
 		name    string
-		handler _MockHandler
-		remove  bool
+		service _MockService
 		withErr bool
 	}{
 		{
-			name: "OK: Valid Handler",
-			handler: _MockHandler{
-				path:   "/",
-				method: http.MethodGet,
+			name: "OK: Valid Service Registration",
+			service: _MockService{
+				name: "Mock",
 			},
-			remove:  false,
 			withErr: false,
 		},
 		{
-			name: "Failure: Handler Already Exists",
-			handler: _MockHandler{
-				path:   "/",
-				method: http.MethodGet,
+			name: "Failure: Same Type Registration",
+			service: _MockService{
+				name: "Mock",
 			},
-			remove:  false,
-			withErr: true,
-		},
-		{
-			name: "Failure: No Path Parameter",
-			handler: _MockHandler{
-				method: http.MethodGet,
-			},
-			remove:  true,
-			withErr: true,
-		},
-		{
-			name: "Failure: No Method Parameter",
-			handler: _MockHandler{
-				path: "/",
-			},
-			remove:  true,
 			withErr: true,
 		},
 	}
@@ -73,10 +42,37 @@ func TestRegistrateHandler(t *testing.T) {
 		tt := test
 
 		t.Run(tt.name, func(t *testing.T) {
-			if tt.remove {
-				RegistryRemoveAllRegisteredHandlers()
+			if actualErr := RegistryRegisterService(tt.service); (actualErr != nil) != tt.withErr {
+				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
-			if actualErr := RegistryRegisterHandler(tt.handler); (actualErr != nil) != tt.withErr {
+		})
+	}
+}
+
+func TestGetService(t *testing.T) {
+	t.Parallel()
+
+	tests := []struct {
+		name    string
+		service _MockService
+		withErr bool
+	}{
+		{
+			name: "OK: Valid Service Registration",
+			service: _MockService{
+				name: "Mock",
+			},
+			withErr: false,
+		},
+	}
+
+	for _, test := range tests {
+		tt := test
+
+		RegistryRegisterService(tt.service)
+		t.Run(tt.name, func(t *testing.T) {
+			var ptr _MockService
+			if actualErr := RegistryGetService(&ptr); (actualErr != nil) != tt.withErr && len(ptr.GetName()) > 0 {
 				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
 		})

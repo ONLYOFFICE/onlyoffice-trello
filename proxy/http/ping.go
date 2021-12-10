@@ -6,8 +6,6 @@ import (
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 )
 
-var _ = NewPingHandler()
-
 type PingHandler struct {
 	path   string
 	method string
@@ -34,11 +32,11 @@ type PingResponse struct {
 	Ping bool `json:"ping"`
 }
 
-func NewPingHandler() bool {
-	handler := PingHandler{
+func NewPingHandler() *PingHandler {
+	handler := &PingHandler{
 		path:   "/ping",
 		method: http.MethodGet,
 	}
 
-	return pkg.RegisterHandler(handler) == nil
+	return handler
 }

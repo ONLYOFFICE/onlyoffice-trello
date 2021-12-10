@@ -26,5 +26,5 @@ func (e *ErrRegistry) Error() string {
 
 var ErrRegistryRegistration = errors.New("handler type already exists")
 var ErrRegistryInvalidInput = errors.New("registry received an invalid input")
-var ErrRegistryInvalidHandler = errors.New("registry received an invalid handler")
-var ErrRegistryNoHandler = errors.New("handler does not exist")
+var ErrRegistryInvalidService = errors.New("registry received an invalid service")
+var ErrRegistryNoService = errors.New("service does not exist")
