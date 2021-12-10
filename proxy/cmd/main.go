@@ -57,6 +57,9 @@ func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
 
 	router.HandleFunc(prhandler.GetPath(), aprhandler.ServeHTTP).Methods(prhandler.GetMethod())
 	router.HandleFunc(phandler.GetPath(), phandler.GetHandle()).Methods(phandler.GetMethod())
+	router.NotFoundHandler = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+		http.Redirect(rw, r, "/proxy", http.StatusPermanentRedirect)
+	})
 
 	// TODO: Logging middleware
 
