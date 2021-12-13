@@ -18,7 +18,8 @@
     "paths": {
       "Components/*": ["src/components/*"],
       "Types/*": ["src/types/*"],
-      "Root*": ["src/*"]
+      "Root/*": ["src/*"],
+      "Public/*": ["public/*"],
     }
   },
   "include": ["./src/**/*"],

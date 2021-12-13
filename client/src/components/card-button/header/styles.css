@@ -1,17 +1,17 @@
-.onlyoffice-header {
+.modal_header {
   display: flex;
   justify-content: space-between;
   height: auto;
   margin-bottom: 1rem;
 }
 
-.onlyoffice-header > img {
+.modal_header > img {
   width: 10rem;
   height: 3rem;
 }
 
 @media all and (max-width: 582px) {
-  .onlyoffice-header {
+  .modal_header {
     justify-content: center;
     flex-direction: column;
   }

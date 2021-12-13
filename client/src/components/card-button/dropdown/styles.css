@@ -9,6 +9,10 @@
   cursor: pointer;
 }
 
+.dropdown-button_checksection {
+  width: 10%;
+}
+
 .checkicon {
   display:inline-block;
   width: 22px;

@@ -8,6 +8,7 @@
 .file_header > * {
   margin: 0;
 }
+
 /* Layout */
 .file_container {
   scroll-snap-type: y mandatory;

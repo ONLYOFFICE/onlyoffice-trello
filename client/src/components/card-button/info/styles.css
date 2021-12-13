@@ -1,4 +1,5 @@
 .info-container {
+    position: relative;
     width: 100%;
     flex-grow: 0;
     flex-shrink: 0;
@@ -88,7 +89,7 @@
     margin-bottom: 0.5rem;
 }
 
-.info-container__item__bottom {
+.info-container__bottom {
     align-self: center;
     font-size: 0.85rem;
     font-weight: 700;
@@ -96,30 +97,30 @@
     color: #0052CC;
 }
 
-.info-container__item__main-text {
+.info-container__main-text {
     font-size: 1rem;
     width: 100%;
     margin-left: 0.5rem;
 }
 
-.info-container__item__icon {
+.info-container__top__icon {
     cursor: pointer;
 }
 
 @media all and (max-width: 583px) {
-    .info-container__item__main-text {
+    .info-container__main-text {
         font-size: 0.9rem;
     }
 }
 
 @media all and (max-width: 525px) {
-    .info-container__item__main-text {
+    .info-container__main-text {
         font-size: 0.8rem;
     }
 }
 
 @media all and (max-width: 411px) {
-    .info-container__item__main-text {
+    .info-container__main-text {
         font-size: 0.8rem;
     }
 }

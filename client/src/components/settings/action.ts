@@ -1,10 +1,21 @@
-import { Trello } from "Types/trello";
+import { Trello } from 'Types/trello';
 
-export function getSettings(t: Trello.PowerUp.IFrame, options: any): any {
-  if (options.context.permissions?.organization === "write") {
+type SettingsOptions = {
+  context: {
+    permissions: {
+      organization: string;
+    };
+  };
+};
+
+export function getSettings(
+  t: Trello.PowerUp.IFrame,
+  options: SettingsOptions
+): any {
+  if (options.context.permissions?.organization === 'write') {
     return t.popup({
-      title: "Note Settings",
-      url: "./show-settings",
+      title: 'Note Settings',
+      url: './show-settings',
       height: 150,
     });
   }

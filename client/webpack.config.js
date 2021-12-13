@@ -111,7 +111,8 @@ module.exports = (env) => {
             alias: {
                 Components: path.resolve(__dirname, 'src/components'),
                 Types: path.resolve(__dirname, 'src/types'),
-                Root: path.resolve(__dirname, 'src')
+                Root: path.resolve(__dirname, 'src/'),
+                Public: path.resolve(__dirname, "public/"),
             }
         },
         mode: env.WEBPACK_BUILD ? 'production' : 'development'

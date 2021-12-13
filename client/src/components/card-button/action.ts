@@ -1,5 +1,5 @@
-import { Trello } from "Types/trello";
-import { ActionProps } from "Types/power-up";
+import { Trello } from 'Types/trello';
+import { ActionProps } from 'Types/power-up';
 
 export function getCardButton(
   _t: Trello.PowerUp.IFrame,
@@ -8,11 +8,11 @@ export function getCardButton(
   return [
     {
       icon: props.baseUrl,
-      text: "ONLYOFFICE",
+      text: 'ONLYOFFICE',
       condition: 'signedIn',
       callback: (t: Trello.PowerUp.IFrame) =>
         t.modal({
-          title: "ONLYOFFICE",
+          title: 'ONLYOFFICE',
           url: `/card-button`,
           fullscreen: true,
         }),

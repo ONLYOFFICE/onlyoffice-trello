@@ -1,6 +1,6 @@
-import word from '../../public/images/word.svg';
-import cell from '../../public/images/cell.svg';
-import slide from '../../public/images/slide.svg';
+import word from 'Public/images/word.svg';
+import cell from 'Public/images/cell.svg';
+import slide from 'Public/images/slide.svg';
 
 const ONLYOFFICE_CELL = 'cell';
 const ONLYOFFICE_WORD = 'word';

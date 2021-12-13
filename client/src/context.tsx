@@ -1,27 +1,28 @@
-import React, { useContext, createContext, FC } from "react";
-import { makeAutoObservable } from "mobx";
-import { Trello } from "Types/trello";
+import React, { useContext, createContext, FC } from 'react';
+import { makeAutoObservable } from 'mobx';
+
+import { Trello } from 'Types/trello';
+import { SORTBY, SORTORDER } from 'Types/enums';
 
 class TrelloStore {
-  authorization: string = "";
-  activeCard: string = "";
+  activeCard: string = '';
   filters: {
     search?: string;
-    sortBy?: "name" | "size" | "type" | "modified";
-    sortOrder?: 'ASC' | 'DESC';
+    sortBy?: SORTBY;
+    sortOrder?: SORTORDER;
   } = {};
   onlyofficeSettings: {
     ds: string;
     secret: string;
     header: string;
   } = {
-    ds: "",
-    secret: "",
-    header: "Authorization",
+    ds: '',
+    secret: '',
+    header: 'Authorization',
   };
-  editorTokenJwt: string = "";
-  editorPayloadJwt: string = "";
-  editorConfigJwt: string = "";
+  editorTokenJwt: string = '';
+  editorPayloadJwt: string = '';
+  editorConfigJwt: string = '';
 
   constructor() {
     makeAutoObservable(this);
