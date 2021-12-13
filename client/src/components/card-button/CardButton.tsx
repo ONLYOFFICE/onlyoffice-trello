@@ -13,12 +13,14 @@ import { Header } from './header/Header';
 import { Info } from './info/Info';
 import { File } from './file/File';
 import { Main } from './main/Main';
+import { Loader } from './loader/Loader';
 
 import './styles.css';
 
 const CardButton = observer(() => {
   const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
   const [isEditor, setIsEditor] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
   const [token, setToken] = useState('');
   const store = useStore();
 
@@ -50,6 +52,7 @@ const CardButton = observer(() => {
       const attachments = await resp.json();
 
       setFiles(attachments);
+      setIsLoading(false);
     });
 
     return () => {
@@ -99,13 +102,6 @@ const CardButton = observer(() => {
       {isEditor && token && store.onlyofficeSettings.ds ? (
         <iframe
           src={`${process.env.BACKEND_HOST}/onlyoffice/editor?token=${store.editorTokenJwt}&epayload=${store.editorPayloadJwt}&config=${store.editorConfigJwt}`}
-          style={{
-            display: 'block',
-            overflow: 'auto',
-            height: '100vh',
-            width: '100vw',
-            border: 'none',
-          }}
           name='iframeEditor'
           id='iframeEditor'
         />
@@ -114,41 +110,47 @@ const CardButton = observer(() => {
           <Main>
             <Header />
             <Info />
-            <FileContainer>
-              {store.filters.sortBy && store.filters.sortOrder ? (
-                <>
-                  {files.sort((getComparator(store.filters.sortBy)?.(store.filters.sortOrder))).map((file) => {
-                    if (!isExtensionSupported(file.name.split('.')[1]))
-                      return null;
-                    if (store.filters.search && !file.name.includes(store.filters.search))
-                      return null;
-                    return (
-                      <File
-                        key={file.id}
-                        handleDownload={handleDownload}
-                        file={file}
-                      />
-                    );
-                  })}
-                </>
-              ) : (
-                <>
-                  {files.map((file) => {
-                    if (!isExtensionSupported(file.name.split('.')[1]))
-                      return null;
-                    if (store.filters.search && !file.name.includes(store.filters.search))
-                      return null;
-                    return (
-                      <File
-                        key={file.id}
-                        handleDownload={handleDownload}
-                        file={file}
-                      />
-                    );
-                  })}
-                </>
-              )}
-            </FileContainer>
+            {!isLoading ? (
+              <FileContainer>
+                {store.filters.sortBy && store.filters.sortOrder ? (
+                  <>
+                    {files.sort((getComparator(store.filters.sortBy)?.(store.filters.sortOrder))).map((file) => {
+                      if (!isExtensionSupported(file.name.split('.')[1]))
+                        return null;
+                      if (store.filters.search && !file.name.includes(store.filters.search))
+                        return null;
+                      return (
+                        <File
+                          key={file.id}
+                          handleDownload={handleDownload}
+                          file={file}
+                        />
+                      );
+                    })}
+                  </>
+                ) : (
+                  <>
+                    {files.map((file) => {
+                      if (!isExtensionSupported(file.name.split('.')[1]))
+                        return null;
+                      if (store.filters.search && !file.name.includes(store.filters.search))
+                        return null;
+                      return (
+                        <File
+                          key={file.id}
+                          handleDownload={handleDownload}
+                          file={file}
+                        />
+                      );
+                    })}
+                  </>
+                )}
+              </FileContainer>
+            ) : (
+              <div className='onlyoffice_loader-container'>
+                <Loader />
+              </div>
+            )}
           </Main>
         </>
       )}

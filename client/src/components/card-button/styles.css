@@ -1,18 +1,14 @@
-.note-field {
-    resize: none;
-    height: 100px
+#iframeEditor {
+  display: block;
+  overflow: auto;
+  height: 100vh;
+  width: 100vw;
+  border: none;
 }
 
-.color-picker-container {
-    margin: 6px;
-}
-
-.color-picker-container.unlicensed{
-    filter: blur(4px) saturate(0.1) brightness(1.2);
-    pointer-events: none;
-}
-
-.color-picker-container.unlicensed::after{
-    content: "This is a pro feature";
-    margin-left: -100%;
+.onlyoffice_loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
