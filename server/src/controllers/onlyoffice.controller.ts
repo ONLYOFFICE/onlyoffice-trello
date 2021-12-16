@@ -137,10 +137,12 @@ export class OnlyofficeController {
       const otp = nanoid();
       if (!docKey) {
         docKey = new Date().getTime().toString();
-        this.cacheManager.set(
-          `${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`,
-          docKey,
-        );
+        if (fileEditable) {
+          this.cacheManager.set(
+            `${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`,
+            docKey,
+          );
+        }
         this.cacheManager.set(otp, otp, 120);
       }
 
