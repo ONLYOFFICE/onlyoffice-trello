@@ -114,6 +114,16 @@ export class OnlyofficeController {
 
       if (!fileSupported) throw new Error('File type is not supported');
 
+      const commandPayload = this.securityService.sign({
+        c: 'version',
+      }, payload.dsjwt, 60 * 2);
+
+      const commandResponse = await axios.post(this.constants.getDocumentServerCommandUrl(payload.ds), {
+        token: commandPayload,
+      });
+
+      if (commandResponse.data.err != 0) throw new Error('No document server response');
+
       const request = {
         url: `${this.constants.URL_TRELLO_API_BASE}/members/me`,
         method: 'GET',
