@@ -21,6 +21,7 @@ import { Constants } from '@utils/const';
 import { OAuthUtil } from '@utils/oauth';
 import { Callback } from '@models/callback';
 import { EditorPayload, EditorPayloadForm } from '@models/payload';
+import { Command } from '@models/command';
 import { Config } from '@models/config';
 import { RegistryService } from '@services/registry.service';
 import { RedisCacheService } from '@services/redis.service';
@@ -114,15 +115,17 @@ export class OnlyofficeController {
 
       if (!fileSupported) throw new Error('File type is not supported');
 
-      const commandPayload = this.securityService.sign({
+      const commandPayload: Command = {
         c: 'version',
-      }, payload.dsjwt, 60 * 2);
+      };
 
-      const commandResponse = await axios.post(this.constants.getDocumentServerCommandUrl(payload.ds), {
-        token: commandPayload,
+      const commandResponse = await axios.post(this.constants.getDocumentServerCommandUrl(payload.ds), commandPayload, {
+        headers: {
+          [payload.dsheader]: `Bearer ${this.securityService.sign(commandPayload, payload.dsjwt, 60 * 2)}`,
+        }
       });
 
-      if (commandResponse.data.err != 0) throw new Error('No document server response');
+      if (!commandResponse.data.version) throw new Error('No document server response');
 
       const request = {
         url: `${this.constants.URL_TRELLO_API_BASE}/members/me`,
