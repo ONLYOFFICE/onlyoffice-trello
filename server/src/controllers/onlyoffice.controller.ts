@@ -6,7 +6,6 @@ import {
   Logger,
   Post,
   Query,
-  Render,
   Req,
   Res,
   UsePipes,
@@ -96,7 +95,6 @@ export class OnlyofficeController {
 
   @Post('editor')
   @UsePipes(new ValidationPipe())
-  @Render('editor')
   async openEditor(@Body() form: EditorPayloadForm, @Res() res: Response) {
     try {
       const payload = Object.setPrototypeOf(
@@ -182,15 +180,16 @@ export class OnlyofficeController {
       config.token = this.securityService.sign(config, payload.dsjwt);
 
       res.status(200);
-      return {
+      res.render('editor', {
         file: payload.filename,
         attachment: payload.attachment,
         apijs: `${payload.ds}web-apps/apps/api/documents/api.js`,
         config: JSON.stringify(config),
-      };
+      });
+
     } catch (err) {
-      this.logger.error(err);
-      res.status(403);
+      this.logger.debug(err);
+      res.render('error');
     }
   }
 }
