@@ -5,10 +5,9 @@ import * as mime from 'mime-types';
 
 import { Callback } from '@models/callback';
 import { CallbackHandler } from '@models/interfaces/handlers';
-import { FilePayload } from '@models/payloads';
+import { EditorPayload } from '@models/payload';
 import { RegistryService } from '@services/registry.service';
 import { OAuthUtil } from '@utils/oauth';
-import { FileService } from '@services/file.service';
 import { RedisCacheService } from '@services/redis.service';
 import { Constants } from '@utils/const';
 
@@ -24,7 +23,6 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
   constructor(
     private readonly cacheManager: RedisCacheService,
     private readonly registry: RegistryService,
-    private readonly fileService: FileService,
     private readonly oauthUtil: OAuthUtil,
     private readonly constants: Constants,
   ) {
@@ -37,7 +35,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
    * @param payload
    * @returns
    */
-  async handle(callback: Callback, payload: FilePayload) {
+  async handle(callback: Callback, payload: EditorPayload, uid: string) {
     if (!callback.url || callback.status !== 2) return;
 
     this.logger.debug(`Trying to save ${payload.filename} changes`);
@@ -72,15 +70,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         if (err) this.logger.error(`[${payload.filename}]: ${err}`);
       },
     );
-    try {
-      this.fileService.deleteFilestoreFolder(
-        payload.attachment,
-        payload.filename,
-      );
-    } catch (err) {
-      this.logger.error(err);
-    } finally {
-      await this.cacheManager.del(`${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`);
-    }
+    await this.cacheManager.del(`${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`);
+    await this.cacheManager.del(uid);
   }
 }

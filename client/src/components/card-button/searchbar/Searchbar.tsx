@@ -10,7 +10,7 @@ export const Searchbar = () => {
   const [query, setQuery] = useState<string>('');
   const handlePress = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      store.filters.search = query;
+      store.card.filters.search = query;
     }
   };
   return (
@@ -26,7 +26,7 @@ export const Searchbar = () => {
       <button
         id='searchbar_container__btn'
         type='submit'
-        onClick={() => (store.filters.search = query)}
+        onClick={() => (store.card.filters.search = query)}
       >
         <img src={search} />
       </button>

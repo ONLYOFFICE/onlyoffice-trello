@@ -28,6 +28,11 @@ func _GetRegistry() *Registry {
 	return _registry
 }
 
+func _registryRemoveServices() {
+	r := _GetRegistry()
+	r.services = make(map[reflect.Type]interface{})
+}
+
 func RegistryRegisterService(s interface{}) error {
 	r := _GetRegistry()
 	t := reflect.TypeOf(s)
@@ -39,11 +44,6 @@ func RegistryRegisterService(s interface{}) error {
 	r.services[t] = s
 	r.types = append(r.types, t)
 	return nil
-}
-
-func RegistryRemoveServices() {
-	r := _GetRegistry()
-	r.services = make(map[reflect.Type]interface{})
 }
 
 func RegistryGetService(service interface{}) error {

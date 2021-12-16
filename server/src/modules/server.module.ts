@@ -8,16 +8,13 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 
 import { OnlyofficeController } from '@controllers/onlyoffice.controller';
-import { FileService } from '@services/file.service';
 import { SecurityService } from '@services/security.service';
 import { RegistryService } from '@services/registry.service';
 import { OAuthUtil } from '@utils/oauth';
 import { Constants } from '@utils/const';
 import { FileUtils } from '@utils/file';
-import { EditorVerificationMiddleware } from '@middlewares/editor';
 import { TokenVerificationMiddleware } from '@middlewares/token';
 import { ConventionalHandlersModule } from '@controllers/handlers/conventional.module';
-import { TestController } from '@controllers/test.controller';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { RedisCacheService } from '@services/redis.service';
@@ -33,7 +30,7 @@ import { PrometheusController } from '@controllers/prometheus.controller';
     ConventionalHandlersModule,
     ThrottlerModule.forRoot({
       ttl: 1,
-      limit: 10000,
+      limit: 1000,
     }),
     CacheModule.registerAsync({
       imports: [ConfigModule],
@@ -47,12 +44,8 @@ import { PrometheusController } from '@controllers/prometheus.controller';
       }),
     }),
   ],
-  controllers:
-    process.env.IS_DEVELOPMENT === '1'
-      ? [OnlyofficeController, TestController, PrometheusController]
-      : [OnlyofficeController, PrometheusController],
+  controllers: [OnlyofficeController, PrometheusController],
   providers: [
-    FileService,
     SecurityService,
     RegistryService,
     RedisCacheService,
@@ -68,7 +61,6 @@ import { PrometheusController } from '@controllers/prometheus.controller';
   ],
   exports: [
     RegistryService,
-    FileService,
     OAuthUtil,
     RedisCacheService,
     Constants,
@@ -80,9 +72,6 @@ export class ServerModule implements NestModule {
       .apply(TokenVerificationMiddleware)
       .forRoutes(
         `${OnlyofficeController.baseRoute}/editor`,
-        `${OnlyofficeController.baseRoute}/callback`,
       )
-      .apply(EditorVerificationMiddleware)
-      .forRoutes(`${OnlyofficeController.baseRoute}/editor`);
   }
 }

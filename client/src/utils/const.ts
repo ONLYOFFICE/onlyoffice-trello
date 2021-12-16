@@ -1,8 +1,8 @@
 export default Object.freeze({
     TRELLO_API: 'https://api.trello.com/1/',
     TRELLO_API_CARDS: 'https://api.trello.com/1/cards/',
-    TRELLO_API_CARD: (id: string): string => {
-        return `https://api.trello.com/1/cards/${id}`;
+    TRELLO_API_CARD(id: string): string{
+        return this.TRELLO_API_CARDS + id;
     },
     TRELLO_API_CARD_ATTACHMENTS(id: string): string {
         return this.TRELLO_API_CARD(id)+'/attachments';

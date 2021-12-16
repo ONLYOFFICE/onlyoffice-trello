@@ -1,7 +1,7 @@
 import { Callback } from '@models/callback';
-import { FilePayload } from '@models/payloads';
+import { EditorPayload } from '@models/payload';
 
 export interface CallbackHandler {
   id: string;
-  handle: (callback: Callback, payload: FilePayload) => void;
+  handle: (callback: Callback, payload: EditorPayload, uid: string) => void;
 }

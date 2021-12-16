@@ -5,24 +5,19 @@ import { Trello } from 'Types/trello';
 import { SORTBY, SORTORDER } from 'Types/enums';
 
 class TrelloStore {
-  activeCard: string = '';
-  filters: {
-    search?: string;
-    sortBy?: SORTBY;
-    sortOrder?: SORTORDER;
-  } = {};
-  onlyofficeSettings: {
-    ds: string;
-    secret: string;
-    header: string;
+  card: {
+    id?: string,
+    filters: {
+      search?: string;
+      sortBy?: SORTBY;
+      sortOrder?: SORTORDER;
+    },
+    editorTokenJwt?: string,
+    editorPayloadJwt?: string,
+    editorConfigJwt?: string,
   } = {
-    ds: '',
-    secret: '',
-    header: 'Authorization',
-  };
-  editorTokenJwt: string = '';
-  editorPayloadJwt: string = '';
-  editorConfigJwt: string = '';
+    filters: {},
+  }
 
   constructor() {
     makeAutoObservable(this);

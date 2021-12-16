@@ -1,6 +1,10 @@
 package config
 
 import (
+	"crypto/rand"
+	"crypto/rsa"
+	"crypto/x509"
+	"encoding/pem"
 	"path/filepath"
 	"runtime"
 
@@ -34,8 +38,11 @@ type ServerConfiguration struct {
 
 // TODO: Custom validtors
 type Config struct {
-	Server ServerConfiguration
-	Proxy  pkg.ProxyParameters
+	Server     ServerConfiguration
+	Proxy      pkg.ProxyParameters
+	Gateway    string
+	PrivateKey *rsa.PrivateKey
+	PublicKey  *pem.Block
 }
 
 func (c *Config) Validate() error {
@@ -85,9 +92,38 @@ func NewConfig(params ConfigParameters) (Config, error) {
 		return config, internal.ErrConfigUnmarshalling
 	}
 
+	config.PublicKey, config.PrivateKey, err = GenerateKeys()
+
+	if err != nil {
+		return config, err
+	}
+
 	if err = config.Validate(); err != nil {
 		return config, err
 	}
 
 	return config, nil
+}
+
+func GenerateKeys() (pubKey *pem.Block, privKey *rsa.PrivateKey, err error) {
+	privateKey, err := rsa.GenerateKey(rand.Reader, 4096)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	publicKey := &privateKey.PublicKey
+
+	publicKeyBytes, err := x509.MarshalPKIXPublicKey(publicKey)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	publicKeyBlock := &pem.Block{
+		Type:  "PUBLIC KEY",
+		Bytes: publicKeyBytes,
+	}
+
+	return publicKeyBlock, privateKey, nil
 }

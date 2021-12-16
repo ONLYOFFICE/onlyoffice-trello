@@ -50,13 +50,15 @@ func run(config config.Config, logger *zap.Logger) (<-chan error, error) {
 
 	router := mux.NewRouter()
 
-	prhandler := endpoint.NewProxyHandler(container)
+	prhandler := endpoint.NewProxyHandler(config)
 	phandler := endpoint.NewPingHandler()
+	khandler := endpoint.NewKeyHandler(config)
 
-	aprhandler := middleware.Adapt(prhandler.GetHandle(), middleware.GetJwtMiddleware(config))
+	aprhandler := middleware.Adapt(prhandler.GetHandle(), middleware.GetOtpMiddleware(config), middleware.GetEncryptionMiddleware(config))
 
 	router.HandleFunc(prhandler.GetPath(), aprhandler.ServeHTTP).Methods(prhandler.GetMethod())
 	router.HandleFunc(phandler.GetPath(), phandler.GetHandle()).Methods(phandler.GetMethod())
+	router.HandleFunc(khandler.GetPath(), khandler.GetHandle()).Methods(khandler.GetMethod())
 	router.NotFoundHandler = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		http.Redirect(rw, r, "/proxy", http.StatusPermanentRedirect)
 	})

@@ -15,7 +15,7 @@ func (_ms _MockService) GetName() string {
 func TestRegistrateService(t *testing.T) {
 	t.Parallel()
 
-	RegistryRemoveServices()
+	_registryRemoveServices()
 
 	tests := []struct {
 		name    string

@@ -1,7 +1,7 @@
-import { Controller, Get, Res } from "@nestjs/common";
+import { Controller, Get, Res } from '@nestjs/common';
 import { Response } from 'express';
-import { SkipThrottle } from "@nestjs/throttler";
-import { PrometheusService } from "@services/prometheus.service";
+import { SkipThrottle } from '@nestjs/throttler';
+import { PrometheusService } from '@services/prometheus.service';
 
 /**
  * Prometheus metrics endpoint

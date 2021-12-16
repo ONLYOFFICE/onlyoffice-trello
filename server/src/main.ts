@@ -54,7 +54,7 @@ async function main() {
       }),
     );
     server.enableCors({
-      origin: 'https://trello.com',
+      origin: ['https://trello.com', process.env.SERVER_HOST],
       credentials: true,
     });
     server.setViewEngine('hbs');

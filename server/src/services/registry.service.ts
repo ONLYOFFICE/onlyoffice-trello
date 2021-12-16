@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 
 import { CallbackHandler } from '@models/interfaces/handlers';
 import { Callback } from '@models/callback';
-import { FilePayload } from '@models/payloads';
+import { EditorPayload } from '@models/payload';
 
 @Injectable()
 export class RegistryService {
@@ -16,9 +16,9 @@ export class RegistryService {
     this.observers.filter((o) => o.id !== ch.id);
   }
 
-  public run(callback: Callback, payload: FilePayload) {
+  public run(callback: Callback, payload: EditorPayload, uid: string) {
     this.observers.forEach((handler) => {
-      handler.handle(callback, payload);
+      handler.handle(callback, payload, uid);
     });
   }
 }

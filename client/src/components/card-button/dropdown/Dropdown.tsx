@@ -30,12 +30,12 @@ const CheckIcon = () => {
 const Menu = (props: any) => {
   const store = useStore();
 
-  const [selected, setSelected] = useState<null | SORTORDER>(() => {
-    return store.filters.sortOrder || null;
+  const [selected, setSelected] = useState<SORTORDER | undefined>(() => {
+    return store.card.filters.sortOrder;
   });
 
   const handleSortOrder = (order: SORTORDER) => {
-    store.filters.sortOrder = order;
+    store.card.filters.sortOrder = order;
     setSelected(order);
   };
 
@@ -75,13 +75,13 @@ export const Dropdown = () => {
   const store = useStore();
 
   const [selected, setSelected] = useState<Option | null>(() => {
-    return tOptions.find((opt) => opt.value === store.filters.sortBy) || null;
+    return tOptions.find((opt) => opt.value === store.card.filters.sortBy) || null;
   });
 
   const handleSortType = (type: Option | null) => {
     setSelected(type);
     if (type?.value) {
-      store.filters.sortBy = type.value as SORTBY;
+      store.card.filters.sortBy = type.value as SORTBY;
     }
   };
 

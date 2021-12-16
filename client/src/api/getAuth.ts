@@ -11,8 +11,11 @@ export async function getAuth(t: Trello.PowerUp.IFrame): Promise<string> {
 
   const res = await fetch(constants.TRELLO_API_ME(token));
   if (res.status != 200) {
-    token = await rest.authorize({ scope: 'read,write' });
+    await rest.clearToken();
+    token = await rest.authorize({ scope: 'read,write', expires: '30days' });
   }
+
+  if (!token) throw new Error('Could not receive a valid token');
 
   return token;
 }

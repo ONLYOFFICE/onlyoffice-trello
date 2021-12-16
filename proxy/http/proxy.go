@@ -28,13 +28,7 @@ func (ph ProxyHandler) GetHandle() http.HandlerFunc {
 	}
 }
 
-func NewProxyHandler(rc *pkg.RegistryContainer) *ProxyHandler {
-	var config config.Config
-
-	if err := rc.GetService(&config); err != nil {
-		return nil
-	}
-
+func NewProxyHandler(config config.Config) *ProxyHandler {
 	prx, err := pkg.NewProxy(pkg.ProxyParameters{
 		To:        config.Proxy.To,
 		Path:      config.Proxy.Path,

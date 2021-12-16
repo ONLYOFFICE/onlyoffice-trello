@@ -19,6 +19,7 @@
     "crypto-js": "^4.1.1",
     "dateformat": "^5.0.2",
     "express": "^4.17.1",
+    "jsencrypt": "^3.2.1",
     "jsonwebtoken": "^8.5.1",
     "mobx": "^6.3.6",
     "mobx-react-lite": "^3.2.2",

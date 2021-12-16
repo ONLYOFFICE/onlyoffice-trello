@@ -5,16 +5,21 @@ import (
 	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
 )
 
-type RegistryContainer struct{}
-
-func NewRegistryContainer() *RegistryContainer {
-	return &RegistryContainer{}
+type RegistryContainer interface {
+	RegisterService(service interface{}) error
+	GetService(service interface{}) error
 }
 
-func (rc *RegistryContainer) RegisterService(service interface{}) error {
+type BasicContainer struct{}
+
+func NewRegistryContainer() *BasicContainer {
+	return &BasicContainer{}
+}
+
+func (bc *BasicContainer) RegisterService(service interface{}) error {
 	return internal.RegistryRegisterService(service)
 }
 
-func (rc *RegistryContainer) GetService(service interface{}) error {
+func (bc *BasicContainer) GetService(service interface{}) error {
 	return internal.RegistryGetService(service)
 }

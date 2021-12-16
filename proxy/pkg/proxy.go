@@ -12,9 +12,11 @@ type ProxyParametersHeader struct{}
 
 // TODO: Custom validators
 type ProxyParameters struct {
-	To        string `json:"to" validate:"required"`
-	Path      string `json:"path" validate:"required"`
-	AuthValue string `json:"authvalue"`
+	To         string `json:"to" validate:"required"`
+	Path       string `json:"path" validate:"required"`
+	AuthValue  string `json:"auth_value"`
+	DocsHeader string `json:"docs_header"`
+	DocsJwt    string `json:"docs_jwt`
 }
 
 func (pp *ProxyParameters) Validate() error {
