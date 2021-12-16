@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/didip/tollbooth v4.0.2+incompatible
-	github.com/mitchellh/mapstructure v1.4.2
 	go.uber.org/zap v1.19.1
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
@@ -16,6 +15,7 @@ require (
 	github.com/hashicorp/hcl v1.0.0 // indirect
 	github.com/leodido/go-urn v1.2.1 // indirect
 	github.com/magiconair/properties v1.8.5 // indirect
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
 	github.com/pelletier/go-toml v1.9.4 // indirect
 	github.com/spf13/afero v1.6.0 // indirect

@@ -6,11 +6,13 @@ import (
 	"crypto/rsa"
 	"encoding/base64"
 	"encoding/json"
-	"fmt"
+	"errors"
 	"net/http"
+	"strings"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
+	"github.com/golang-jwt/jwt"
 )
 
 func GetEncryptionMiddleware(config config.Config) func(next http.Handler) http.Handler {
@@ -42,7 +44,6 @@ func GetEncryptionMiddleware(config config.Config) func(next http.Handler) http.
 			var p pkg.ProxyParameters
 			err = json.Unmarshal([]byte(data), &p)
 			if err != nil {
-				fmt.Println(err.Error())
 				pkg.ResponseError(w, http.StatusInternalServerError, "Could not populate proxy parameters")
 				return
 			}
@@ -51,6 +52,21 @@ func GetEncryptionMiddleware(config config.Config) func(next http.Handler) http.
 
 			if err != nil {
 				pkg.ResponseError(w, http.StatusInternalServerError, "Could not populate proxy parameters")
+				return
+			}
+
+			// TODO: Custom headers
+			token := strings.ReplaceAll(r.Header.Get(p.DocsHeader), "Bearer ", "")
+
+			_, err = jwt.Parse(token, func(t *jwt.Token) (interface{}, error) {
+				if _, ok := t.Method.(*jwt.SigningMethodHMAC); !ok {
+					return nil, errors.New("jwt validation error")
+				}
+				return []byte(p.DocsJwt), nil
+			})
+
+			if err != nil {
+				pkg.ResponseError(w, http.StatusForbidden, "Invalid jwt")
 				return
 			}
 
