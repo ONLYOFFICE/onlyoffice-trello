@@ -10,6 +10,8 @@ declare global {
     }
 }
 
+export type TrelloSettings = 'docs_address' | 'docs_jwt' | 'docs_header';
+
 export namespace Trello {
     namespace Callback {
         type CacheAction = 'run' | 'retain' | 'release';
@@ -44,6 +46,7 @@ export namespace Trello {
     }
 
     namespace PowerUp {
+
         // INTERNAL TYPES
         type ResourceDictionary = {
             [key: string]: string;
@@ -72,7 +75,7 @@ export namespace Trello {
             'on-enable'?: (t: PowerUp.IFrame) => PromiseLike<void>;
             'on-disable'?: (t: Trello.PowerUp.IFrame) => void;
             'remove-data'?: (t: Trello.PowerUp.IFrame) => void;
-            'save-attachment'?:  (t: Trello.PowerUp.IFrame, options: any) => void;
+            'save-attachment'?: (t: Trello.PowerUp.IFrame, options: any) => void;
             'show-settings'?: (t: PowerUp.IFrame, options?: any) => PromiseLike<void>;
             'authorization-status'?: (t: PowerUp.IFrame, options: any) => PromiseLike<AuthorizationStatusResponse>;
             'show-authorization'?: (t: Trello.PowerUp.IFrame) => void;
@@ -200,7 +203,7 @@ export namespace Trello {
         }
 
         type Colors = 'blue' | 'green' | 'orange' | 'red' | 'yellow' |
-            'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
+        'purple' | 'pink' | 'sky' | 'lime' | 'light-gray' | 'business-blue';
 
         type AlertDisplay = 'info' | 'warning' | 'error' | 'success';
 
@@ -288,8 +291,8 @@ export namespace Trello {
             hideAlert(): PromiseLike<void>;
             popup(
                 options: PopupOptions | PopupSearchOptions |
-                    PopupIframeOptions | PopupDateOptions |
-                    PopupConfirmOptions | PopupConfirmWithCancelOptions): PromiseLike<void>;
+                PopupIframeOptions | PopupDateOptions |
+                PopupConfirmOptions | PopupConfirmWithCancelOptions): PromiseLike<void>;
             overlay(options: {
                 url: string;
                 args: { [key: string]: any};

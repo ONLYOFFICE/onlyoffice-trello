@@ -4,7 +4,6 @@ import './styles.css';
 
 export const Loader = () => {
     return (
-        <div className='modal-main_loader'>
-        </div>
-    )
-}
+        <div className='modal-main_loader'/>
+    );
+};
