@@ -1,0 +1,7 @@
+#iframeEditor {
+    display: block;
+    overflow: auto;
+    height: 100vh;
+    width: 100vw;
+    border: none;
+  }

@@ -16,6 +16,7 @@ import {Info} from './info/Info';
 import {Main} from './main/Main';
 import {Loader} from './loader/Loader';
 import {FileList} from './file/FileList';
+import {Editor} from './editor/Editor';
 
 import './styles.css';
 
@@ -27,6 +28,8 @@ const CardButton = observer(() => {
     const [isError, setIsError] = useState(false);
     const [token, setToken] = useState('');
     const [docServerInfo, setDocServerInfo] = useState<DocServer>();
+    const [signature, setSignature] = useState('');
+    const [editorPayload, setEditorPayload] = useState<EditorPayload>();
 
     useEffect(() => {
         (async () => {
@@ -75,7 +78,7 @@ const CardButton = observer(() => {
                 docs_header: docServerInfo?.docs_header || '',
             };
 
-            const payload: EditorPayload = {
+            setEditorPayload({
                 proxyResource: encodeURIComponent(btoa(JSON.stringify(proxyResource))),
                 attachment,
                 card: store.card.id || '',
@@ -84,26 +87,14 @@ const CardButton = observer(() => {
                 ds: docServerInfo?.docs_address || '',
                 dsheader: docServerInfo?.docs_header || '',
                 dsjwt: docServerInfo?.docs_jwt || '',
-            };
-
-            const signature = await (store.trello as any).jwt({
+            });
+            setSignature(await (store.trello as any).jwt({
                 state: JSON.stringify({
                     attachment,
                     due: timestamp + 1.5 * 60 * 1000,
                 }),
-            });
-
+            }));
             setIsEditor(true);
-
-            (
-                document.getElementById('onlyoffice-editor-form') as HTMLFormElement
-            ).action = `${process.env.BACKEND_HOST}/onlyoffice/editor?signature=${signature}`;
-            (
-                document.getElementById('onlyoffice-editor-payload') as HTMLInputElement
-            ).value = JSON.stringify(payload);
-            (
-                document.getElementById('onlyoffice-editor-form') as HTMLFormElement
-            ).submit();
         } catch (err) {
             setIsError(true);
         }
@@ -119,25 +110,10 @@ const CardButton = observer(() => {
             {!isError && (
                 <>
                     {allowEditor ? (
-                        <>
-                            <form
-                                action=''
-                                method='POST'
-                                target='iframeEditor'
-                                id='onlyoffice-editor-form'
-                            >
-                                <input
-                                    id='onlyoffice-editor-payload'
-                                    name='payload'
-                                    value=''
-                                    type='hidden'
-                                />
-                            </form>
-                            <iframe
-                                name='iframeEditor'
-                                id='iframeEditor'
-                            />
-                        </>
+                        <Editor
+                            signature={signature}
+                            payload={editorPayload!}
+                        />
                     ) : (
                         <>
                             <Main>

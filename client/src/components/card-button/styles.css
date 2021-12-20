@@ -1,11 +1,3 @@
-#iframeEditor {
-  display: block;
-  overflow: auto;
-  height: 100vh;
-  width: 100vw;
-  border: none;
-}
-
 .onlyoffice_loader-container {
   display: flex;
   justify-content: center;
