@@ -9,7 +9,7 @@ func ResponseOK(w http.ResponseWriter, body interface{}) {
 	w.WriteHeader(http.StatusOK)
 	w.Header().Set("Content-Type", "application/json")
 
-	json.NewEncoder(w).Encode(body)
+	_ = json.NewEncoder(w).Encode(body)
 }
 
 func ResponseError(w http.ResponseWriter, code int, reason string) {
@@ -20,5 +20,5 @@ func ResponseError(w http.ResponseWriter, code int, reason string) {
 		"error": reason,
 	}
 
-	json.NewEncoder(w).Encode(payload)
+	_ = json.NewEncoder(w).Encode(payload)
 }

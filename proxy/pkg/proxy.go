@@ -17,6 +17,7 @@ type ProxyParameters struct {
 	AuthValue  string `json:"auth_value"`
 	DocsHeader string `json:"docs_header"`
 	DocsJwt    string `json:"docs_jwt"`
+	Due        int64  `json:"due"`
 }
 
 func (pp *ProxyParameters) Validate() error {

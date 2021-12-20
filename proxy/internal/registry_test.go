@@ -15,7 +15,7 @@ func (_ms _MockService) GetName() string {
 func TestRegistrateService(t *testing.T) {
 	t.Parallel()
 
-	_registryRemoveServices()
+	registry := NewRegistry()
 
 	tests := []struct {
 		name    string
@@ -42,7 +42,7 @@ func TestRegistrateService(t *testing.T) {
 		tt := test
 
 		t.Run(tt.name, func(t *testing.T) {
-			if actualErr := RegistryRegisterService(tt.service); (actualErr != nil) != tt.withErr {
+			if actualErr := registry.RegistryRegisterService(tt.service); (actualErr != nil) != tt.withErr {
 				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
 		})
@@ -51,6 +51,8 @@ func TestRegistrateService(t *testing.T) {
 
 func TestGetService(t *testing.T) {
 	t.Parallel()
+
+	registry := NewRegistry()
 
 	tests := []struct {
 		name    string
@@ -69,10 +71,13 @@ func TestGetService(t *testing.T) {
 	for _, test := range tests {
 		tt := test
 
-		RegistryRegisterService(tt.service)
+		err := registry.RegistryRegisterService(tt.service)
+		if err != nil {
+			t.Fatalf(err.Error())
+		}
 		t.Run(tt.name, func(t *testing.T) {
 			var ptr _MockService
-			if actualErr := RegistryGetService(&ptr); (actualErr != nil) != tt.withErr && len(ptr.GetName()) > 0 {
+			if actualErr := registry.RegistryGetService(&ptr); (actualErr != nil) != tt.withErr && len(ptr.GetName()) > 0 {
 				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
 		})

@@ -10,16 +10,20 @@ type RegistryContainer interface {
 	GetService(service interface{}) error
 }
 
-type BasicContainer struct{}
+type BasicContainer struct {
+	_registry *internal.Registry
+}
 
 func NewRegistryContainer() *BasicContainer {
-	return &BasicContainer{}
+	return &BasicContainer{
+		_registry: internal.NewRegistry(),
+	}
 }
 
 func (bc *BasicContainer) RegisterService(service interface{}) error {
-	return internal.RegistryRegisterService(service)
+	return bc._registry.RegistryRegisterService(service)
 }
 
 func (bc *BasicContainer) GetService(service interface{}) error {
-	return internal.RegistryGetService(service)
+	return bc._registry.RegistryGetService(service)
 }

@@ -6,38 +6,23 @@ import (
 	"sync"
 )
 
-var _registry *Registry
-var _locker = &sync.Mutex{}
-
 type Registry struct {
 	services map[reflect.Type]interface{}
 	types    []reflect.Type
+	locker   sync.Mutex
 }
 
-func _GetRegistry() *Registry {
-	if _registry == nil {
-		_locker.Lock()
-		defer _locker.Unlock()
-		if _registry == nil {
-			_registry = &Registry{
-				services: make(map[reflect.Type]interface{}),
-			}
-		}
+func NewRegistry() *Registry {
+	return &Registry{
+		services: make(map[reflect.Type]interface{}),
+		locker:   sync.Mutex{},
 	}
-
-	return _registry
 }
 
-func _registryRemoveServices() {
-	r := _GetRegistry()
-	r.services = make(map[reflect.Type]interface{})
-}
-
-func RegistryRegisterService(s interface{}) error {
-	r := _GetRegistry()
+func (r *Registry) RegistryRegisterService(s interface{}) error {
 	t := reflect.TypeOf(s)
-	_locker.Lock()
-	defer _locker.Unlock()
+	r.locker.Lock()
+	defer r.locker.Unlock()
 	if _, exists := r.services[t]; exists {
 		return ErrRegistryRegistration
 	}
@@ -46,8 +31,7 @@ func RegistryRegisterService(s interface{}) error {
 	return nil
 }
 
-func RegistryGetService(service interface{}) error {
-	r := _GetRegistry()
+func (r *Registry) RegistryGetService(service interface{}) error {
 	if reflect.TypeOf(service).Kind() != reflect.Ptr {
 		return ErrRegistryInvalidInput
 	}

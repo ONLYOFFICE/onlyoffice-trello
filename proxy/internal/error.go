@@ -28,3 +28,5 @@ var ErrRegistryRegistration = errors.New("handler type already exists")
 var ErrRegistryInvalidInput = errors.New("registry received an invalid input")
 var ErrRegistryInvalidService = errors.New("registry received an invalid service")
 var ErrRegistryNoService = errors.New("service does not exist")
+
+var ErrAesInvalidTextLength = errors.New("cipher text is too short")

@@ -1,10 +1,6 @@
 package config
 
 import (
-	"crypto/rand"
-	"crypto/rsa"
-	"crypto/x509"
-	"encoding/pem"
 	"path/filepath"
 	"runtime"
 
@@ -17,12 +13,12 @@ import (
 type ConfigType string
 
 const (
-	ConfigYml ConfigType = "yml"
+	ConfigYML ConfigType = "yml"
 )
 
 func (t ConfigType) Validate() error {
 	switch t {
-	case ConfigYml:
+	case ConfigYML:
 		return nil
 	default:
 		return internal.ErrConfigInvalidType
@@ -32,22 +28,18 @@ func (t ConfigType) Validate() error {
 type ServerConfiguration struct {
 	Host   string `validate:"required"`
 	Port   int    `validate:"required"`
-	Secret string `validate:"required"`
-	Limit  int    `validate:"required"`
+	Secret string `validate:"required,len=32"`
+	Limit  int    `validate:"required,min=1"`
 }
 
-// TODO: Custom validtors
 type Config struct {
-	Server     ServerConfiguration
-	Proxy      pkg.ProxyParameters
-	Gateway    string
-	PrivateKey *rsa.PrivateKey
-	PublicKey  *pem.Block
+	Server  ServerConfiguration
+	Proxy   pkg.ProxyParameters
+	Gateway string
 }
 
 func (c *Config) Validate() error {
 	validator := validator.New()
-
 	return validator.Struct(c)
 }
 
@@ -84,15 +76,9 @@ func NewConfig(params ConfigParameters) (Config, error) {
 		}
 	}
 
-	viper.SetDefault("server.host", "127.0.0.1")
-	viper.SetDefault("server.port", 8080)
-	viper.SetDefault("server.secret", "proxy_secret")
-
 	if err = viper.Unmarshal(&config); err != nil {
 		return config, internal.ErrConfigUnmarshalling
 	}
-
-	config.PublicKey, config.PrivateKey, err = GenerateKeys()
 
 	if err != nil {
 		return config, err
@@ -103,27 +89,4 @@ func NewConfig(params ConfigParameters) (Config, error) {
 	}
 
 	return config, nil
-}
-
-func GenerateKeys() (pubKey *pem.Block, privKey *rsa.PrivateKey, err error) {
-	privateKey, err := rsa.GenerateKey(rand.Reader, 4096)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	publicKey := &privateKey.PublicKey
-
-	publicKeyBytes, err := x509.MarshalPKIXPublicKey(publicKey)
-
-	if err != nil {
-		return nil, nil, err
-	}
-
-	publicKeyBlock := &pem.Block{
-		Type:  "PUBLIC KEY",
-		Bytes: publicKeyBytes,
-	}
-
-	return publicKeyBlock, privateKey, nil
 }
