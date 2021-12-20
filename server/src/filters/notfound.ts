@@ -1,4 +1,4 @@
-import { ArgumentsHost, Catch, ExceptionFilter, NotFoundException } from "@nestjs/common";
+import {ArgumentsHost, Catch, ExceptionFilter, NotFoundException} from '@nestjs/common';
 
 /**
  * 404 Redirect to https://trello.com handler
@@ -9,5 +9,5 @@ export class NotFoundExceptionFilter implements ExceptionFilter {
         const ctx = host.switchToHttp();
         const response = ctx.getResponse();
         response.redirect('https://trello.com');
-    };
-};
+    }
+}

@@ -1,12 +1,12 @@
 type Action = {
-  type: number;
-  userid: string;
+    type: number;
+    userid: string;
 };
 
 export type Callback = {
-  key: string;
-  status: number;
-  users: string[];
-  actions: Action[];
-  url?: string;
+    key: string;
+    status: number;
+    users: string[];
+    actions: Action[];
+    url?: string;
 };

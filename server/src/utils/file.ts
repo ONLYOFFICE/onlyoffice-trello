@@ -1,6 +1,7 @@
-import { Injectable } from '@nestjs/common';
-import { EditorPayload } from '@models/payload';
-import { Constants } from './const';
+import {Injectable} from '@nestjs/common';
+import {EditorPayload} from '@models/payload';
+
+import {Constants} from './const';
 
 const ONLYOFFICE_CELL = 'cell';
 const ONLYOFFICE_WORD = 'word';
@@ -52,27 +53,27 @@ const AllowedExtensions = new Map([
  */
 @Injectable()
 export class FileUtils {
-  private trelloApiVersion: string = '1';
+    private trelloApiVersion = '1';
 
-  constructor(
-    private readonly constants: Constants,
-  ){};
+    constructor(
+        private readonly constants: Constants,
+    ) {}
 
-  /**
+    /**
    *
    * @param payload An object with essential trello properties (oauth token, card id, attachment id, filename)
    * @returns A url to download 'filename' from trello servers
    */
-  public buildTrelloFileUrl(payload: EditorPayload) {
-    return `${this.constants.URL_TRELLO_BASE}/${this.trelloApiVersion}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`;
-  }
+    public buildTrelloFileUrl(payload: EditorPayload) {
+        return `${this.constants.URL_TRELLO_BASE}/${this.trelloApiVersion}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`;
+    }
 
-  /**
+    /**
    *
    * @param fileExt
    * @returns
    */
-  public isExtensionSupported(fileExt: string): [boolean, boolean] {
-    return [EditExtensions.has(fileExt) || AllowedExtensions.has(fileExt), EditExtensions.has(fileExt)];
-  }
+    public isExtensionSupported(fileExt: string): [boolean, boolean] {
+        return [EditExtensions.has(fileExt) || AllowedExtensions.has(fileExt), EditExtensions.has(fileExt)];
+    }
 }
