@@ -4,6 +4,8 @@ import Select, {components} from 'react-select';
 import {useStore} from 'Root/context';
 import {SORTBY, SORTORDER} from 'Types/enums';
 
+import {CheckIcon} from './CheckIcon';
+
 import './styles.css';
 
 type Option = {
@@ -17,15 +19,6 @@ const Options: Option[] = [
     {value: 'type', label: 'Type'},
     {value: 'modified', label: 'Last Modified'},
 ];
-
-const CheckIcon = () => {
-    return (
-        <span className='checkicon'>
-            <div className='checkicon_tip'/>
-            <div className='checkicon_base'/>
-        </span>
-    );
-};
 
 const Menu = (props: any) => {
     const store = useStore();

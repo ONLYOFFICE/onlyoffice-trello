@@ -15,6 +15,7 @@
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-y: scroll;
+  scroll-behavior: smooth;
 }
 
 .file_container::-webkit-scrollbar {

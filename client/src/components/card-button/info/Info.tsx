@@ -34,7 +34,7 @@ export const Info = () => {
                     src={info}
                 />
                 <b className='info-container__main-text'>
-                    {'ONLYOFFICE Power-Up is suitable for files less than 2.5 MB'}
+                    {'ONLYOFFICE Power-Up is suitable for files less than 1.5 MB'}
                 </b>
                 <img
                     className='info-container__top__icon'

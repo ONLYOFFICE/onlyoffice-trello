@@ -1,26 +1,11 @@
 import React, {useState, useEffect} from 'react';
 import dateFormat from 'dateformat';
 
-import {Dropdown} from 'Components/card-button/dropdown/Dropdown';
 import {getIconByExt} from 'Root/utils/file';
 import {Trello} from 'Types/trello';
 
 import download from 'Public/images/download.svg';
 import './styles.css';
-
-export const FileContainer: React.FC = ({children}) => {
-    return (
-        <>
-            <div className='file_header'>
-                <h2>{'Files'}</h2>
-                <div>
-                    <Dropdown/>
-                </div>
-            </div>
-            <div className='file_container'>{children}</div>
-        </>
-    );
-};
 
 const DesktopFile: React.FC<{ file: Trello.PowerUp.Attachment }> = ({file}) => {
     const extIcon = getIconByExt(file.name.split('.')[1]);
@@ -51,22 +36,20 @@ const DesktopFile: React.FC<{ file: Trello.PowerUp.Attachment }> = ({file}) => {
 const MobileFile: React.FC<{ file: Trello.PowerUp.Attachment }> = ({file}) => {
     const extIcon = getIconByExt(file.name.split('.')[1]);
     return (
-        <>
-            <div className='file_container_item__main'>
-                <img src={extIcon}/>
-                <div className='file_container_item__main_mobile'>
-                    <h2>{file.name}</h2>
-                    <div className='file_container_item__main__text'>
-                        <p className='file_container_item__main__text__item'>
-                            {(file.bytes / 1000000).toFixed(2)} MB
-                        </p>
-                        <p className='file_container_item__main__text__item file_container_item__main__text__item_long'>
-                            {dateFormat(file.date, 'dd/m/yy HH:MM')}
-                        </p>
-                    </div>
+        <div className='file_container_item__main'>
+            <img src={extIcon}/>
+            <div className='file_container_item__main_mobile'>
+                <h2>{file.name}</h2>
+                <div className='file_container_item__main__text'>
+                    <p className='file_container_item__main__text__item'>
+                        {(file.bytes / 1000000).toFixed(2)} MB
+                    </p>
+                    <p className='file_container_item__main__text__item file_container_item__main__text__item_long'>
+                        {dateFormat(file.date, 'dd/m/yy HH:MM')}
+                    </p>
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 
@@ -89,13 +72,12 @@ export const File: React.FC<{
         };
     }, []);
 
+    const fileFitsLimit = parseFloat((props.file.bytes / 1000000).toFixed(2)) <= 1.5;
+
     return (
         <div className='file_container_item'>
-            {!isMobile ? (
-                <DesktopFile file={props.file}/>
-            ) : (
-                <MobileFile file={props.file}/>
-            )}
+            {isMobile && <MobileFile file={props.file}/>}
+            {!isMobile && <DesktopFile file={props.file}/>}
             <div className='file_container_item__controls'>
                 <button>
                     <a
@@ -108,13 +90,13 @@ export const File: React.FC<{
                         />
                     </a>
                 </button>
-                {parseFloat((props.file.bytes / 1000000).toFixed(2)) <= 1.5 ? (
+                {fileFitsLimit && (
                     <button
                         onClick={() => props.handleDownload(props.file.id, props.file.name)}
                     >
                         {'Open in ONLYOFFICE'}
                     </button>
-                ) : null}
+                )}
             </div>
         </div>
     );

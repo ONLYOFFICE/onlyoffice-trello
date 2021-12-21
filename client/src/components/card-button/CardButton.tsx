@@ -1,9 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {Trello} from 'Types/trello';
-import {DocServer} from 'Types/docserver';
-import {ProxyPayloadResource, EditorPayload} from 'Types/payloads';
 import {getAuth} from 'Root/api/getAuth';
 import {useStore} from 'Root/context';
 import {generateOAuthHeader} from 'Root/utils/oauth';
@@ -11,12 +8,17 @@ import constants from 'Root/utils/const';
 import {filterFiles} from 'Root/utils/sort';
 import {isExtensionSupported} from 'Root/utils/file';
 
+import {Trello} from 'Types/trello';
+import {DocServer} from 'Types/docserver';
+import {ProxyPayloadResource, EditorPayload} from 'Types/payloads';
+
 import {Header} from './header/Header';
 import {Info} from './info/Info';
 import {Main} from './main/Main';
 import {Loader} from './loader/Loader';
 import {FileList} from './file/FileList';
 import {Editor} from './editor/Editor';
+import {Error} from './error/Error';
 
 import './styles.css';
 
@@ -41,7 +43,13 @@ const CardButton = observer(() => {
                 method: 'GET',
                 url: constants.TRELLO_API_CARD_ATTACHMENTS(card.id),
             };
-            const token = await getAuth(store.trello);
+            let token = '';
+            try {
+                token = await getAuth(store.trello);
+            } catch {
+                setIsError(true);
+                return;
+            }
             const auth = generateOAuthHeader(
                 options,
                 rest.appKey,
@@ -88,12 +96,14 @@ const CardButton = observer(() => {
                 dsheader: docServerInfo?.docs_header || '',
                 dsjwt: docServerInfo?.docs_jwt || '',
             });
-            setSignature(await (store.trello as any).jwt({
-                state: JSON.stringify({
-                    attachment,
-                    due: timestamp + 1.5 * 60 * 1000,
+            setSignature(
+                await (store.trello as any).jwt({
+                    state: JSON.stringify({
+                        attachment,
+                        due: timestamp + 1.5 * 60 * 1000,
+                    }),
                 }),
-            }));
+            );
             setIsEditor(true);
         } catch (err) {
             setIsError(true);
@@ -103,40 +113,37 @@ const CardButton = observer(() => {
     const allowEditor = isEditor && token && docServerInfo?.docs_address;
 
     return (
-        <div id='container'>
-            {isError && (
-                <div>Error</div>
-            )}
+        <>
+            {isError && <Error/>}
             {!isError && (
-                <>
-                    {allowEditor ? (
+                <div id='container'>
+                    {allowEditor && (
                         <Editor
                             signature={signature}
                             payload={editorPayload!}
                             setError={setIsError}
                         />
-                    ) : (
-                        <>
-                            <Main>
-                                <Header/>
-                                <Info/>
-                                {isLoading && (
-                                    <div className='onlyoffice_loader-container'>
-                                        <Loader/>
-                                    </div>
-                                )}
-                                {!isLoading && (
-                                    <FileList
-                                        files={filterFiles(files, store.card.filters)}
-                                        handleDownload={handleDownload}
-                                    />
-                                )}
-                            </Main>
-                        </>
                     )}
-                </>
+                    {!allowEditor && (
+                        <Main>
+                            <Header/>
+                            <Info/>
+                            {isLoading && (
+                                <div className='onlyoffice_loader-container'>
+                                    <Loader/>
+                                </div>
+                            )}
+                            {!isLoading && (
+                                <FileList
+                                    files={filterFiles(files, store.card.filters)}
+                                    handleDownload={handleDownload}
+                                />
+                            )}
+                        </Main>
+                    )}
+                </div>
             )}
-        </div>
+        </>
     );
 });
 

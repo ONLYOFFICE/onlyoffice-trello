@@ -4,17 +4,12 @@ import {EditorPayload} from 'Types/payloads';
 
 import './styles.css';
 
-const invokeEditor = (signature: string, payload: EditorPayload) => {
-    (document.getElementById('onlyoffice-editor-form') as HTMLFormElement).
-        action = `${process.env.BACKEND_HOST}/onlyoffice/editor?signature=${signature}`;
-    (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).
-        value = JSON.stringify(payload);
-    (document.getElementById('onlyoffice-editor-form') as HTMLFormElement).submit();
-};
-
 export const Editor: React.FC<{signature: string, payload: EditorPayload, setError: React.Dispatch<React.SetStateAction<boolean>>}> = ({signature, payload, setError}) => {
     useEffect(() => {
-        invokeEditor(signature, payload);
+        const form = (document.getElementById('onlyoffice-editor-form') as HTMLFormElement);
+        form.action = `${process.env.BACKEND_HOST}/onlyoffice/editor?signature=${signature}`;
+        (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
+        form.submit();
         setTimeout(() => {
             if (!(document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length) {
                 setError(true);
@@ -23,8 +18,10 @@ export const Editor: React.FC<{signature: string, payload: EditorPayload, setErr
     }, []);
 
     const editorLoaded = () => {
-        const isDocument = !!(document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length;
-        if (!isDocument) props.setError(true);
+        const isDocument = Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length);
+        if (!isDocument) {
+            setError(true);
+        }
     };
 
     return (
