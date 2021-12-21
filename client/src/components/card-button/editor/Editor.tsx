@@ -11,14 +11,14 @@ export const Editor: React.FC<{signature: string, payload: EditorPayload, setErr
         (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
         form.submit();
         setTimeout(() => {
-            if (!(document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length) {
+            if (!(document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length) {
                 setError(true);
             }
         }, 8000);
     }, []);
 
     const editorLoaded = () => {
-        const isDocument = Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length);
+        const isDocument = Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length);
         if (!isDocument) {
             setError(true);
         }
