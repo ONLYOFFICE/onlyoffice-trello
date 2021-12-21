@@ -221,7 +221,7 @@ export class OnlyofficeController {
                 }
             }
 
-            this.cacheManager.set(uid, JSON.stringify(payload), 30);
+            this.cacheManager.set(uid, form.payload, 30);
 
             const config: Config = {
                 document: {
