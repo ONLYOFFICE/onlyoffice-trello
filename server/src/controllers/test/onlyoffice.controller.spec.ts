@@ -23,60 +23,6 @@ const mockRedisDel = (key: string) => {
 describe('Onlyoffice Controller', () => {
     let app: NestExpressApplication;
     let secService: SecurityService;
-    const errpage = '<!DOCTYPE html>\n' +
-    '<html>\n' +
-    '\n' +
-    '<head runat="server">\n' +
-    '    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />\n' +
-    '    <meta http-equiv="X-UA-Compatible" content="IE=edge" />\n' +
-    '    <meta name="viewport"\n' +
-    '        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />\n' +
-    '    <meta name="apple-mobile-web-app-capable" content="yes" />\n' +
-    '    <meta name="mobile-web-app-capable" content="yes" />\n' +
-    '    <!--\n' +
-    '    *\n' +
-    '    * (c) Copyright Ascensio System SIA 2021\n' +
-    '    *\n' +
-    '    * Licensed under the Apache License, Version 2.0 (the "License");\n' +
-    '    * you may not use this file except in compliance with the License.\n' +
-    '    * You may obtain a copy of the License at\n' +
-    '    *\n' +
-    '    *     http://www.apache.org/licenses/LICENSE-2.0\n' +
-    '    *\n' +
-    '    * Unless required by applicable law or agreed to in writing, software\n' +
-    '    * distributed under the License is distributed on an "AS IS" BASIS,\n' +
-    '    * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n' +
-    '    * See the License for the specific language governing permissions and\n' +
-    '    * limitations under the License.\n' +
-    '    *\n' +
-    '    -->\n' +
-    '    <title>ONLYOFFICE</title>\n' +
-    '    <style>\n' +
-    '        body {\n' +
-    '            background: #fff;\n' +
-    '            color: #333;\n' +
-    '            font-family: Arial, Tahoma, sans-serif;\n' +
-    '            font-size: 12px;\n' +
-    '            font-weight: normal;\n' +
-    '            height: 100%;\n' +
-    '            margin: 0;\n' +
-    '            overflow-y: hidden;\n' +
-    '            padding: 0;\n' +
-    '            text-decoration: none;\n' +
-    '        }\n' +
-    '\n' +
-    '        div {\n' +
-    '            margin: 0;\n' +
-    '            padding: 0;\n' +
-    '        }\n' +
-    '    </style>\n' +
-    '</head>\n' +
-    '\n' +
-    '<body>\n' +
-    '    <h1>Error</h1>\n' +
-    '</body>\n' +
-    '\n' +
-    '</html>\n';
     beforeEach(async () => {
         const mockRedisService = {
             get: jest.fn().mockReturnValue(Promise.resolve(JSON.stringify({
@@ -150,7 +96,6 @@ describe('Onlyoffice Controller', () => {
             const res = await request(app.getHttpServer())
             .post('/onlyoffice/editor')
             .send(body);
-            expect(res.text).toBe(errpage);
             expect(res.get('X-ONLYOFFICE-REASON')).toBe('Error: Invalid form payload');
         });
 
@@ -171,7 +116,6 @@ describe('Onlyoffice Controller', () => {
             const res = await request(app.getHttpServer())
             .post('/onlyoffice/editor')
             .send(body);
-            expect(res.text).toBe(errpage);
             expect(res.get('X-ONLYOFFICE-REASON')).toBe('Error: Invalid document server url');
         });
 
@@ -192,7 +136,6 @@ describe('Onlyoffice Controller', () => {
             const res = await request(app.getHttpServer())
             .post('/onlyoffice/editor')
             .send(body);
-            expect(res.text).toBe(errpage);
             expect(res.get('X-ONLYOFFICE-REASON')).toBe('Error: File type is not supported');
         });
 
@@ -213,8 +156,7 @@ describe('Onlyoffice Controller', () => {
             const res = await request(app.getHttpServer())
             .post('/onlyoffice/editor')
             .send(body);
-            expect(res.text).toBe(errpage);
-            expect(res.get('X-ONLYOFFICE-REASON')).toContain('Error: getaddrinfo ENOTFOUND');
+            expect(res.get('X-ONLYOFFICE-REASON')).toContain('Error: Request failed with status code 401');
         });
     });
 
