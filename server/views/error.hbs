@@ -1,13 +1,14 @@
-<!DOCTYPE html>
 <html>
 
-<head runat="server">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport"
-        content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no" />
-    <meta name="apple-mobile-web-app-capable" content="yes" />
-    <meta name="mobile-web-app-capable" content="yes" />
+  <head runat='server'>
+    <meta http-equiv='Content-Type' content='text/html; charset=utf-8' />
+    <meta http-equiv='X-UA-Compatible' content='IE=edge' />
+    <meta
+      name='viewport'
+      content='width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no'
+    />
+    <meta name='apple-mobile-web-app-capable' content='yes' />
+    <meta name='mobile-web-app-capable' content='yes' />
     <!--
     *
     * (c) Copyright Ascensio System SIA 2021
@@ -27,28 +28,37 @@
     -->
     <title>ONLYOFFICE</title>
     <style>
-        body {
-            background: #fff;
-            color: #333;
-            font-family: Arial, Tahoma, sans-serif;
-            font-size: 12px;
-            font-weight: normal;
-            height: 100%;
-            margin: 0;
-            overflow-y: hidden;
-            padding: 0;
-            text-decoration: none;
-        }
-
-        div {
-            margin: 0;
-            padding: 0;
-        }
+      .onlyoffice-error { position: relative; overflow: hidden; height: 100vh;
+      width: 100vw; display: flex; justify-content: center; align-items: center;
+      flex-direction: column; color: #42526e; } .onlyoffice-error_header {
+      font-family: sans-serif; font-weight: 500; font-style: normal; font-size:
+      1.5rem; line-height: 2.5rem; text-align: center; } .onlyoffice-error_text
+      { font-family: sans-serif; font-weight: 400; font-style: normal; margin: 0
+      1rem 0 1rem; font-size: 1rem; line-height: 1.5rem; text-align: center; }
+      .onlyoffice-error_background { position: absolute; border-radius: 50%;
+      mix-blend-mode: multiply; } .onlyoffice-error_background:nth-of-type(1) {
+      background-color: #F8FBFF; width: 1036px; height: 1036px; }
+      .onlyoffice-error_background:nth-of-type(2) { background-color: #F8FBFF;
+      width: 724px; height: 724px; } .onlyoffice-error_background:nth-of-type(3)
+      { background-color: #F8FBFF; width: 466px; height: 466px; } @media all and
+      (max-width: 730px) { .onlyoffice-error_header { font-size: 1.4rem;
+      line-height: 2.4rem; } .onlyoffice-error_text { font-size: 0.9rem;
+      line-height: 1.5rem; } } @media all and (max-width: 450px) {
+      .onlyoffice-error_header { font-size: 1.4rem; line-height: 2.4rem; }
+      .onlyoffice-error_text { font-size: 0.8rem; line-height: 1.5rem; } }
     </style>
-</head>
+  </head>
 
-<body>
-    <h1>Error</h1>
-</body>
+  <body>
+    <div className='onlyoffice-error'>
+      <p className='onlyoffice-error_header'>System error</p>
+      <p className='onlyoffice-error_text'>Something went wrong. Perhaps, the
+        service is busy or we don't have your access token. Please try again
+        later or contant the site administrator</p>
+      <div className='onlyoffice-error_background'></div>
+      <div className='onlyoffice-error_background'></div>
+      <div className='onlyoffice-error_background'></div>
+    </div>
+  </body>
 
 </html>
