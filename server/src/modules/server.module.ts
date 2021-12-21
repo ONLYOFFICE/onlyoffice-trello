@@ -30,7 +30,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
         ConventionalHandlersModule,
         ThrottlerModule.forRoot({
             ttl: 1,
-            limit: 1000,
+            limit: 50,
         }),
         CacheModule.registerAsync({
             isGlobal: true,
@@ -41,7 +41,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
                 host: configService.get('CACHE_URL'),
                 port: configService.get('CACHE_PORT'),
                 ttl: 0,
-                max: 100000,
+                max: 10000,
             }),
         }),
     ],
