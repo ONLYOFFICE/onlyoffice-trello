@@ -113,6 +113,7 @@ const CardButton = observer(() => {
                         <Editor
                             signature={signature}
                             payload={editorPayload!}
+                            setError={setIsError}
                         />
                     ) : (
                         <>

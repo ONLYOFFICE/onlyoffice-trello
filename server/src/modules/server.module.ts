@@ -30,7 +30,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
         ConventionalHandlersModule,
         ThrottlerModule.forRoot({
             ttl: 1,
-            limit: 50,
+            limit: 125,
         }),
         CacheModule.registerAsync({
             isGlobal: true,

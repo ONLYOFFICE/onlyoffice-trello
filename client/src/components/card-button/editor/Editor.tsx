@@ -12,10 +12,20 @@ const invokeEditor = (signature: string, payload: EditorPayload) => {
     (document.getElementById('onlyoffice-editor-form') as HTMLFormElement).submit();
 };
 
-export const Editor: React.FC<{signature: string, payload: EditorPayload}> = (props) => {
+export const Editor: React.FC<{signature: string, payload: EditorPayload, setError: React.Dispatch<React.SetStateAction<boolean>>}> = ({signature, payload, setError}) => {
     useEffect(() => {
-        invokeEditor(props.signature, props.payload);
+        invokeEditor(signature, payload);
+        setTimeout(() => {
+            if (!(document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length) {
+                setError(true);
+            }
+        }, 8000);
     }, []);
+
+    const editorLoaded = () => {
+        const isDocument = !!(document.getElementById('iframeEditor') as HTMLIFrameElement).contentWindow?.length;
+        if (!isDocument) props.setError(true);
+    };
 
     return (
         <>
@@ -35,6 +45,7 @@ export const Editor: React.FC<{signature: string, payload: EditorPayload}> = (pr
             <iframe
                 name='iframeEditor'
                 id='iframeEditor'
+                onLoad={editorLoaded}
             />
         </>
     );
