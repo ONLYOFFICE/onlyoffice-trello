@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	runner "github.com/ONLYOFFICE/onlyoffice-trello/cmd/bootstrapper"
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
+	runner "github.com/ONLYOFFICE/onlyoffice-trello/cmd/runner"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	"go.uber.org/zap"
 )
