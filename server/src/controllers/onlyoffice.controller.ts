@@ -102,6 +102,7 @@ export class OnlyofficeController {
     @Post('editor')
     @UsePipes(new ValidationPipe())
     async openEditor(@Body() form: EditorPayloadForm, @Res() res: Response) {
+        const uid = nanoid();
         try {
             const payload = Object.setPrototypeOf(
                 JSON.parse(form.payload),
@@ -200,7 +201,6 @@ export class OnlyofficeController {
                 }
             }
 
-            const uid = nanoid();
             this.cacheManager.set(uid, JSON.stringify(payload), 30);
 
             const config: Config = {
@@ -231,6 +231,7 @@ export class OnlyofficeController {
             });
         } catch (err) {
             this.logger.debug(err);
+            await this.cacheManager.del(uid);
             res.setHeader('X-ONLYOFFICE-REASON', err);
             res.render('error');
         }
