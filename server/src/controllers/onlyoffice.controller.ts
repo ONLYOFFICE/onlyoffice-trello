@@ -125,6 +125,26 @@ export class OnlyofficeController {
                 throw new Error('File type is not supported');
             }
 
+            const attachmentUrl = `${this.constants.URL_TRELLO_API_BASE}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`;
+            let authHeader = this.oauthUtil.getAuthHeaderForRequest(
+                {
+                    url: attachmentUrl,
+                    method: 'HEAD',
+                },
+                payload.token,
+            );
+
+            const fileInfo = await axios.head(attachmentUrl, {
+                headers: {
+                    Authorization: authHeader.Authorization,
+                },
+            });
+
+            const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
+            if (fileSize > 1.6) {
+                throw new Error('File size error');
+            }
+
             const commandPayload: Command = {
                 c: 'version',
             };
@@ -149,7 +169,7 @@ export class OnlyofficeController {
 
             if (!payload.proxySecret) {
                 const request = {
-                    url: `${this.constants.URL_TRELLO_API_BASE}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`,
+                    url: attachmentUrl,
                     method: 'GET',
                 };
 
@@ -175,7 +195,7 @@ export class OnlyofficeController {
                 method: 'GET',
             };
 
-            const authHeader = this.oauthUtil.getAuthHeaderForRequest(
+            authHeader = this.oauthUtil.getAuthHeaderForRequest(
                 request,
                 payload.token,
             );
