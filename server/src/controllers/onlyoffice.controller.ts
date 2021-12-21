@@ -51,7 +51,8 @@ export class OnlyofficeController {
 
     @Post('callback')
     async callback(
-    @Query('uid') uid: string,
+        @Query('uid') uid: string,
+        @Query('id') id: string,
         @Body() callback: Callback,
         @Req() req: Request,
         @Res() res: Response,
@@ -75,14 +76,16 @@ export class OnlyofficeController {
 
             await this.securityService.verify(dsToken, payload.dsjwt);
 
-            this.registryService.run(callback, payload, uid);
+            await this.cacheManager.set(uid, spayload, 60 * 60 * 12);
+            await this.cacheManager.set(`${this.constants.PREFIX_DOC_KEY_CACHE}_${id}`, callback.key, 60 * 60 * 12);
 
-            await this.cacheManager.set(uid, spayload, 60 * 60 * 24);
+            this.registryService.run(callback, payload, uid);
 
             res.status(200);
             res.send({error: 0});
         } catch (err) {
-            this.cacheManager.del(uid);
+            await this.cacheManager.del(uid);
+            await this.cacheManager.del(`${this.constants.PREFIX_DOC_KEY_CACHE}_${id}`);
             this.logger.error(err);
             res.status(403);
             res.send({error: 1});
@@ -192,6 +195,7 @@ export class OnlyofficeController {
                     this.cacheManager.set(
                         `${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`,
                         docKey,
+                        30,
                     );
                 }
             }
@@ -207,7 +211,7 @@ export class OnlyofficeController {
                     url: `${process.env.PROXY_ADDRESS}?secret=${payload.proxySecret}&resource=${payload.proxyResource}`,
                 },
                 editorConfig: {
-                    callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?uid=${uid}`,
+                    callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?uid=${uid}&id=${payload.attachment}`,
                     user: {
                         id: me.data?.id,
                         name: me.data?.username || 'Anonymous',
