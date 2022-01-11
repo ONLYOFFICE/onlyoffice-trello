@@ -15,12 +15,14 @@ import {Constants} from '@utils/const';
 import {FileUtils} from '@utils/file';
 import {TokenVerificationMiddleware} from '@middlewares/token';
 import {ConventionalHandlersModule} from '@controllers/handlers/conventional.module';
-import {ThrottlerGuard, ThrottlerModule} from '@nestjs/throttler';
+import {ThrottlerModule} from '@nestjs/throttler';
 import {APP_GUARD} from '@nestjs/core';
 import {RedisCacheService} from '@services/redis.service';
 import {ValidatorUtils} from '@utils/validation';
 import {PrometheusService} from '@services/prometheus.service';
 import {PrometheusController} from '@controllers/prometheus.controller';
+import { CustomThrottlerGuard } from '@guards/throttler';
+import { SettingsController } from '@controllers/settings.controller';
 
 @Module({
     imports: [
@@ -30,7 +32,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
         ConventionalHandlersModule,
         ThrottlerModule.forRoot({
             ttl: 1,
-            limit: 125,
+            limit: 3,
         }),
         CacheModule.registerAsync({
             isGlobal: true,
@@ -45,7 +47,11 @@ import {PrometheusController} from '@controllers/prometheus.controller';
             }),
         }),
     ],
-    controllers: [OnlyofficeController, PrometheusController],
+    controllers: [
+        OnlyofficeController,
+        SettingsController,
+        PrometheusController
+    ],
     providers: [
         SecurityService,
         RegistryService,
@@ -57,7 +63,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
         ValidatorUtils,
         {
             provide: APP_GUARD,
-            useClass: ThrottlerGuard,
+            useClass: CustomThrottlerGuard,
         },
     ],
     exports: [
@@ -66,6 +72,7 @@ import {PrometheusController} from '@controllers/prometheus.controller';
         RedisCacheService,
         Constants,
         CacheModule,
+        FileUtils,
     ],
 })
 export class ServerModule implements NestModule {

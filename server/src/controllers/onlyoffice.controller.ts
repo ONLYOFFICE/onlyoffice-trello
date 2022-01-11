@@ -1,8 +1,6 @@
-import axios from 'axios';
 import {
     Body,
     Controller,
-    Get,
     Logger,
     Post,
     Query,
@@ -11,6 +9,7 @@ import {
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
+import {Throttle} from '@nestjs/throttler';
 import {Request, Response} from 'express';
 import {nanoid} from 'nanoid';
 import {validate} from 'class-validator';
@@ -24,7 +23,6 @@ import {
     EditorPayloadForm,
     ProxyPayloadSecret,
 } from '@models/payload';
-import {Command} from '@models/command';
 import {Config} from '@models/config';
 import {RegistryService} from '@services/registry.service';
 import {RedisCacheService} from '@services/redis.service';
@@ -49,7 +47,24 @@ export class OnlyofficeController {
         private fileUtils: FileUtils,
     ) {}
 
+    private getDefaultProxySecret(fileUrl: string, token: string, dsjwt: string): string {
+        const header = this.oauthUtil.getAuthHeaderForRequest(
+            { url: fileUrl, method: 'GET' },
+            token,
+        );
+        const secret: ProxyPayloadSecret = {
+            auth_value: header.Authorization,
+            docs_jwt: dsjwt,
+            due: (Number(new Date())) + 1000 * 80,
+        };
+        return this.securityService.encrypt(
+            JSON.stringify(secret),
+            process.env.PROXY_ENCRYPTION_KEY!,
+        );
+    }
+
     @Post('callback')
+    @Throttle(6, 1)
     async callback(
         @Query('uid') uid: string,
         @Query('id') id: string,
@@ -70,6 +85,7 @@ export class OnlyofficeController {
                 throw new Error('Malformed payload');
             }
 
+            // TODO: Custom headers
             const dsToken = (
                 req.headers[payload.dsheader.toLowerCase()] as string
             ).split('Bearer ')[1];
@@ -77,7 +93,7 @@ export class OnlyofficeController {
             await this.securityService.verify(dsToken, payload.dsjwt);
 
             await this.cacheManager.set(uid, spayload, 60 * 60 * 12);
-            await this.cacheManager.set(`${this.constants.PREFIX_DOC_KEY_CACHE}_${id}`, callback.key, 60 * 60 * 12);
+            await this.cacheManager.setDocKey(id, callback.key, 60 * 60 * 12);
 
             this.registryService.run(callback, payload, uid);
 
@@ -85,18 +101,11 @@ export class OnlyofficeController {
             res.send({error: 0});
         } catch (err) {
             await this.cacheManager.del(uid);
-            await this.cacheManager.del(`${this.constants.PREFIX_DOC_KEY_CACHE}_${id}`);
-            this.logger.error(err);
+            await this.cacheManager.docKeyCleanup(id);
+            this.logger.debug(err);
             res.status(403);
             res.send({error: 1});
         }
-    }
-
-    @Get('ping')
-    async getPing(@Res() res: Response) {
-        res.send({
-            ok: true,
-        });
     }
 
     @Post('editor')
@@ -108,124 +117,26 @@ export class OnlyofficeController {
                 JSON.parse(form.payload),
                 EditorPayload.prototype,
             ) as EditorPayload;
-            const validationErr = await validate(payload);
-            if (validationErr.length > 0) {
-                throw new Error('Invalid form payload');
-            }
+            payload.dsjwt = this.securityService.decrypt(payload.dsjwt, process.env.POWERUP_APP_ENCRYPTION_KEY);
+            await this.validationUtils.validateEditorPayload(payload);
 
-            if (!this.validationUtils.validURL(payload.ds)) {
-                throw new Error('Invalid document server url');
-            }
+            const fileUrl = this.fileUtils.buildTrelloFileUrl(payload);
 
-            const fileExt = payload.filename.split('.')[1];
-            const [fileSupported, fileEditable] =
-        this.fileUtils.isExtensionSupported(fileExt);
-
-            if (!fileSupported) {
-                throw new Error('File type is not supported');
-            }
-
-            const attachmentUrl = `${this.constants.URL_TRELLO_API_BASE}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`;
-            let authHeader = this.oauthUtil.getAuthHeaderForRequest(
-                {
-                    url: attachmentUrl,
-                    method: 'HEAD',
-                },
-                payload.token,
-            );
-
-            const fileInfo = await axios.head(attachmentUrl, {
-                headers: {
-                    Authorization: authHeader.Authorization,
-                },
-            });
-
-            const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
-            if (fileSize > 1.6) {
-                throw new Error('File size error');
-            }
-
-            const commandPayload: Command = {
-                c: 'version',
-            };
-
-            const commandResponse = await axios.post(
-                this.constants.getDocumentServerCommandUrl(payload.ds),
-                commandPayload,
-                {
-                    headers: {
-                        [payload.dsheader]: `Bearer ${this.securityService.sign(
-                            commandPayload,
-                            payload.dsjwt,
-                            60 * 2,
-                        )}`,
-                    },
-                },
-            );
-
-            if (!commandResponse.data.version) {
-                throw new Error('No document server response');
-            }
+            await this.validationUtils.validateFileSize(fileUrl, payload.token);
 
             if (!payload.proxySecret) {
-                const request = {
-                    url: attachmentUrl,
-                    method: 'GET',
-                };
-
-                const authHeader = this.oauthUtil.getAuthHeaderForRequest(
-                    request,
-                    payload.token,
-                );
-
-                const secret: ProxyPayloadSecret = {
-                    auth_value: authHeader.Authorization,
-                    docs_jwt: payload.dsjwt,
-                    due: (Number(new Date())) + 1000 * 80,
-                };
-
-                payload.proxySecret = this.securityService.encrypt(
-                    JSON.stringify(secret),
-                    process.env.PROXY_ENCRYPTION_KEY!,
-                );
+                payload.proxySecret = this.getDefaultProxySecret(fileUrl, payload.token, payload.dsjwt);
             }
 
-            const request = {
-                url: `${this.constants.URL_TRELLO_API_BASE}/members/me`,
-                method: 'GET',
-            };
+            const me = await this.oauthUtil.getMe(`${this.constants.URL_TRELLO_API_BASE}/members/me`, payload.token);
 
-            authHeader = this.oauthUtil.getAuthHeaderForRequest(
-                request,
-                payload.token,
-            );
+            const docKey = await this.cacheManager.getDocKey(payload.attachment, payload.isEditable);
 
-            const me = await axios.get(request.url, {
-                headers: {
-                    Authorization: authHeader.Authorization,
-                },
-            });
-
-            let docKey = await this.cacheManager.get(
-                `${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`,
-            );
-
-            if (!docKey) {
-                docKey = new Date().getTime().toString();
-                if (fileEditable) {
-                    this.cacheManager.set(
-                        `${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`,
-                        docKey,
-                        30,
-                    );
-                }
-            }
-
-            this.cacheManager.set(uid, form.payload, 30);
+            this.cacheManager.set(uid, JSON.stringify(payload), 40);
 
             const config: Config = {
                 document: {
-                    fileType: fileExt,
+                    fileType: payload.fileExtension,
                     key: docKey,
                     title: payload.filename,
                     url: `${process.env.PROXY_ADDRESS}?secret=${payload.proxySecret}&resource=${payload.proxyResource}`,
@@ -233,10 +144,10 @@ export class OnlyofficeController {
                 editorConfig: {
                     callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?uid=${uid}&id=${payload.attachment}`,
                     user: {
-                        id: me.data?.id,
-                        name: me.data?.username || 'Anonymous',
+                        id: me.id,
+                        name: me.username || 'Anonymous',
                     },
-                    mode: fileEditable ? 'edit' : 'view',
+                    mode: payload.isEditable ? 'edit' : 'view',
                 },
             };
 

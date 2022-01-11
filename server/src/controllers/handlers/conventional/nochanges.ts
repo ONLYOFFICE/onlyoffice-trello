@@ -1,11 +1,11 @@
 import {Injectable, Logger} from '@nestjs/common';
 
+import {RegistryService} from '@services/registry.service';
+import {RedisCacheService} from '@services/redis.service';
+
 import {Callback} from '@models/callback';
 import {EditorPayload} from '@models/payload';
 import {CallbackHandler} from '@models/interfaces/handlers';
-import {RegistryService} from '@services/registry.service';
-import {RedisCacheService} from '@services/redis.service';
-import {Constants} from '@utils/const';
 
 /**
  * Status 4 callback handler
@@ -21,7 +21,6 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
     constructor(
         private readonly cacheManager: RedisCacheService,
         private readonly registry: RegistryService,
-        private readonly constants: Constants,
     ) {
         this.registry.subscribe(this);
     }
@@ -37,7 +36,7 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
             return;
         }
         this.logger.debug(`No file ${payload.attachment} changes! Cleaning up`);
-        await this.cacheManager.del(`${this.constants.PREFIX_DOC_KEY_CACHE}_${payload.attachment}`);
+        await this.cacheManager.docKeyCleanup(payload.attachment);
         await this.cacheManager.del(uid);
     }
 }

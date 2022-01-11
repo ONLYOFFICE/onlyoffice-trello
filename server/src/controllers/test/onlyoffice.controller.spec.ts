@@ -65,13 +65,6 @@ describe('Onlyoffice Controller', () => {
         expect(res.statusCode).toBe(404);
     });
 
-    it('Get ping', async () => {
-        const res = await request(app.getHttpServer())
-        .get('/onlyoffice/ping');
-        expect(res.statusCode).toBe(200);
-        expect(res.body.ok).toBe(true);
-    });
-
     describe('Editor endpoint', () => {
         it('Invalid body', async () => {
             const res = await request(app.getHttpServer())
@@ -90,7 +83,7 @@ describe('Onlyoffice Controller', () => {
                     filename: "test.docx",
                     ds: "asdsad",
                     dsheader: "header",
-                    dsjwt: "secret",
+                    dsjwt: secService.encrypt("secret", process.env.POWERUP_APP_ENCRYPTION_KEY),
                 }),
             };
             const res = await request(app.getHttpServer())
@@ -110,7 +103,7 @@ describe('Onlyoffice Controller', () => {
                     filename: "test.docx",
                     ds: "asdsad",
                     dsheader: "header",
-                    dsjwt: "secret",
+                    dsjwt: secService.encrypt("secret", process.env.POWERUP_APP_ENCRYPTION_KEY),
                 }),
             };
             const res = await request(app.getHttpServer())
@@ -130,7 +123,7 @@ describe('Onlyoffice Controller', () => {
                     filename: "test.unknown",
                     ds: "https://httpbin.com/",
                     dsheader: "header",
-                    dsjwt: "secret",
+                    dsjwt: secService.encrypt("secret", process.env.POWERUP_APP_ENCRYPTION_KEY),
                 }),
             };
             const res = await request(app.getHttpServer())
@@ -150,7 +143,7 @@ describe('Onlyoffice Controller', () => {
                     filename: "test.docx",
                     ds: "https://httpbin.com/",
                     dsheader: "header",
-                    dsjwt: "secret",
+                    dsjwt: secService.encrypt("secret", process.env.POWERUP_APP_ENCRYPTION_KEY),
                 }),
             };
             const res = await request(app.getHttpServer())

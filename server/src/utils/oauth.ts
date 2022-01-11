@@ -1,3 +1,4 @@
+import axios from 'axios';
 import {createHmac} from 'crypto';
 
 import {Injectable} from '@nestjs/common';
@@ -32,5 +33,31 @@ export class OAuthUtil {
         });
 
         return oauth.toHeader(authorization);
+    }
+
+    /**
+     *
+     * @param url
+     * @param token
+     * @returns
+     */
+    public async getMe(url: string, token: string) {
+        const request = {
+            url,
+            method: 'GET',
+        };
+
+        const header = this.getAuthHeaderForRequest(
+            request,
+            token,
+        );
+
+        const me = await axios.get(request.url, {
+            headers: {
+                Authorization: header.Authorization,
+            },
+        });
+
+        return me.data;
     }
 }

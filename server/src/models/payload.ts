@@ -24,6 +24,8 @@ export class EditorPayload {
     @IsDefined()
     @MinLength(4)
         dsjwt: string;
+    isEditable?: boolean;
+    fileExtension?: string;
 }
 
 export class EditorPayloadForm {

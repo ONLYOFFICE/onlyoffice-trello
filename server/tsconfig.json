@@ -24,7 +24,8 @@
       "@utils/*": ["src/utils/*"],
       "@modules/*": ["src/modules/*"],
       "@middlewares/*": ["src/middlewares/*"],
-      "@filters/*": ["src/filters/*"]
+      "@filters/*": ["src/filters/*"],
+      "@guards/*": ["src/guards/*"]
     }
   }
 }

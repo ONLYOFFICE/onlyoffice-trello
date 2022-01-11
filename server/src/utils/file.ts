@@ -3,6 +3,7 @@ import {EditorPayload} from '@models/payload';
 
 import {Constants} from './const';
 
+// TODO: External file
 const ONLYOFFICE_CELL = 'cell';
 const ONLYOFFICE_WORD = 'word';
 const ONLYOFFICE_SLIDE = 'slide';
@@ -47,6 +48,7 @@ const AllowedExtensions = new Map([
     ['ott', ONLYOFFICE_WORD],
     ['rtf', ONLYOFFICE_WORD],
 ]);
+//
 
 /**
  * Performs operations related to file management (Trello side, Onlyoffice file utils)
@@ -75,5 +77,14 @@ export class FileUtils {
    */
     public isExtensionSupported(fileExt: string): [boolean, boolean] {
         return [EditExtensions.has(fileExt) || AllowedExtensions.has(fileExt), EditExtensions.has(fileExt)];
+    }
+
+    /**
+     *
+     * @param filename
+     * @returns
+     */
+    public getFileExtension(filename: string): string {
+        return filename.split('.')[1];
     }
 }

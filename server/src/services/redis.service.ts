@@ -1,4 +1,5 @@
 import {Injectable, Inject, CACHE_MANAGER} from '@nestjs/common';
+import { Constants } from '@utils/const';
 import {Cache} from 'cache-manager';
 
 /**
@@ -8,6 +9,7 @@ import {Cache} from 'cache-manager';
 export class RedisCacheService {
     constructor(
         @Inject(CACHE_MANAGER) private readonly cache: Cache,
+        private readonly constants: Constants,
     ) {}
 
     /**
@@ -46,5 +48,40 @@ export class RedisCacheService {
         try {
             await this.cache.del(key);
         } catch {}
+    }
+
+    /**
+     *
+     * @param attachment
+     * @param isEditable
+     * @returns
+     */
+    async getDocKey(attachment: string, isEditable: boolean): Promise<string> {
+        let docKey = await this.get(
+            `${this.constants.PREFIX_DOC_KEY_CACHE+attachment}`,
+        );
+        if (!docKey) {
+            docKey = new Date().getTime().toString();
+            if (isEditable) this.set(`${this.constants.PREFIX_DOC_KEY_CACHE+attachment}`, docKey, 30);
+        }
+        return docKey;
+    }
+
+    /**
+     *
+     * @param attachment
+     * @param value
+     * @param ttl
+     */
+    async setDocKey(attachment: string, value: string, ttl: number) {
+        await this.set(`${this.constants.PREFIX_DOC_KEY_CACHE+attachment}`, value, ttl);
+    }
+
+    /**
+     *
+     * @param attachment
+     */
+    async docKeyCleanup(attachment: string) {
+        await this.del(`${this.constants.PREFIX_DOC_KEY_CACHE+attachment}`);
     }
 }
