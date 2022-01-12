@@ -9,10 +9,10 @@ import {RedisCacheService} from '@services/redis.service';
 import {OAuthUtil} from '@utils/oauth';
 import {Constants} from '@utils/const';
 
-import {Callback} from '@models/callback';
+import {Callback, DocKeySession} from '@models/callback';
 import {CallbackHandler} from '@models/interfaces/handlers';
-import {EditorPayload} from '@models/payload';
 import { FileUtils } from '@utils/file';
+import { EventService } from '@services/event.service';
 
 /**
  * Status 2 callback handler
@@ -26,6 +26,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
     constructor(
         private readonly cacheManager: RedisCacheService,
         private readonly registry: RegistryService,
+        private readonly eventService: EventService,
         private readonly oauthUtil: OAuthUtil,
         private readonly fileUtils: FileUtils,
         private readonly constants: Constants,
@@ -39,12 +40,12 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
    * @param payload
    * @returns
    */
-    async handle(callback: Callback, payload: EditorPayload, uid: string) {
+    async handle(callback: Callback, token: string, session: DocKeySession) {
         if (!callback.url || callback.status !== 2) {
             return;
         }
 
-        this.logger.debug(`Trying to save ${payload.filename} changes`);
+        this.logger.debug(`Trying to save ${session.File} changes`);
 
         const response = await axios({
             url: callback.url!,
@@ -53,33 +54,33 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         });
 
         const r = {
-            url: `${this.constants.URL_TRELLO_API_BASE}/cards/${payload.card}/attachments`,
+            url: `${this.constants.URL_TRELLO_API_BASE}/cards/${session.Card}/attachments`,
             method: 'POST',
         };
 
-        const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, payload.token);
+        const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, token);
         const formData = new FormData();
         formData.append('file', response.data, {
-            filename: payload.filename,
-            contentType: mime.contentType(this.fileUtils.getFileExtension(payload.filename)) as string,
+            filename: session.File,
+            contentType: mime.contentType(this.fileUtils.getFileExtension(session.File)) as string,
             knownLength: response.data?.length,
         });
         formData.submit(
             {
                 host: 'api.trello.com',
                 protocol: 'https:',
-                path: `/1/cards/${payload.card}/attachments`,
+                path: `/1/cards/${session.Card}/attachments`,
                 headers: {
                     Authorization: authHeader.Authorization,
                 },
             },
             (err) => {
                 if (err) {
-                    this.logger.error(`[${payload.filename}]: ${err}`);
+                    this.logger.error(`[${session.File}]: ${err}`);
                 }
             },
         );
-        await this.cacheManager.docKeyCleanup(payload.attachment);
-        await this.cacheManager.del(uid);
+        // await this.cacheManager.docKeyCleanup(session.Attachment);
+        this.eventService.emit(session.Attachment);
     }
 }

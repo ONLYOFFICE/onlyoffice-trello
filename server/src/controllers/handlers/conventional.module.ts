@@ -1,8 +1,8 @@
 import {forwardRef, Module} from '@nestjs/common';
-import {ConventionalSaveCallbackHandler} from '@controllers/handlers/conventional/save';
+import {ConventionalSaveCallbackHandler} from '@controllers/handlers/conventional/save.status';
 import {ServerModule} from '@modules/server.module';
 
-import {ConventionalNoChangesCallbackHandler} from './conventional/nochanges';
+import {ConventionalNoChangesCallbackHandler} from './conventional/nochanges.status';
 
 @Module({
     imports: [forwardRef(() => ServerModule)],

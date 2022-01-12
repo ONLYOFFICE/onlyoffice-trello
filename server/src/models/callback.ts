@@ -10,3 +10,12 @@ export type Callback = {
     actions: Action[];
     url?: string;
 };
+
+export type DocKeySession = {
+    Address: string,
+    Header: string,
+    Secret: string,
+    Attachment: string,
+    File: string,
+    Card: string,
+};

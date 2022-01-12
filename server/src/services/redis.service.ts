@@ -10,7 +10,9 @@ export class RedisCacheService {
     constructor(
         @Inject(CACHE_MANAGER) private readonly cache: Cache,
         private readonly constants: Constants,
-    ) {}
+    ) {
+        this.cache.reset();
+    }
 
     /**
    * A GET Wrapper over cache-manager
@@ -56,7 +58,7 @@ export class RedisCacheService {
      * @param isEditable
      * @returns
      */
-    async getDocKey(attachment: string, isEditable: boolean): Promise<string> {
+    async getDocKey(attachment: string, isEditable: boolean = false): Promise<string> {
         let docKey = await this.get(
             `${this.constants.PREFIX_DOC_KEY_CACHE+attachment}`,
         );

@@ -3,9 +3,9 @@ import {Injectable, Logger} from '@nestjs/common';
 import {RegistryService} from '@services/registry.service';
 import {RedisCacheService} from '@services/redis.service';
 
-import {Callback} from '@models/callback';
-import {EditorPayload} from '@models/payload';
+import {Callback, DocKeySession} from '@models/callback';
 import {CallbackHandler} from '@models/interfaces/handlers';
+import { EventService } from '@services/event.service';
 
 /**
  * Status 4 callback handler
@@ -21,6 +21,7 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
     constructor(
         private readonly cacheManager: RedisCacheService,
         private readonly registry: RegistryService,
+        private readonly eventService: EventService,
     ) {
         this.registry.subscribe(this);
     }
@@ -31,12 +32,12 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
    * @param payload
    * @returns
    */
-    async handle(callback: Callback, payload: EditorPayload, uid: string) {
+    async handle(callback: Callback, _: string, session: DocKeySession) {
         if (callback.status !== 4) {
             return;
         }
-        this.logger.debug(`No file ${payload.attachment} changes! Cleaning up`);
-        await this.cacheManager.docKeyCleanup(payload.attachment);
-        await this.cacheManager.del(uid);
+        this.logger.debug(`No file ${session.Attachment} changes! Cleaning up`);
+        // await this.cacheManager.docKeyCleanup(session.Attachment);
+        this.eventService.emit(session.Attachment);
     }
 }

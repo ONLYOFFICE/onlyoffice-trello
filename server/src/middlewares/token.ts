@@ -1,5 +1,6 @@
 import {Injectable, Logger, NestMiddleware} from '@nestjs/common';
 import {SecurityService} from '@services/security.service';
+import { Constants } from '@utils/const';
 import {NextFunction, Request, Response} from 'express';
 
 /**
@@ -11,6 +12,7 @@ export class TokenVerificationMiddleware implements NestMiddleware {
 
     constructor(
         private readonly securityService: SecurityService,
+        private readonly constants: Constants,
     ) {}
 
     async use(req: Request, res: Response, next: NextFunction) {
@@ -21,6 +23,7 @@ export class TokenVerificationMiddleware implements NestMiddleware {
             if (sig.due <= Number(new Date())) {
                 throw new Error('Token has expired');
             }
+            res.set(this.constants.HEADER_ONLYOFFICE_DOC_KEY, sig.docKey);
             this.logger.debug('OK');
             next();
         } catch (err) {

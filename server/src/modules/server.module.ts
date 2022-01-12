@@ -23,6 +23,7 @@ import {PrometheusService} from '@services/prometheus.service';
 import {PrometheusController} from '@controllers/prometheus.controller';
 import { CustomThrottlerGuard } from '@guards/throttler';
 import { SettingsController } from '@controllers/settings.controller';
+import { EventService } from '@services/event.service';
 
 @Module({
     imports: [
@@ -57,6 +58,7 @@ import { SettingsController } from '@controllers/settings.controller';
         RegistryService,
         RedisCacheService,
         PrometheusService,
+        EventService,
         OAuthUtil,
         Constants,
         FileUtils,
@@ -70,6 +72,7 @@ import { SettingsController } from '@controllers/settings.controller';
         RegistryService,
         OAuthUtil,
         RedisCacheService,
+        EventService,
         Constants,
         CacheModule,
         FileUtils,

@@ -1,7 +1,6 @@
-import {Callback} from '@models/callback';
-import {EditorPayload} from '@models/payload';
+import {Callback, DocKeySession} from '@models/callback';
 
 export interface CallbackHandler {
     id: string;
-    handle: (callback: Callback, payload: EditorPayload, uid: string) => void;
+    handle: (callback: Callback, token: string, session: DocKeySession) => void;
 }

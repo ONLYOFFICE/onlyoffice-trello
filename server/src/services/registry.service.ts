@@ -1,8 +1,7 @@
 import {Injectable} from '@nestjs/common';
 
 import {CallbackHandler} from '@models/interfaces/handlers';
-import {Callback} from '@models/callback';
-import {EditorPayload} from '@models/payload';
+import {Callback, DocKeySession} from '@models/callback';
 
 /**
  *
@@ -30,12 +29,12 @@ export class RegistryService {
     /**
      *
      * @param callback
-     * @param payload
-     * @param uid
+     * @param token
+     * @param session
      */
-    public run(callback: Callback, payload: EditorPayload, uid: string) {
+    public run(callback: Callback, token: string, session: DocKeySession) {
         this.observers.forEach((handler) => {
-            handler.handle(callback, payload, uid);
+            handler.handle(callback, token, session);
         });
     }
 }
