@@ -1,7 +1,6 @@
 import {Injectable, Logger} from '@nestjs/common';
 
 import {RegistryService} from '@services/registry.service';
-import {RedisCacheService} from '@services/redis.service';
 
 import {Callback, DocKeySession} from '@models/callback';
 import {CallbackHandler} from '@models/interfaces/handlers';
@@ -19,7 +18,6 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
         new Date().getTime().toString() + ConventionalNoChangesCallbackHandler.name;
 
     constructor(
-        private readonly cacheManager: RedisCacheService,
         private readonly registry: RegistryService,
         private readonly eventService: EventService,
     ) {
@@ -37,7 +35,6 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
             return;
         }
         this.logger.debug(`No file ${session.Attachment} changes! Cleaning up`);
-        // await this.cacheManager.docKeyCleanup(session.Attachment);
         this.eventService.emit(session.Attachment);
     }
 }

@@ -4,7 +4,6 @@ import * as FormData from 'form-data';
 import * as mime from 'mime-types';
 
 import {RegistryService} from '@services/registry.service';
-import {RedisCacheService} from '@services/redis.service';
 
 import {OAuthUtil} from '@utils/oauth';
 import {Constants} from '@utils/const';
@@ -24,7 +23,6 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         new Date().getTime().toString() + ConventionalSaveCallbackHandler.name;
 
     constructor(
-        private readonly cacheManager: RedisCacheService,
         private readonly registry: RegistryService,
         private readonly eventService: EventService,
         private readonly oauthUtil: OAuthUtil,
@@ -46,6 +44,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         }
 
         this.logger.debug(`Trying to save ${session.File} changes`);
+        this.eventService.emit(session.Attachment);
 
         const response = await axios({
             url: callback.url!,
@@ -80,7 +79,5 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
                 }
             },
         );
-        // await this.cacheManager.docKeyCleanup(session.Attachment);
-        this.eventService.emit(session.Attachment);
     }
 }

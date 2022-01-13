@@ -17,7 +17,7 @@ import {TokenVerificationMiddleware} from '@middlewares/token';
 import {ConventionalHandlersModule} from '@controllers/handlers/conventional.module';
 import {ThrottlerModule} from '@nestjs/throttler';
 import {APP_GUARD} from '@nestjs/core';
-import {RedisCacheService} from '@services/redis.service';
+import {CacheService} from '@services/cache.service';
 import {ValidatorUtils} from '@utils/validation';
 import {PrometheusService} from '@services/prometheus.service';
 import {PrometheusController} from '@controllers/prometheus.controller';
@@ -35,17 +35,10 @@ import { EventService } from '@services/event.service';
             ttl: 1,
             limit: 3,
         }),
-        CacheModule.registerAsync({
+        CacheModule.register({
+            ttl: 10,
+            max: 200,
             isGlobal: true,
-            imports: [ConfigModule],
-            inject: [ConfigService],
-            useFactory: async (configService: ConfigService) => ({
-                store: redisStore,
-                host: configService.get('CACHE_URL'),
-                port: configService.get('CACHE_PORT'),
-                ttl: 0,
-                max: 10000,
-            }),
         }),
     ],
     controllers: [
@@ -56,7 +49,7 @@ import { EventService } from '@services/event.service';
     providers: [
         SecurityService,
         RegistryService,
-        RedisCacheService,
+        CacheService,
         PrometheusService,
         EventService,
         OAuthUtil,
@@ -71,7 +64,7 @@ import { EventService } from '@services/event.service';
     exports: [
         RegistryService,
         OAuthUtil,
-        RedisCacheService,
+        CacheService,
         EventService,
         Constants,
         CacheModule,

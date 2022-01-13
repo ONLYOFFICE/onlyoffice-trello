@@ -6,13 +6,11 @@ import {Cache} from 'cache-manager';
  * A wrapper over cache-manager to handle Redis caching
  */
 @Injectable()
-export class RedisCacheService {
+export class CacheService {
     constructor(
         @Inject(CACHE_MANAGER) private readonly cache: Cache,
         private readonly constants: Constants,
-    ) {
-        this.cache.reset();
-    }
+    ) {}
 
     /**
    * A GET Wrapper over cache-manager

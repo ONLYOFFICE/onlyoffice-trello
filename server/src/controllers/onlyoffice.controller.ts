@@ -25,10 +25,10 @@ import {
 } from '@models/payload';
 import {Config} from '@models/config';
 import {RegistryService} from '@services/registry.service';
-import {RedisCacheService} from '@services/redis.service';
+import {CacheService} from '@services/cache.service';
 import {ValidatorUtils} from '@utils/validation';
 import {FileUtils} from '@utils/file';
-import { Observable, interval, map } from 'rxjs';
+import { Observable } from 'rxjs';
 import { EventService } from '@services/event.service';
 
 /**
@@ -40,7 +40,7 @@ export class OnlyofficeController {
     public static readonly baseRoute = '/onlyoffice';
 
     constructor(
-        private readonly cacheManager: RedisCacheService,
+        private readonly cacheManager: CacheService,
         private securityService: SecurityService,
         private registryService: RegistryService,
         private eventService: EventService,

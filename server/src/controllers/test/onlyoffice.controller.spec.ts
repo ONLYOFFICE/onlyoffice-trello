@@ -1,7 +1,7 @@
 import { OnlyofficeController } from "../onlyoffice.controller";
 import { Test } from "@nestjs/testing";
 import * as request from 'supertest';
-import { RedisCacheService } from "@services/redis.service";
+import { CacheService } from "@services/cache.service";
 import { CACHE_MANAGER } from "@nestjs/common";
 import { SecurityService } from "@services/security.service";
 import { RegistryService } from "@services/registry.service";
@@ -43,7 +43,7 @@ describe('Onlyoffice Controller', () => {
             controllers: [OnlyofficeController],
             providers: [
                 { provide: CACHE_MANAGER, useValue: mockRedisService },
-                RedisCacheService,
+                CacheService,
                 RegistryService,
                 SecurityService,
                 Constants,
