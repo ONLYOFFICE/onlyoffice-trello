@@ -562,7 +562,7 @@
       "files": ["*.ts", "*.tsx"],
       "parserOptions": {
         "alwaysTryTypes": true,
-        "project": ["./client/tsconfig.json"]
+        "project": ["./tsconfig.json"]
       }
     }
   ]

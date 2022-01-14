@@ -7,13 +7,11 @@ const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
   const cleanup = ({data}: {data: string}): void => {
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     t.remove('card', 'shared', data);
-    console.log('callback');
   };
   eventSource.addEventListener('message', cleanup);
   setTimeout(() => {
     eventSource.removeEventListener('message', cleanup);
     eventSource.close();
-    console.log('cleanup');
   }, 30000);
 };
 

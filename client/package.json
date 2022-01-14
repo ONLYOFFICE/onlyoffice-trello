@@ -9,7 +9,7 @@
     "build:dev": "webpack --config webpack.config.js --mode=development --watch",
     "start:dev": "npm run build && node ./dev-server.js",
     "clean": "rimraf dist && rimraf node_modules",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.{js,ts,tsx}\" --fix"
+    "lint": "eslint \"src/**/*.{js,ts,tsx}\" --fix"
   },
   "dependencies": {
     "core-js": "^3.9.1",
