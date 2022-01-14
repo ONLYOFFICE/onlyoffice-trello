@@ -23,7 +23,7 @@ import {
 } from 'components/card-button/types';
 
 import './styles.css';
-import {generateSignature} from 'root/api/handlers/docKey';
+import {generateDocKeySignature} from 'root/api/handlers/signature';
 import {fetchDocsInfo} from 'root/api/handlers/settings';
 import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
 
@@ -76,7 +76,7 @@ const CardButton = observer(() => {
           dsheader: docServerInfo!.docsHeader,
           dsjwt: docServerInfo!.docsJwt,
         });
-        setSignature(await generateSignature(attachment));
+        setSignature(await generateDocKeySignature(attachment));
         setIsEditor(true);
       } catch (e) {
         setIsError(true);

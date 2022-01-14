@@ -4,7 +4,7 @@ import {
     Module,
     NestModule,
 } from '@nestjs/common';
-import {ConfigModule, ConfigService} from '@nestjs/config';
+import {ConfigModule} from '@nestjs/config';
 import * as redisStore from 'cache-manager-redis-store';
 
 import {OnlyofficeController} from '@controllers/onlyoffice.controller';
@@ -13,15 +13,13 @@ import {RegistryService} from '@services/registry.service';
 import {OAuthUtil} from '@utils/oauth';
 import {Constants} from '@utils/const';
 import {FileUtils} from '@utils/file';
-import {TokenVerificationMiddleware} from '@middlewares/token';
+import {TokenEditorVerificationMiddleware, TokenSettingsVerificationMiddleware} from '@middlewares/token';
 import {ConventionalHandlersModule} from '@controllers/handlers/conventional.module';
 import {ThrottlerModule} from '@nestjs/throttler';
-import {APP_GUARD} from '@nestjs/core';
 import {CacheService} from '@services/cache.service';
 import {ValidatorUtils} from '@utils/validation';
 import {PrometheusService} from '@services/prometheus.service';
 import {PrometheusController} from '@controllers/prometheus.controller';
-import { CustomThrottlerGuard } from '@guards/throttler';
 import { SettingsController } from '@controllers/settings.controller';
 import { EventService } from '@services/event.service';
 
@@ -33,7 +31,7 @@ import { EventService } from '@services/event.service';
         ConventionalHandlersModule,
         ThrottlerModule.forRoot({
             ttl: 1,
-            limit: 3,
+            limit: 100,
         }),
         CacheModule.register({
             ttl: 10,
@@ -56,10 +54,6 @@ import { EventService } from '@services/event.service';
         Constants,
         FileUtils,
         ValidatorUtils,
-        {
-            provide: APP_GUARD,
-            useClass: CustomThrottlerGuard,
-        },
     ],
     exports: [
         RegistryService,
@@ -74,9 +68,13 @@ import { EventService } from '@services/event.service';
 export class ServerModule implements NestModule {
     configure(consumer: MiddlewareConsumer) {
         consumer.
-            apply(TokenVerificationMiddleware).
+            apply(TokenEditorVerificationMiddleware).
             forRoutes(
                 `${OnlyofficeController.baseRoute}/editor`,
+            ).
+            apply(TokenSettingsVerificationMiddleware).
+            forRoutes(
+                `${SettingsController.baseRoute}`
             );
     }
 }

@@ -2,6 +2,7 @@
 import React, {useEffect, useState} from 'react';
 
 import constants from 'root/utils/const';
+import {generateSettingsSignature} from 'root/api/handlers/signature';
 import {trelloSettingsHandler} from 'root/api/handlers/settings';
 import {trello} from 'root/api/client';
 
@@ -38,9 +39,10 @@ const saveSettings = async (settings: SettingsData): Promise<void> => {
     return;
   }
   try {
+    const signature = await generateSettingsSignature();
     const response = await fetch(
       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      constants.ONLYOFFICE_SETTINGS_ENDPOINT,
+      `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}?signature=${signature}`,
       {
         method: 'POST',
         cache: 'no-cache',
@@ -53,6 +55,9 @@ const saveSettings = async (settings: SettingsData): Promise<void> => {
         }),
       },
     );
+    if (response.status !== 200) {
+      throw new Error('Could not save ONLYOFFICE settings');
+    }
     const secureSecret = await response.text();
     await Promise.all([
       settingsHandler.set('docsAddress', settings.Address),

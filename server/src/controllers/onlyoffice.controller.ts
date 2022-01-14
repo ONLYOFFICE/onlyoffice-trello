@@ -7,6 +7,7 @@ import {
     Req,
     Res,
     Sse,
+    UseGuards,
     UsePipes,
     ValidationPipe,
 } from '@nestjs/common';
@@ -30,6 +31,7 @@ import {ValidatorUtils} from '@utils/validation';
 import {FileUtils} from '@utils/file';
 import { Observable } from 'rxjs';
 import { EventService } from '@services/event.service';
+import { DocumentServerThrottlerGuard } from '@guards/throttler';
 
 /**
  * Onlyoffice controller is responsible for managing users interaction with document servers
@@ -68,6 +70,7 @@ export class OnlyofficeController {
 
     @Post('callback')
     @Throttle(4, 1)
+    @UseGuards(DocumentServerThrottlerGuard)
     async callback(
         @Query('token') encToken: string,
         @Query('session') encSession: string,

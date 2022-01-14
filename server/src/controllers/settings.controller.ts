@@ -1,6 +1,5 @@
 import {Request, Response} from 'express';
 import { Controller, Logger, Res, Post, Body, Req } from "@nestjs/common";
-import { Throttle } from "@nestjs/throttler";
 import { SecurityService } from "@services/security.service";
 
 type EncryptionPayload = {
@@ -17,7 +16,6 @@ export class SettingsController {
     ) {}
 
     @Post()
-    @Throttle(6, 1)
     async encryptDocumentServerSecret(
         @Body() payload: EncryptionPayload,
         @Req() _: Request,
