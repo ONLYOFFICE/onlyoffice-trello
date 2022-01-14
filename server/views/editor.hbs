@@ -67,6 +67,12 @@
             window.parent.console.log('changed');
         };
 
+        var onError = function (event) {
+            window.parent.postMessage({
+                action: 'cleanup',
+                id: conf.attachment,
+            }, '*');
+        };
 
         // replace the link to the document which contains a bookmark
         var replaceActionLink = function (href, linkParam) {
@@ -89,6 +95,7 @@
             "onAppReady": onAppReady,
             "onRequestClose": onRequestClose,
             "onDocumentStateChange": onDocumentStateChange,
+            "onError": onError,
         };
 
         const conf = {{{config}}};

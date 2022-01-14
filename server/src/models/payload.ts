@@ -34,7 +34,7 @@ export class EditorPayloadForm {
 }
 
 export type ProxyPayloadSecret = {
-    docs_jwt: string;
-    auth_value: string;
+    docsJwt: string;
+    authValue: string;
     due: number;
 };

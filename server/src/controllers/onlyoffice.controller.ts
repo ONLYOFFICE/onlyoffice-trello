@@ -56,8 +56,8 @@ export class OnlyofficeController {
             token,
         );
         const secret: ProxyPayloadSecret = {
-            auth_value: header.Authorization,
-            docs_jwt: dsjwt,
+            authValue: header.Authorization,
+            docsJwt: dsjwt,
             due: (Number(new Date())) + 1000 * 80,
         };
         return this.securityService.encrypt(
@@ -88,15 +88,12 @@ export class OnlyofficeController {
 
             await this.securityService.verify(dsToken, session.Secret);
 
-            // await this.cacheManager.setDocKey(session.Attachment, callback.key, 60 * 60 * 12);
-
             this.registryService.run(callback, token, session);
 
             res.status(200);
             res.send({error: 0});
         } catch (err) {
-            // await this.cacheManager.docKeyCleanup(session.Attachment);
-            this.logger.debug(err);
+            this.logger.error(err);
             res.status(403);
             res.send({error: 1});
         }
@@ -160,14 +157,13 @@ export class OnlyofficeController {
                     },
                     mode: payload.isEditable ? 'edit' : 'view',
                 },
+                attachment: payload.attachment
             };
 
             config.token = this.securityService.sign(config, secret);
 
             res.status(200);
             res.render('editor', {
-                file: payload.filename,
-                attachment: payload.attachment,
                 apijs: `${payload.ds}web-apps/apps/api/documents/api.js`,
                 config: JSON.stringify(config),
             });

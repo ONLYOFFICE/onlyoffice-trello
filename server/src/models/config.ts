@@ -2,6 +2,7 @@ export type Config = {
     document: Document,
     editorConfig: EditorConfig,
     token?: string,
+    attachment: string,
 };
 
 type Document = {
