@@ -2,9 +2,19 @@
 /* eslint-disable jsx-a11y/iframe-has-title */
 import React, {useEffect} from 'react';
 
+import {trello} from 'root/api/client';
 import {EditorPayload} from 'components/card-button/types';
 
 import './styles.css';
+
+const forceCleanup = (e: MessageEvent<{action: string, id: string}>): void => {
+  const {data, isTrusted} = e;
+
+  if (isTrusted && data.action === 'cleanup') {
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    trello.remove('card', 'shared', data.id);
+  }
+};
 
 export function Editor({signature, payload, setError}: {
   signature: string,
@@ -26,7 +36,13 @@ export function Editor({signature, payload, setError}: {
     setTimeout(() => {
       checkEditorLoaded();
     }, 8000);
-  }, []);
+
+    window.addEventListener('message', forceCleanup);
+
+    return () => {
+      window.removeEventListener('message', forceCleanup);
+    };
+  });
 
   return (
       <>
