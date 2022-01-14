@@ -5,6 +5,7 @@ import {trello} from 'root/api/client';
 import {isExtensionSupported} from 'root/utils/file';
 import {generateOAuthHeader} from 'root/utils/oauth';
 import constants from 'root/utils/const';
+
 import {Trello} from 'types/trello';
 import {TrelloCard} from 'components/card-button/types';
 

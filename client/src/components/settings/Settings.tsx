@@ -1,83 +1,12 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {useEffect, useState} from 'react';
 
-import constants from 'root/utils/const';
-import {generateSettingsSignature} from 'root/api/handlers/signature';
-import {trelloSettingsHandler} from 'root/api/handlers/settings';
 import {trello} from 'root/api/client';
+import {fetchSettings, saveSettings} from 'root/api/handlers/settings';
 
 import {SettingsData} from 'components/settings/types';
 
 import './styles.css';
-
-const settingsHandler = trelloSettingsHandler();
-
-const fetchSettings = async (): Promise<SettingsData> => {
-  let data: SettingsData = {};
-  try {
-    data.Address = await settingsHandler.get('docsAddress');
-    data.Header = await settingsHandler.get('docsHeader');
-    data.Jwt = await settingsHandler.get('docsJwt');
-  } catch {
-    data = {};
-    await trello.alert({
-      message: 'Could not fetch ONLYOFFICE settings, try again later',
-      duration: 15,
-      display: 'error',
-    });
-  }
-  return data;
-};
-
-const saveSettings = async (settings: SettingsData): Promise<void> => {
-  if (!settings.Jwt || !settings.Header || !settings.Address) {
-    await trello.alert({
-      message: 'Could not save ONLYOFFICE settings with empty fields',
-      duration: 15,
-      display: 'error',
-    });
-    return;
-  }
-  try {
-    const signature = await generateSettingsSignature();
-    const response = await fetch(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}?signature=${signature}`,
-      {
-        method: 'POST',
-        cache: 'no-cache',
-        credentials: 'same-origin',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          secret: settings.Jwt,
-        }),
-      },
-    );
-    if (response.status !== 200) {
-      throw new Error('Could not save ONLYOFFICE settings');
-    }
-    const secureSecret = await response.text();
-    await Promise.all([
-      settingsHandler.set('docsAddress', settings.Address),
-      settingsHandler.set('docsHeader', settings.Header),
-      settingsHandler.set('docsJwt', secureSecret),
-    ]);
-    await trello.alert({
-      message: 'ONLYOFFICE settings have been saved',
-      duration: 15,
-      display: 'info',
-    });
-    await trello.closePopup();
-  } catch {
-    await trello.alert({
-      message: 'Could not save ONLYOFFICE settings',
-      duration: 15,
-      display: 'error',
-    });
-  }
-};
 
 export default function SettingsComponent(): JSX.Element {
   const [settingsData, setSettingsData] = useState<SettingsData>({});
