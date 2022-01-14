@@ -2,6 +2,7 @@ import {trello} from 'root/api/client';
 import {generateSettingsSignature} from 'root/api/handlers/signature';
 
 import constants from 'root/utils/const';
+import {fetchWithTimeout} from 'root/utils/withTimeout';
 
 import {DocServerInfo} from 'components/card-button/types';
 import {SettingsData} from 'components/settings/types';
@@ -54,9 +55,9 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
   }
   try {
     const signature = await generateSettingsSignature();
-    const response = await fetch(
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+    const response = await fetchWithTimeout(
       `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}?signature=${signature}`,
+      {timeout: 3000},
       {
         method: 'POST',
         cache: 'no-cache',
