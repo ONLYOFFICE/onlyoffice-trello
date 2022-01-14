@@ -1,43 +1,85 @@
 {
-  "extends": [
-      "eslint:recommended",
-      "plugin:react-hooks/recommended"
-  ],
-  "parserOptions": {
-    "ecmaVersion": 8,
-    "sourceType": "module",
-    "ecmaFeatures": {
-      "jsx": true,
-      "impliedStrict": true,
-      "modules": true,
-      "experimentalObjectRestSpread": true
-    }
-  },
-  "parser": "babel-eslint",
-  "plugins": [
-    "react",
-    "import"
-  ],
   "env": {
     "browser": true,
-    "node": true,
-    "jquery": true,
-    "es6": true,
-    "jest": true
+    "es2021": true
   },
-  "globals": {
-    "jest": true,
-    "describe": true,
-    "it": true,
-    "expect": true,
-    "before": true,
-    "after": true,
-    "beforeEach": true
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "airbnb",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:@typescript-eslint/recommended-requiring-type-checking",
+    "plugin:jsx-a11y/recommended"
+  ],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "sourceType": "module"
   },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "react-hooks",
+    "import"
+  ],
   "settings": {
-    "import/resolver": "webpack"
+    "import/parsers": {
+      "@typescript-eslint/parser": [
+        ".ts",
+        ".tsx"
+      ]
+    },
+    "import/resolver": {
+      "typescript": {
+        "alwaysTryTypes": true,
+        "project": "./client/tsconfig.json"
+      }
+    }
   },
   "rules": {
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": [
+      "error"
+    ],
+    "react/jsx-filename-extension": [
+      "warn",
+      {
+        "extensions": [
+          ".tsx"
+        ]
+      }
+    ],
+    "import/extensions": [
+      "error",
+      "ignorePackages",
+      {
+        "ts": "never",
+        "tsx": "never"
+      }
+    ],
+    "no-shadow": "off",
+    "@typescript-eslint/no-shadow": [
+      "error"
+    ],
+    "@typescript-eslint/explicit-function-return-type": [
+      "error",
+      {
+        "allowExpressions": true
+      }
+    ],
+    "max-len": [
+      "warn",
+      {
+        "code": 80
+      }
+    ],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "import/prefer-default-export": "off",
+    "react/prop-types": "off",
     "array-bracket-spacing": [
       2,
       "never"
@@ -80,15 +122,11 @@
       2,
       "last"
     ],
-    "complexity": [
-      0,
-      10
-    ],
     "computed-property-spacing": [
       2,
       "never"
     ],
-    "consistent-return": 2,
+    "consistent-return": 1,
     "consistent-this": [
       2,
       "self"
@@ -120,17 +158,6 @@
         "allowArrowFunctions": true
       }
     ],
-    "generator-star-spacing": [
-      2,
-      {
-        "before": false,
-        "after": true
-      }
-    ],
-    "global-require": 2,
-    "guard-for-in": 2,
-    "id-blacklist": 0,
-    "import/no-unresolved": 2,
     "import/order": [
       "error",
       {
@@ -145,13 +172,6 @@
           "sibling",
           "index"
         ]
-      }
-    ],
-    "indent": [
-      2,
-      4,
-      {
-        "SwitchCase": 0
       }
     ],
     "jsx-quotes": [
@@ -183,14 +203,6 @@
         "beforeLineComment": true,
         "allowBlockStart": true,
         "allowBlockEnd": true
-      }
-    ],
-    "max-lines": [
-      1,
-      {
-        "max": 450,
-        "skipBlankLines": true,
-        "skipComments": false
       }
     ],
     "max-nested-callbacks": [
@@ -312,7 +324,7 @@
     "no-new-wrappers": 2,
     "no-octal-escape": 2,
     "no-param-reassign": 2,
-    "no-process-env": 2,
+    "no-process-env": 0,
     "no-process-exit": 2,
     "no-proto": 2,
     "no-redeclare": 2,
@@ -330,13 +342,6 @@
     ],
     "no-self-compare": 2,
     "no-sequences": 2,
-    "no-shadow": [
-      2,
-      {
-        "hoist": "functions"
-      }
-    ],
-    "no-shadow-restricted-names": 2,
     "no-spaced-func": 2,
     "no-tabs": 0,
     "no-template-curly-in-string": 2,
@@ -371,14 +376,6 @@
         "args": "after-used"
       }
     ],
-    "no-use-before-define": [
-      2,
-      {
-        "classes": false,
-        "functions": false,
-        "variables": false
-      }
-    ],
     "no-useless-computed-key": 2,
     "no-useless-concat": 2,
     "no-useless-constructor": 2,
@@ -401,60 +398,6 @@
         "allowMultiplePropertiesPerLine": true
       }
     ],
-    "object-shorthand": [
-      2,
-      "always"
-    ],
-    "one-var": [
-      2,
-      "never"
-    ],
-    "one-var-declaration-per-line": 0,
-    "operator-assignment": [
-      2,
-      "always"
-    ],
-    "operator-linebreak": [
-      2,
-      "after"
-    ],
-    "padded-blocks": [
-      2,
-      "never"
-    ],
-    "prefer-arrow-callback": 2,
-    "prefer-const": 2,
-    "prefer-destructuring": 0,
-    "prefer-numeric-literals": 2,
-    "prefer-promise-reject-errors": 2,
-    "prefer-rest-params": 2,
-    "prefer-spread": 2,
-    "prefer-template": 0,
-    "quote-props": [
-      2,
-      "as-needed"
-    ],
-    "quotes": [
-      2,
-      "single",
-      "avoid-escape"
-    ],
-    "radix": 2,
-    "react/display-name": [
-      0,
-      {
-        "ignoreTranspilerName": false
-      }
-    ],
-    "react/forbid-component-props": 0,
-    "react/forbid-elements": [
-      2,
-      {
-        "forbid": [
-          "embed"
-        ]
-      }
-    ],
     "react/jsx-boolean-value": [
       2,
       "always"
@@ -473,7 +416,6 @@
       2,
       "never"
     ],
-    "react/jsx-filename-extension": 2,
     "react/jsx-first-prop-new-line": [
       2,
       "multiline"
@@ -502,7 +444,7 @@
         "ignoreCase": false
       }
     ],
-    "react/jsx-no-literals": 2,
+    "react/jsx-no-literals": 0,
     "react/jsx-no-target-blank": 2,
     "react/jsx-no-undef": 2,
     "react/jsx-pascal-case": 2,
@@ -546,27 +488,12 @@
     ],
     "react/prefer-es6-class": 2,
     "react/prefer-stateless-function": 2,
-    "react/prop-types": [
-      2,
-      {
-        "ignore": [
-          "location",
-          "history",
-          "component"
-        ]
-      }
-    ],
     "react/require-default-props": 0,
     "react/require-optimization": 1,
     "react/require-render-return": 2,
     "react/self-closing-comp": 2,
     "react/sort-comp": 0,
     "react/style-prop-object": 2,
-    "require-yield": 2,
-    "rest-spread-spacing": [
-      2,
-      "never"
-    ],
     "semi": [
       2,
       "always"
@@ -632,37 +559,10 @@
   },
   "overrides": [
     {
-      "files": ["**/*.tsx", "**/*.ts"],
-      "extends": "plugin:@typescript-eslint/recommended",
-      "rules": {
-        "@typescript-eslint/ban-ts-ignore": 0,
-        "@typescript-eslint/ban-types": 1,
-        "@typescript-eslint/ban-ts-comment": 0,
-        "@typescript-eslint/no-var-requires": 0,
-        "@typescript-eslint/prefer-interface": 0,
-        "@typescript-eslint/explicit-function-return-type": 0,
-        "@typescript-eslint/explicit-module-boundary-types": 0,
-        "@typescript-eslint/indent": [
-          2,
-          4,
-          {
-            "SwitchCase": 0
-          }
-        ],
-        "@typescript-eslint/no-use-before-define": [
-          2,
-          {
-            "classes": false,
-            "functions": false,
-            "variables": false
-          }
-        ],
-        "react/jsx-filename-extension": [
-          1,
-          {
-            "extensions": [".jsx", ".tsx"]
-          }
-        ]
+      "files": ["*.ts", "*.tsx"],
+      "parserOptions": {
+        "alwaysTryTypes": true,
+        "project": ["./client/tsconfig.json"]
       }
     }
   ]

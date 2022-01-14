@@ -1,19 +1,22 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React from 'react';
 
-import {Searchbar} from 'Components/card-button/searchbar/Searchbar';
+import {Searchbar} from 'components/card-button/searchbar/Searchbar';
 
-import logo from 'Public/images/logo.svg';
+import logo from 'public/images/logo.svg';
 import './styles.css';
 
-export const Header = () => {
-    return (
-        <div className='modal_header'>
-            <img
-                src={logo}
-                style={{cursor: 'pointer'}}
-                onClick={() => window.open('https://www.onlyoffice.com/')}
-            />
-            <Searchbar/>
-        </div>
-    );
-};
+export function Header(): JSX.Element {
+  return (
+      <div className='modal_header'>
+          <img
+              alt='ONLYOFFICE'
+              src={logo as string}
+              style={{cursor: 'pointer'}}
+              onClick={() => window.open('https://www.onlyoffice.com/')}
+          />
+          <Searchbar/>
+      </div>
+  );
+}

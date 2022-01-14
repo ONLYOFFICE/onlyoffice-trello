@@ -1,3 +1,7 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable max-len */
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /**
  * Thanks to Angelo Tata for the Trello Types -
  * See https://github.com/tatablack/leaner-coffee-powerup for more info.
@@ -10,7 +14,7 @@ declare global {
     }
 }
 
-export type TrelloSettings = 'docs_address' | 'docs_jwt' | 'docs_header';
+export type TrelloSettings = 'docsAddress' | 'docsJwt' | 'docsHeader';
 
 export namespace Trello {
     namespace Callback {
@@ -376,6 +380,7 @@ export namespace Trello {
             getRestApi(): unknown;
             initSentry(): void;
             NotHandled: any;
+            jwt(payload: any): PromiseLike<string>;
         }
 
         interface PluginOptions extends LocalizerOptions {

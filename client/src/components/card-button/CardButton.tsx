@@ -1,150 +1,130 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, {useState, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
-import {getAuth} from 'Root/api/getAuth';
-import {useStore} from 'Root/context';
-import {generateOAuthHeader} from 'Root/utils/oauth';
-import constants from 'Root/utils/const';
-import {filterFiles} from 'Root/utils/sort';
-import {isExtensionSupported} from 'Root/utils/file';
+import {getAuth} from 'root/api/handlers/auth';
+import {useStore} from 'root/context';
+import {filterFiles} from 'root/utils/sort';
 
-import {Trello} from 'Types/trello';
-import {DocServer} from 'Types/docserver';
-import {ProxyPayloadResource, EditorPayload} from 'Types/payloads';
-
-import {Header} from './header/Header';
-import {Info} from './info/Info';
-import {Main} from './main/Main';
-import {Loader} from './loader/Loader';
-import {FileList} from './file/FileList';
-import {Editor} from './editor/Editor';
-import {Error} from './error/Error';
+import {Trello} from 'types/trello';
+import {Header} from 'components/card-button/header/Header';
+import {Info} from 'components/card-button/info/Info';
+import {Main} from 'components/card-button/main/Main';
+import {Loader} from 'components/card-button/loader/Loader';
+import {FileList} from 'components/card-button/file/FileList';
+import {Editor} from 'components/card-button/editor/Editor';
+import {Error} from 'components/card-button/error/Error';
+import {Dropdown} from 'components/card-button/dropdown/Dropdown';
+import {
+  ProxyPayloadResource,
+  EditorPayload,
+  DocServerInfo,
+  TrelloCard,
+} from 'components/card-button/types';
 
 import './styles.css';
+import {generateSignature} from 'root/api/handlers/docKey';
+import {fetchDocsInfo} from 'root/api/handlers/settings';
+import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
 
 const CardButton = observer(() => {
-    const store = useStore();
-    const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
-    const [isEditor, setIsEditor] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [isError, setIsError] = useState(false);
-    const [token, setToken] = useState('');
-    const [docServerInfo, setDocServerInfo] = useState<DocServer>();
-    const [signature, setSignature] = useState('');
-    const [editorPayload, setEditorPayload] = useState<EditorPayload>();
+  const store = useStore();
+  const [isEditor, setIsEditor] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
+  const [token, setToken] = useState('');
+  const [signature, setSignature] = useState('');
+  const [currentCard, setCurrentCard] = useState<TrelloCard>();
+  const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
+  const [docServerInfo, setDocServerInfo] = useState<DocServerInfo>();
+  const [editorPayload, setEditorPayload] = useState<EditorPayload>();
 
-    useEffect(() => {
-        (async () => {
-            setDocServerInfo(await store.trello.get('board', 'shared'));
-            const rest = store.trello.getRestApi() as any;
-            const card = await store.trello.card('id', 'attachments');
-            store.card.id = card.id;
-            const options = {
-                method: 'GET',
-                url: constants.TRELLO_API_CARD_ATTACHMENTS(card.id),
-            };
-            let token = '';
-            try {
-                token = await getAuth(store.trello);
-            } catch {
-                setIsError(true);
-                return;
-            }
-            const auth = generateOAuthHeader(
-                options,
-                rest.appKey,
-                rest.t.secret,
-                token,
-            );
-
-            const resp = await fetch(options.url, {
-                headers: {
-                    Authorization: auth.Authorization,
-                },
-            });
-
-            const files = ((await resp.json()) as Trello.PowerUp.Attachment[]).filter(
-                (file) => isExtensionSupported(file.name.split('.')[1]),
-            );
-            setToken(token);
-            setFiles(files);
-            setIsLoading(false);
-        })();
-
-        return () => {
-            store.card = {filters: {}};
-        };
-    }, []);
-
-    const handleDownload = async (attachment: string, filename: string) => {
-        try {
-            const timestamp = Number(new Date());
-
-            const proxyResource: ProxyPayloadResource = {
-                to: 'api.trello.com',
-                path: `/1/cards/${store.card.id}/attachments/${attachment}/download/${filename}`,
-                docs_header: docServerInfo?.docs_header || '',
-            };
-
-            setEditorPayload({
-                proxyResource: encodeURIComponent(btoa(JSON.stringify(proxyResource))),
-                attachment,
-                card: store.card.id || '',
-                filename,
-                token,
-                ds: docServerInfo?.docs_address || '',
-                dsheader: docServerInfo?.docs_header || '',
-                dsjwt: docServerInfo?.docs_jwt || '',
-            });
-            setSignature(
-                await (store.trello as any).jwt({
-                    state: JSON.stringify({
-                        attachment,
-                        due: timestamp + 1.5 * 60 * 1000,
-                    }),
-                }),
-            );
-            setIsEditor(true);
-        } catch (err) {
-            setIsError(true);
-        }
+  useEffect(() => {
+    const init = async (): Promise<void> => {
+      try {
+        setToken(await getAuth());
+        setDocServerInfo(await fetchDocsInfo());
+        const card = await getCurrentCard();
+        setCurrentCard(card);
+        setFiles(await fetchSupportedFiles(card.id));
+        setIsLoading(false);
+      } catch {
+        setIsError(true);
+      }
     };
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    init();
+  }, []);
 
-    const allowEditor = isEditor && token && docServerInfo?.docs_address;
+  const startEditor = async (attachment: string, filename: string)
+    : Promise<void> => {
+    if (!isError) {
+      const resource: ProxyPayloadResource = {
+        to: 'api.trello.com',
+        path: `/1/cards/${currentCard!.id}/
+          attachments/${attachment}/download/${filename}`,
+        docsHeader: docServerInfo!.docsHeader,
+      };
+      try {
+        setEditorPayload({
+          proxyResource: encodeURIComponent(btoa(JSON.stringify(resource))),
+          attachment,
+          card: currentCard!.id,
+          filename,
+          token,
+          ds: docServerInfo!.docsAddress,
+          dsheader: docServerInfo!.docsHeader,
+          dsjwt: docServerInfo!.docsJwt,
+        });
+        setSignature(await generateSignature(attachment));
+        setIsEditor(true);
+      } catch (e) {
+        setIsError(true);
+      }
+    }
+  };
 
-    return (
-        <>
-            {isError && <Error/>}
-            {!isError && (
-                <div id='container'>
-                    {allowEditor && (
-                        <Editor
-                            signature={signature}
-                            payload={editorPayload!}
-                            setError={setIsError}
-                        />
-                    )}
-                    {!allowEditor && (
-                        <Main>
-                            <Header/>
-                            <Info/>
-                            {isLoading && (
-                                <div className='onlyoffice_loader-container'>
-                                    <Loader/>
-                                </div>
-                            )}
-                            {!isLoading && (
-                                <FileList
-                                    files={filterFiles(files, store.card.filters)}
-                                    handleDownload={handleDownload}
-                                />
-                            )}
-                        </Main>
-                    )}
-                </div>
-            )}
-        </>
-    );
+  return (
+      <>
+          {isError && <Error/>}
+          {!isError && (
+          <>
+              {isEditor && (
+              <Editor
+                  signature={signature}
+                  payload={editorPayload}
+                  setError={setIsError}
+              />
+              )}
+              {!isEditor && (
+              <Main>
+                  <Header/>
+                  <Info/>
+                  {isLoading && (
+                  <div className='onlyoffice_loader-container'>
+                      <Loader/>
+                  </div>
+                  )}
+                  {!isLoading && (
+                  <>
+                      <div className='file_header'>
+                          <h2>Files</h2>
+                          <div>
+                              <Dropdown/>
+                          </div>
+                      </div>
+                      <FileList
+                          files={filterFiles(files, store.card.filters)}
+                          openHandler={startEditor}
+                      />
+                  </>
+                  )}
+              </Main>
+              )}
+          </>
+          )}
+      </>
+  );
 });
 
 export default CardButton;

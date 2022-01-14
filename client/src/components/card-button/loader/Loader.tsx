@@ -2,8 +2,8 @@ import React from 'react';
 
 import './styles.css';
 
-export const Loader = () => {
-    return (
-        <div className='modal-main_loader'/>
-    );
-};
+export function Loader(): JSX.Element {
+  return (
+      <div className='onlyoffice_loader'/>
+  );
+}

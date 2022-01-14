@@ -1,103 +1,59 @@
 import React, {useState, useEffect} from 'react';
-import dateFormat from 'dateformat';
 
-import {getIconByExt} from 'Root/utils/file';
-import {Trello} from 'Types/trello';
+import {MobileFile} from 'components/card-button/file/FileMobile';
+import {DesktopFile} from 'components/card-button/file/FileDesktop';
 
-import download from 'Public/images/download.svg';
+import {Trello} from 'types/trello';
+import {OpenHandler} from 'components/card-button/file/types';
+
+import download from 'public/images/download.svg';
 import './styles.css';
 
-const DesktopFile: React.FC<{ file: Trello.PowerUp.Attachment }> = ({file}) => {
-    const extIcon = getIconByExt(file.name.split('.')[1]);
-    return (
-        <>
-            <div
-                className='file_container_item__main'
-                style={{maxWidth: '50%'}}
-            >
-                <img src={extIcon}/>
-                <h2>{file.name}</h2>
-            </div>
-            <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
-                <p
-                    className='file_container_item__main__text__item'
-                    style={{marginRight: '4rem'}}
-                >
-                    {(file.bytes / 1000000).toFixed(2)} MB
-                </p>
-                <p className='file_container_item__main__text__item file_container_item__main__text__item_long'>
-                    {dateFormat(file.date, 'dd/m/yy HH:MM')}
-                </p>
-            </div>
-        </>
-    );
-};
+export function File({file, openHandler} : {
+  file: Trello.PowerUp.Attachment,
+  openHandler: OpenHandler,
+}): JSX.Element {
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 941);
 
-const MobileFile: React.FC<{ file: Trello.PowerUp.Attachment }> = ({file}) => {
-    const extIcon = getIconByExt(file.name.split('.')[1]);
-    return (
-        <div className='file_container_item__main'>
-            <img src={extIcon}/>
-            <div className='file_container_item__main_mobile'>
-                <h2>{file.name}</h2>
-                <div className='file_container_item__main__text'>
-                    <p className='file_container_item__main__text__item'>
-                        {(file.bytes / 1000000).toFixed(2)} MB
-                    </p>
-                    <p className='file_container_item__main__text__item file_container_item__main__text__item_long'>
-                        {dateFormat(file.date, 'dd/m/yy HH:MM')}
-                    </p>
-                </div>
-            </div>
-        </div>
-    );
-};
+  useEffect(() => {
+    const onResize = (): void => {
+      setIsMobile(window.innerWidth <= 941);
+    };
+    window.addEventListener('resize', onResize);
 
-export const File: React.FC<{
-    file: Trello.PowerUp.Attachment;
-    handleDownload: (attachment: string, filename: string) => Promise<void>;
-}> = (props) => {
-    const [isMobile, setIsMobile] = useState(() => {
-        return window.innerWidth <= 941;
-    });
+    return () => {
+      window.removeEventListener('resize', onResize);
+    };
+  }, []);
 
-    useEffect(() => {
-        const onResize = () => {
-            setIsMobile(window.innerWidth <= 941);
-        };
-        window.addEventListener('resize', onResize);
+  const limitOK = parseFloat((file.bytes / 1000000).toFixed(2)) <= 1.5;
 
-        return () => {
-            window.removeEventListener('resize', onResize);
-        };
-    }, []);
+  return (
+      <div className='file_container_item'>
+          {isMobile && <MobileFile file={file}/>}
+          {!isMobile && <DesktopFile file={file}/>}
+          <div className='file_container_item__controls'>
+              <button type='button'>
+                  <a
+                      href={file.url}
+                      download={true}
+                  >
+                      <img
+                          src={download as string}
+                          alt='onlyoffice_download'
+                      />
+                  </a>
+              </button>
+              {limitOK && (
+              <button
+                  type='button'
+                  onClick={() => openHandler(file.id, file.name)}
+              >
+                  Open in ONLYOFFICE
+              </button>
+              )}
+          </div>
+      </div>
+  );
+}
 
-    const fileFitsLimit = parseFloat((props.file.bytes / 1000000).toFixed(2)) <= 1.5;
-
-    return (
-        <div className='file_container_item'>
-            {isMobile && <MobileFile file={props.file}/>}
-            {!isMobile && <DesktopFile file={props.file}/>}
-            <div className='file_container_item__controls'>
-                <button>
-                    <a
-                        href={props.file.url}
-                        download={true}
-                    >
-                        <img
-                            src={download}
-                            alt='onlyoffice_download'
-                        />
-                    </a>
-                </button>
-                {fileFitsLimit && (
-                    <button
-                        onClick={() => props.handleDownload(props.file.id, props.file.name)}
-                    >
-                        {'Open in ONLYOFFICE'}
-                    </button>
-                )}
-            </div>
-        </div>
-    );
-};

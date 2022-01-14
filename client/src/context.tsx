@@ -1,52 +1,42 @@
-import React, {useContext, createContext, FC} from 'react';
-import {makeAutoObservable} from 'mobx';
-import {configure} from 'mobx';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+import React, {useContext, createContext} from 'react';
+import {makeAutoObservable, configure} from 'mobx';
 
-import {Trello} from 'Types/trello';
-import {SORTBY, SORTORDER} from 'Types/enums';
+import {SortBy, SortOrder} from 'components/card-button/types';
 
 configure({
-    enforceActions: 'never',
+  enforceActions: 'never',
 });
 
-class TrelloStore {
-    private _trello: Trello.PowerUp.IFrame | null = null;
+class GlobalStore {
     card: {
         id?: string,
         filters: {
             search?: string;
-            sortBy?: SORTBY;
-            sortOrder?: SORTORDER;
+            sortBy?: SortBy;
+            sortOrder?: SortOrder;
         },
     } = {
-        filters: {},
+      filters: {},
     }
 
     constructor() {
-        makeAutoObservable(this);
-    }
-
-    public get trello(): Trello.PowerUp.IFrame {
-        if (!this._trello) {
-            this._trello = window.TrelloPowerUp.iframe({
-                appName: process.env.POWERUP_NAME,
-                appKey: process.env.POWERUP_APP_KEY,
-            });
-        }
-        return this._trello;
+      makeAutoObservable(this);
     }
 }
 
-const TrelloContext = createContext<TrelloStore>(new TrelloStore());
+const GlobalStoreContext = createContext<GlobalStore>(new GlobalStore());
 
-const TrelloProvider: FC<{ store: TrelloStore }> = ({store, children}) => {
-    return (
-        <TrelloContext.Provider value={store}>{children}</TrelloContext.Provider>
-    );
-};
+function GlobalStoreProvider(
+  {store, children}: {store: GlobalStore, children: React.ReactNode},
+): JSX.Element {
+  return (
+      <GlobalStoreContext.Provider value={store}>
+          {children}
+      </GlobalStoreContext.Provider>
+  );
+}
 
-const useStore = () => {
-    return useContext(TrelloContext);
-};
+const useStore = (): GlobalStore => useContext(GlobalStoreContext);
 
-export {TrelloStore, useStore, TrelloProvider};
+export {GlobalStore, useStore, GlobalStoreProvider};

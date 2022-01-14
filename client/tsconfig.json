@@ -15,11 +15,12 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "baseUrl": ".",
+    "moduleResolution": "node",
     "paths": {
-      "Components/*": ["src/components/*"],
-      "Types/*": ["src/types/*"],
-      "Root/*": ["src/*"],
-      "Public/*": ["public/*"],
+      "components/*": ["src/components/*"],
+      "types/*": ["src/types/*"],
+      "root/*": ["src/*"],
+      "public/*": ["public/*"],
     }
   },
   "include": ["./src/**/*"],
