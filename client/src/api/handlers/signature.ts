@@ -1,6 +1,7 @@
 import {nanoid} from 'nanoid';
 
 import {trello} from 'root/api/client';
+import {delay} from 'root/utils/withTimeout';
 
 export const generateDocKeySignature = async (
   attachment: string,
@@ -10,6 +11,8 @@ export const generateDocKeySignature = async (
     key = nanoid();
     await trello.set('card', 'shared', attachment, key);
   }
+  await delay(200);
+  key = (await trello.get('card', 'shared', attachment)) as string;
   const timestamp = Number(new Date()) + (2 * 60 * 1000);
   return trello.jwt({
     state: JSON.stringify({
