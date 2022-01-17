@@ -41,9 +41,6 @@ func Run(container *pkg.BasicContainer) (<-chan error, error) {
 	proxyRouter.HandleFunc(prhandler.GetPath(), middleware.Chain(prhandler.GetHandle(), middleware.GetEncryptionMiddleware(config, logger)).ServeHTTP)
 
 	router.HandleFunc(phandler.GetPath(), phandler.GetHandle()).Methods(phandler.GetMethod())
-	router.NotFoundHandler = http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
-		http.Redirect(rw, r, "/proxy", http.StatusPermanentRedirect)
-	})
 
 	lmt := tollbooth.NewLimiter(float64(config.Server.Limit), &limiter.ExpirableOptions{
 		DefaultExpirationTTL: 1 * time.Second,

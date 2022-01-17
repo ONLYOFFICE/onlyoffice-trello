@@ -33,9 +33,8 @@ type ServerConfiguration struct {
 }
 
 type Config struct {
-	Server  ServerConfiguration
-	Proxy   pkg.ProxyParameters
-	Gateway string
+	Server ServerConfiguration
+	Proxy  pkg.ProxyParameters
 }
 
 func (c *Config) Validate() error {

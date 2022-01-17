@@ -14,9 +14,9 @@ type ProxyParametersHeader struct{}
 type ProxyParameters struct {
 	To         string `json:"to" validate:"required"`
 	Path       string `json:"path" validate:"required"`
-	AuthValue  string `json:"auth_value"`
-	DocsHeader string `json:"docs_header"`
-	DocsJwt    string `json:"docs_jwt"`
+	AuthValue  string `json:"authValue"`
+	DocsHeader string `json:"docsHeader"`
+	DocsJwt    string `json:"docsJwt"`
 	Due        int64  `json:"due"`
 }
 

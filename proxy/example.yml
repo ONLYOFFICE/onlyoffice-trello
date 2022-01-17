@@ -7,4 +7,3 @@ proxy:
   to: "example.com"
   path: "/"
   authvalue: ""
-gateway: "https://<gateway>/onlyoffice/otp"
