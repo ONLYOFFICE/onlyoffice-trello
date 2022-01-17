@@ -23,7 +23,7 @@ const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
     eventSource.removeEventListener('message', cleanup);
     eventSource.close();
     await displayKeyRemoved();
-  }, 30000);
+  }, 15000);
   eventSource.addEventListener('message', cleanup);
 };
 
@@ -57,7 +57,7 @@ export function getCardButton(
     {
       icon: props.baseUrl,
       text: 'ONLYOFFICE Reset',
-      condition: 'edit',
+      condition: 'admin',
       callback: async (t: Trello.PowerUp.IFrame): Promise<void> => {
         const cardData = await t.get('card', 'shared') as [];
         await t.remove('card', 'shared', Object.keys(cardData));

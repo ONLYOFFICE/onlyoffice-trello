@@ -46,7 +46,7 @@ function Menu(props: any): JSX.Element {
           <div>
               {/* eslint-disable-next-line */}
               <div>{props.children}</div>
-              <hr/>
+              <hr style={{margin: 0}}/>
               <div>
                   <button
                       type='button'
@@ -91,7 +91,7 @@ export function Dropdown(): JSX.Element {
   return (
       <div style={{display: 'flex'}}>
           <Select
-              placeholder='Select'
+              placeholder='Sorting'
               styles={{
                 control: (css) => ({
                   ...css,
