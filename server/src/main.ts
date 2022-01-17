@@ -60,9 +60,7 @@ async function main() {
             origin: ['https://trello.com', process.env.SERVER_HOST, process.env.CLIENT_HOST],
             credentials: true,
         });
-        server.set('trust proxy', (ip) => {
-            return true;
-        });
+        server.set('trust proxy', 'loopback');
         server.setViewEngine('hbs');
         server.setBaseViewsDir(join(__dirname, '..', 'views'));
         server.useGlobalFilters(new NotFoundExceptionFilter());

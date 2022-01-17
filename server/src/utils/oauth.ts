@@ -56,6 +56,7 @@ export class OAuthUtil {
             headers: {
                 Authorization: header.Authorization,
             },
+            timeout: 1800,
         });
 
         return me.data;

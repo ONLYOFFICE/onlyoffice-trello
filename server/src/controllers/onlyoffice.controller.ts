@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import {Throttle} from '@nestjs/throttler';
 import {Request, Response} from 'express';
-import {validate} from 'class-validator';
 
 import {SecurityService} from '@services/security.service';
 import {Constants} from '@utils/const';
@@ -131,8 +130,6 @@ export class OnlyofficeController {
             const me = await this.oauthUtil.getMe(`${this.constants.URL_TRELLO_API_BASE}/members/me`, payload.token);
 
             if (!me.id || !me.username) throw new Error('Unknown user');
-
-            // const docKey = await this.cacheManager.getDocKey(payload.attachment, payload.isEditable);
 
             const session: DocKeySession = {
                 Address: payload.ds,
