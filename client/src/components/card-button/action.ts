@@ -54,5 +54,14 @@ export function getCardButton(
         },
       }),
     },
+    {
+      icon: props.baseUrl,
+      text: 'ONLYOFFICE Reset',
+      condition: 'edit',
+      callback: async (t: Trello.PowerUp.IFrame): Promise<void> => {
+        const cardData = await t.get('card', 'shared') as [];
+        await t.remove('card', 'shared', Object.keys(cardData));
+      },
+    },
   ];
 }
