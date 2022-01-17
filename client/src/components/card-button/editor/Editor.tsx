@@ -25,6 +25,8 @@ export function Editor({signature, payload, setError}: {
     const isDocument = Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length);
     if (!isDocument) {
       setError(true);
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      trello.remove('card', 'shared', payload.attachment);
     }
   };
 

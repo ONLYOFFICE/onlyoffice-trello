@@ -61,8 +61,8 @@ const CardButton = observer(() => {
     if (!isError) {
       const resource: ProxyPayloadResource = {
         to: 'api.trello.com',
-        path: `/1/cards/${currentCard!.id}/
-          attachments/${attachment}/download/${filename}`,
+        // eslint-disable-next-line max-len
+        path: `/1/cards/${currentCard!.id}/attachments/${attachment}/download/${filename}`,
         docsHeader: docServerInfo!.docsHeader,
       };
       try {
