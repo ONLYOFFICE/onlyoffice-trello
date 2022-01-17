@@ -15,13 +15,15 @@ const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
   const cleanup = async ({data}: {data: string}): Promise<void> => {
     await t.remove('card', 'shared', data);
     await displayKeyRemoved();
+    // eslint-disable-next-line @typescript-eslint/no-use-before-define
+    clearTimeout(timeout);
   };
-  eventSource.addEventListener('message', cleanup);
-  setTimeout(async () => {
+  const timeout = setTimeout(async () => {
     eventSource.removeEventListener('message', cleanup);
     eventSource.close();
     await displayKeyRemoved();
   }, 30000);
+  eventSource.addEventListener('message', cleanup);
 };
 
 export function getCardButton(
