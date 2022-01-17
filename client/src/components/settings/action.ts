@@ -14,9 +14,9 @@ export function getSettings(
 ): PromiseLike<void> | undefined {
   if (options.context.permissions?.organization === 'write') {
     return t.popup({
-      title: 'Note Settings',
+      title: 'ONLYOFFICE',
       url: './show-settings',
-      height: 150,
+      height: 240,
     });
   }
 }
