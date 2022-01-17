@@ -2,64 +2,117 @@ import word from 'public/images/word.svg';
 import cell from 'public/images/cell.svg';
 import slide from 'public/images/slide.svg';
 
+import pdf from 'public/images/pdf.svg';
+import odt from 'public/images/odt.svg';
+import ott from 'public/images/ott.svg';
+import txt from 'public/images/txt.svg';
+import rtf from 'public/images/rtf.svg';
+import fb2 from 'public/images/fb2.svg';
+import epub from 'public/images/epub.svg';
+
+type FileType = {
+  type: string,
+  icon: string,
+}
+
 const ONLYOFFICE_CELL = 'cell';
 const ONLYOFFICE_WORD = 'word';
 const ONLYOFFICE_SLIDE = 'slide';
 
-const EditExtensions = new Map([
-  ['docx', ONLYOFFICE_WORD],
-  ['xlsx', ONLYOFFICE_CELL],
-  ['pptx', ONLYOFFICE_SLIDE],
+const genericWord: FileType = {
+  type: ONLYOFFICE_WORD,
+  icon: word as string,
+};
+
+const genericCell: FileType = {
+  type: ONLYOFFICE_CELL,
+  icon: cell as string,
+};
+
+const genericSlide: FileType = {
+  type: ONLYOFFICE_SLIDE,
+  icon: slide as string,
+};
+
+const EditExtensions = new Map<string, FileType>([
+  ['docx', genericWord],
+  ['xlsx', genericCell],
+  ['pptx', genericSlide],
 ]);
 
-const AllowedExtensions = new Map([
-  ['xls', ONLYOFFICE_CELL],
-  ['xlsx', ONLYOFFICE_CELL],
-  ['xlsm', ONLYOFFICE_CELL],
-  ['xlt', ONLYOFFICE_CELL],
-  ['xltx', ONLYOFFICE_CELL],
-  ['xltm', ONLYOFFICE_CELL],
-  ['ods', ONLYOFFICE_CELL],
-  ['fods', ONLYOFFICE_CELL],
-  ['ots', ONLYOFFICE_CELL],
-  ['csv', ONLYOFFICE_CELL],
-  ['pps', ONLYOFFICE_SLIDE],
-  ['ppsx', ONLYOFFICE_SLIDE],
-  ['ppsm', ONLYOFFICE_SLIDE],
-  ['ppt', ONLYOFFICE_SLIDE],
-  ['pptx', ONLYOFFICE_SLIDE],
-  ['pptm', ONLYOFFICE_SLIDE],
-  ['pot', ONLYOFFICE_SLIDE],
-  ['potx', ONLYOFFICE_SLIDE],
-  ['potm', ONLYOFFICE_SLIDE],
-  ['odp', ONLYOFFICE_SLIDE],
-  ['fodp', ONLYOFFICE_SLIDE],
-  ['otp', ONLYOFFICE_SLIDE],
-  ['doc', ONLYOFFICE_WORD],
-  ['docx', ONLYOFFICE_WORD],
-  ['docm', ONLYOFFICE_WORD],
-  ['dot', ONLYOFFICE_WORD],
-  ['dotx', ONLYOFFICE_WORD],
-  ['dotm', ONLYOFFICE_WORD],
-  ['odt', ONLYOFFICE_WORD],
-  ['fodt', ONLYOFFICE_WORD],
-  ['ott', ONLYOFFICE_WORD],
-  ['rtf', ONLYOFFICE_WORD],
-]);
-
-const ExtensionIcons = new Map([
-  [ONLYOFFICE_WORD, word as string],
-  [ONLYOFFICE_CELL, cell as string],
-  [ONLYOFFICE_SLIDE, slide as string],
+const AllowedExtensions = new Map<string, FileType>([
+  ['xls', genericCell],
+  ['xlsx', genericCell],
+  ['xlsm', genericCell],
+  ['xlt', genericCell],
+  ['xltx', genericCell],
+  ['xltm', genericCell],
+  ['ods', genericCell],
+  ['fods', genericCell],
+  ['ots', genericCell],
+  ['csv', genericCell],
+  ['pps', genericSlide],
+  ['ppsx', genericSlide],
+  ['ppsm', genericSlide],
+  ['ppt', genericSlide],
+  ['pptx', genericSlide],
+  ['pptm', genericSlide],
+  ['pot', genericSlide],
+  ['potx', genericSlide],
+  ['potm', genericSlide],
+  ['odp', genericSlide],
+  ['fodp', genericSlide],
+  ['otp', genericSlide],
+  ['pdf', {
+    type: ONLYOFFICE_WORD,
+    icon: pdf as string,
+  }],
+  ['doc', genericWord],
+  ['docx', genericWord],
+  ['docm', genericWord],
+  ['dot', genericWord],
+  ['dotx', genericWord],
+  ['dotm', genericWord],
+  ['odt', {
+    type: ONLYOFFICE_WORD,
+    icon: odt as string,
+  }],
+  ['fodt', genericWord],
+  ['ott', {
+    type: ONLYOFFICE_WORD,
+    icon: ott as string,
+  }],
+  ['rtf', {
+    type: ONLYOFFICE_WORD,
+    icon: rtf as string,
+  }],
+  ['txt', {
+    type: ONLYOFFICE_WORD,
+    icon: txt as string,
+  }],
+  ['fb2', {
+    type: ONLYOFFICE_WORD,
+    icon: fb2 as string,
+  }],
+  ['epub', {
+    type: ONLYOFFICE_WORD,
+    icon: epub as string,
+  }],
 ]);
 
 export function getFileTypeByExt(fileExt: string): string {
-  return AllowedExtensions.get(fileExt) || ONLYOFFICE_WORD;
+  return AllowedExtensions.get(fileExt)?.type || ONLYOFFICE_WORD;
+}
+
+export function isFileEditable(fileExt: string): boolean {
+  return EditExtensions.has(fileExt);
 }
 
 export function getIconByExt(fileExt: string): string {
-  const icon = ExtensionIcons.get(getFileTypeByExt(fileExt));
-  return icon || word as string;
+  const icon = EditExtensions.get(fileExt)?.icon
+    || AllowedExtensions.get(fileExt)?.icon || word as string;
+
+  return icon;
 }
 
 export function isExtensionSupported(fileExt: string, edit?: boolean): boolean {

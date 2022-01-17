@@ -15,7 +15,16 @@ import {NotFoundExceptionFilter} from '@filters/notfound';
 
 const cluster = require('cluster');
 
+const encKeysValid = (): boolean => {
+    const pKey = process.env.PROXY_ENCRYPTION_KEY;
+    const sKey = process.env.POWERUP_APP_ENCRYPTION_KEY;
+
+    return pKey.length === 32 && sKey.length === 32;
+}
+
 async function main() {
+    if (!encKeysValid()) throw new Error('Invalid encryption key/keys size');
+
     process.env.UV_THREADPOOL_SIZE = cpus().length.toString();
 
     // const aggregatorRegistry = new AggregatorRegistry();

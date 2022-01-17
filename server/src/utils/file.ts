@@ -37,6 +37,7 @@ const AllowedExtensions = new Map([
     ['odp', ONLYOFFICE_SLIDE],
     ['fodp', ONLYOFFICE_SLIDE],
     ['otp', ONLYOFFICE_SLIDE],
+    ['pdf', ONLYOFFICE_WORD],
     ['doc', ONLYOFFICE_WORD],
     ['docx', ONLYOFFICE_WORD],
     ['docm', ONLYOFFICE_WORD],
@@ -47,6 +48,9 @@ const AllowedExtensions = new Map([
     ['fodt', ONLYOFFICE_WORD],
     ['ott', ONLYOFFICE_WORD],
     ['rtf', ONLYOFFICE_WORD],
+    ['txt', ONLYOFFICE_WORD],
+    ['fb2', ONLYOFFICE_WORD],
+    ['epub', ONLYOFFICE_WORD],
 ]);
 //
 
