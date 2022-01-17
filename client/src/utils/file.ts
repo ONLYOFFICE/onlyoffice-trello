@@ -118,3 +118,7 @@ export function getIconByExt(fileExt: string): string {
 export function isExtensionSupported(fileExt: string, edit?: boolean): boolean {
   return edit ? EditExtensions.has(fileExt) : AllowedExtensions.has(fileExt);
 }
+
+export function getFileExt(filename: string): string {
+  return filename.split('.')[1];
+}

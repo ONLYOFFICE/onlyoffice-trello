@@ -2,11 +2,12 @@
 import React, {useState, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 
+import {fetchDocsInfo} from 'root/api/handlers/settings';
+import {generateDocKeySignature} from 'root/api/handlers/signature';
+import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
 import {getAuth} from 'root/api/handlers/auth';
 import {useStore} from 'root/context';
-import {filterFiles} from 'root/utils/sort';
 
-import {Trello} from 'types/trello';
 import {Header} from 'components/card-button/header/Header';
 import {Info} from 'components/card-button/info/Info';
 import {Main} from 'components/card-button/main/Main';
@@ -15,6 +16,8 @@ import {FileList} from 'components/card-button/file/FileList';
 import {Editor} from 'components/card-button/editor/Editor';
 import {Error} from 'components/card-button/error/Error';
 import {Dropdown} from 'components/card-button/dropdown/Dropdown';
+
+import {Trello} from 'types/trello';
 import {
   ProxyPayloadResource,
   EditorPayload,
@@ -22,10 +25,10 @@ import {
   TrelloCard,
 } from 'components/card-button/types';
 
+import {getFileExt, isFileEditable} from 'root/utils/file';
+import {filterFiles} from 'root/utils/sort';
+
 import './styles.css';
-import {generateDocKeySignature} from 'root/api/handlers/signature';
-import {fetchDocsInfo} from 'root/api/handlers/settings';
-import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
 
 const CardButton = observer(() => {
   const store = useStore();
@@ -76,7 +79,8 @@ const CardButton = observer(() => {
           dsheader: docServerInfo!.docsHeader,
           dsjwt: docServerInfo!.docsJwt,
         });
-        setSignature(await generateDocKeySignature(attachment));
+        const isEditable = isFileEditable(getFileExt(filename));
+        setSignature(await generateDocKeySignature(attachment, isEditable));
         setIsEditor(true);
       } catch (e) {
         setIsError(true);

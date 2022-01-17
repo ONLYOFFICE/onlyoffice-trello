@@ -5,11 +5,10 @@ import {ActionProps} from 'types/power-up';
 import constants from 'root/utils/const';
 
 const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
-  window.localStorage.removeItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR);
   const eventSource = new EventSource(constants.ONLYOFFICE_SSE_ENDPOINT);
   const displayKeyRemoved = async (): Promise<void> => {
     await t.alert({
-      message: 'Document key has been successfully removed. You can close the browser now',
+      message: 'Document key has been successfully removed. You may close the tab now',
       display: 'success',
     });
   };
@@ -41,8 +40,11 @@ export function getCardButton(
         url: '/card-button',
         fullscreen: true,
         callback: async () => {
-          const afterEditor = window.localStorage.getItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR);
-          if (afterEditor) {
+          const attachment = window.localStorage.getItem(constants.ONLYOFFICE_LOCAL_STORAGE_ATTACHMENT);
+          const attachmentKey = window.localStorage.getItem(constants.ONLYOFFICE_LOCAL_STORAGE_ATTACHMENT_KEY);
+          const storedKey = (await t.get('card', 'shared', attachment || '')) as string;
+
+          if (attachmentKey === storedKey) {
             await t.alert({
               message: `Please do not close the tab.
               We are removing ONLYOFFICE document keys from your trello storage`,
@@ -51,6 +53,9 @@ export function getCardButton(
             });
             docKeyCleanup(t);
           }
+
+          window.localStorage.removeItem(constants.ONLYOFFICE_LOCAL_STORAGE_ATTACHMENT);
+          window.localStorage.removeItem(constants.ONLYOFFICE_LOCAL_STORAGE_ATTACHMENT_KEY);
         },
       }),
     },
