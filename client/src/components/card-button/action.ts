@@ -1,17 +1,26 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
+/* eslint-disable max-len */
 import {Trello} from 'types/trello';
 import {ActionProps} from 'types/power-up';
 import constants from 'root/utils/const';
 
 const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
   const eventSource = new EventSource(constants.ONLYOFFICE_SSE_ENDPOINT);
-  const cleanup = ({data}: {data: string}): void => {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    t.remove('card', 'shared', data);
+  const displayKeyRemoved = async (): Promise<void> => {
+    await t.alert({
+      message: 'Document key has been successfully removed. You can close the browser now',
+      display: 'success',
+    });
+  };
+  const cleanup = async ({data}: {data: string}): Promise<void> => {
+    await t.remove('card', 'shared', data);
+    await displayKeyRemoved();
   };
   eventSource.addEventListener('message', cleanup);
-  setTimeout(() => {
+  setTimeout(async () => {
     eventSource.removeEventListener('message', cleanup);
     eventSource.close();
+    await displayKeyRemoved();
   }, 30000);
 };
 
@@ -28,7 +37,13 @@ export function getCardButton(
         title: 'ONLYOFFICE',
         url: '/card-button',
         fullscreen: true,
-        callback: () => {
+        callback: async () => {
+          await t.alert({
+            message: `Please do not close your browser.
+            We are removing ONLYOFFICE document keys from your trello storage`,
+            duration: 30,
+            display: 'warning',
+          });
           docKeyCleanup(t);
         },
       }),
