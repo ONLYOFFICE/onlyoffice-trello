@@ -5,15 +5,25 @@ import React, {useEffect} from 'react';
 import {trello} from 'root/api/client';
 import {EditorPayload} from 'components/card-button/types';
 
+import constants from 'root/utils/const';
+
 import './styles.css';
+
+const cleanup = (id: string): void => {
+  // eslint-disable-next-line @typescript-eslint/no-floating-promises
+  trello.remove('card', 'shared', id);
+};
 
 const forceCleanup = (e: MessageEvent<{action: string, id: string}>): void => {
   const {data, isTrusted} = e;
 
   if (isTrusted && data.action === 'cleanup') {
-    // eslint-disable-next-line @typescript-eslint/no-floating-promises
-    trello.remove('card', 'shared', data.id);
+    cleanup(data.id);
   }
+};
+
+const isEditorLoaded = (): boolean => {
+  return Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length);
 };
 
 export function Editor({signature, payload, setError}: {
@@ -22,11 +32,9 @@ export function Editor({signature, payload, setError}: {
   setError: React.Dispatch<React.SetStateAction<boolean>>,
 }): JSX.Element {
   const checkEditorLoaded = (): void => {
-    const isDocument = Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length);
-    if (!isDocument) {
+    if (!isEditorLoaded()) {
       setError(true);
-      // eslint-disable-next-line @typescript-eslint/no-floating-promises
-      trello.remove('card', 'shared', payload.attachment);
+      cleanup(payload.attachment);
     }
   };
 
@@ -35,6 +43,7 @@ export function Editor({signature, payload, setError}: {
     form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}`;
     (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
     form.submit();
+    window.localStorage.setItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR, Date.now().toString());
     setTimeout(() => {
       checkEditorLoaded();
     }, 8000);

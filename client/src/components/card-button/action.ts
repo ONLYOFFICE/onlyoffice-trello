@@ -5,6 +5,7 @@ import {ActionProps} from 'types/power-up';
 import constants from 'root/utils/const';
 
 const docKeyCleanup = (t: Trello.PowerUp.IFrame): void => {
+  window.localStorage.removeItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR);
   const eventSource = new EventSource(constants.ONLYOFFICE_SSE_ENDPOINT);
   const displayKeyRemoved = async (): Promise<void> => {
     await t.alert({
@@ -40,13 +41,16 @@ export function getCardButton(
         url: '/card-button',
         fullscreen: true,
         callback: async () => {
-          await t.alert({
-            message: `Please do not close your browser.
-            We are removing ONLYOFFICE document keys from your trello storage`,
-            duration: 30,
-            display: 'warning',
-          });
-          docKeyCleanup(t);
+          const afterEditor = window.localStorage.getItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR);
+          if (afterEditor) {
+            await t.alert({
+              message: `Please do not close the tab.
+              We are removing ONLYOFFICE document keys from your trello storage`,
+              duration: 30,
+              display: 'warning',
+            });
+            docKeyCleanup(t);
+          }
         },
       }),
     },
