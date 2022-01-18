@@ -71,7 +71,7 @@ export class FileUtils {
    * @returns A url to download 'filename' from trello servers
    */
     public buildTrelloFileUrl(payload: EditorPayload) {
-        return `${this.constants.URL_TRELLO_BASE}/${this.trelloApiVersion}/cards/${payload.card}/attachments/${payload.attachment}/download/${payload.filename}`;
+        return `${this.constants.URL_TRELLO_BASE}/${this.trelloApiVersion}/cards/${payload.card}/attachments/${payload.attachment}/download/${encodeURI(payload.filename)}`;
     }
 
     /**

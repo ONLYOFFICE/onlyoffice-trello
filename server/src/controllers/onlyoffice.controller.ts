@@ -136,7 +136,7 @@ export class OnlyofficeController {
                 Header: payload.dsheader,
                 Secret: payload.dsjwt,
                 Attachment: payload.attachment,
-                File: payload.filename,
+                File: encodeURI(payload.filename),
                 Card: payload.card,
             };
             const encSession = Buffer.from(JSON.stringify(session)).toString('base64url');

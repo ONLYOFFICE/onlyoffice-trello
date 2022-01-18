@@ -60,7 +60,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, token);
         const formData = new FormData();
         formData.append('file', response.data, {
-            filename: session.File,
+            filename: decodeURI(session.File),
             contentType: mime.contentType(this.fileUtils.getFileExtension(session.File)) as string,
             knownLength: response.data?.length,
         });

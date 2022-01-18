@@ -70,7 +70,9 @@ const CardButton = observer(() => {
       };
       try {
         setEditorPayload({
-          proxyResource: encodeURIComponent(btoa(JSON.stringify(resource))),
+          proxyResource: btoa(
+            unescape(encodeURIComponent((JSON.stringify(resource)))),
+          ),
           attachment,
           card: currentCard!.id,
           filename,
