@@ -55,7 +55,14 @@
             innerAlert("Document editor ready");
         };
 
-        var onRequestClose = function () {
+        var onDocumentReady = function () {
+            window.parent.postMessage({
+                action: 'ready',
+                id: conf.attachment,
+            }, '*');
+        }
+
+        var onRequestClose = function (e) {
             if (window.opener) {
                 window.close();
                 return;
@@ -68,6 +75,13 @@
         };
 
         var onError = function (event) {
+            window.parent.postMessage({
+                action: 'cleanup',
+                id: conf.attachment,
+            }, '*');
+        };
+
+        var onOutdatedVersion = function () {
             window.parent.postMessage({
                 action: 'cleanup',
                 id: conf.attachment,
@@ -95,6 +109,8 @@
             "onAppReady": onAppReady,
             "onRequestClose": onRequestClose,
             "onDocumentStateChange": onDocumentStateChange,
+            "onDocumentReady": onDocumentReady,
+            "onOutdatedVersion": onOutdatedVersion,
             "onError": onError,
         };
 

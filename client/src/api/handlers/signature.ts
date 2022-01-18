@@ -1,5 +1,3 @@
-import {nanoid} from 'nanoid';
-
 import {trello} from 'root/api/client';
 import constants from 'root/utils/const';
 
@@ -8,6 +6,11 @@ type KeyInfo = {
   isNew: boolean,
 };
 
+/**
+ *
+ * @param attachment
+ * @returns
+ */
 const getEditableDocKey = async (attachment: string): Promise<KeyInfo> => {
   let keyInfo: KeyInfo;
   try {
@@ -21,20 +24,44 @@ const getEditableDocKey = async (attachment: string): Promise<KeyInfo> => {
 
   if (!keyInfo.key) {
     keyInfo = {
-      key: nanoid(),
+      key: Number(new Date()).toString(),
       isNew: true,
     };
-  }
+    try {
+      await trello.set('card', 'shared', attachment, keyInfo.key);
+    } catch {
+      /* Remove the oldest docKey
+        On PluginData length of 4096 characters exceeded and regenerate it */
 
-  try {
-    await trello.set('card', 'shared', attachment, keyInfo.key);
-  } catch {
-    throw new Error('Could not set data to trello data store');
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+      const allKeys = (await trello.getAll()).card.shared as [] || [];
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+      const entries = Object.entries(allKeys).
+        sort(([, a], [, b]) => b - a);
+      if (entries.length < 1) {
+        throw new Error('Could not set data to trello data store');
+      }
+      await trello.remove('card', 'shared', entries[0][0]);
+      await trello.set('card', 'shared', attachment, keyInfo.key);
+    }
+    const savedKey = await trello.get('card', 'shared', attachment) as string;
+
+    /* Refetch in order to avoid conflicting sessions */
+    if (savedKey && savedKey !== keyInfo.key) {
+      keyInfo.key = savedKey;
+      keyInfo.isNew = false;
+    }
   }
 
   return keyInfo;
 };
 
+/**
+ *
+ * @param attachment
+ * @param editable
+ * @returns
+ */
 export const generateDocKeySignature = async (
   attachment: string,
   editable: boolean,
@@ -42,7 +69,7 @@ export const generateDocKeySignature = async (
   let keyInfo: KeyInfo;
   try {
     keyInfo = editable ? await getEditableDocKey(attachment) : {
-      key: nanoid(),
+      key: Number(new Date()).toString(),
       isNew: false, // Local docKey
     };
   } catch {
@@ -72,6 +99,10 @@ export const generateDocKeySignature = async (
   }
 };
 
+/**
+ *
+ * @returns
+ */
 export const generateSettingsSignature = async (): Promise<string> => {
   const timestamp = Number(new Date()) + (1 * 60 * 1000);
   return trello.jwt({
