@@ -43,7 +43,7 @@ export const generateDocKeySignature = async (
   try {
     keyInfo = editable ? await getEditableDocKey(attachment) : {
       key: nanoid(),
-      isNew: true,
+      isNew: false, // Local docKey
     };
   } catch {
     throw new Error('Could not generate a document key');
