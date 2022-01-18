@@ -5,8 +5,6 @@ import React, {useEffect} from 'react';
 import {trello} from 'root/api/client';
 import {EditorPayload} from 'components/card-button/types';
 
-import constants from 'root/utils/const';
-
 import './styles.css';
 
 const cleanup = (id: string): void => {
@@ -43,7 +41,6 @@ export function Editor({signature, payload, setError}: {
     form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}`;
     (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
     form.submit();
-    window.localStorage.setItem(constants.ONLYOFFICE_LOCAL_STORAGE_AFTER_EDITOR, Date.now().toString());
     setTimeout(() => {
       checkEditorLoaded();
     }, 8000);
