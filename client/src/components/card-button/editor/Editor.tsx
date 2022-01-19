@@ -42,7 +42,9 @@ export function Editor({signature, payload, setError}: {
     (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
     form.submit();
     setTimeout(() => {
-      checkEditorLoaded();
+      if (!isEditorLoaded()) {
+        setError(true);
+      }
     }, 8000);
 
     window.addEventListener('message', cleanupOnEvent);
