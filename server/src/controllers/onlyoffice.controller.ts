@@ -72,7 +72,7 @@ export class OnlyofficeController {
     }
 
     @Post('callback')
-    @Throttle(4, 1)
+    @Throttle(30, 1)
     @UseGuards(DocumentServerThrottlerGuard)
     async callback(
         @Query('token') encToken: string,
