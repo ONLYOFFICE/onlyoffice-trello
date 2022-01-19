@@ -37,7 +37,7 @@ const getEditableDocKey = async (attachment: string): Promise<KeyInfo> => {
       const allKeys = (await trello.getAll()).card.shared as [] || [];
       // eslint-disable-next-line @typescript-eslint/no-unsafe-return
       const entries = Object.entries(allKeys).
-        sort(([, a], [, b]) => b - a);
+        sort(([, a], [, b]) => a - b);
       if (entries.length < 1) {
         throw new Error('Could not set data to trello data store');
       }
