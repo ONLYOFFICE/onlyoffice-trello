@@ -12,7 +12,9 @@ describe('Registry Service', () => {
     registry = new RegistryService();
     handler = {
       id: '0',
-      handle: (__: Callback, ___: EditorPayload, _: string, session: DocKeySession) => {},
+      handle: (callback: Callback, token: string, session: DocKeySession) => {
+
+      }
     };
   });
 
