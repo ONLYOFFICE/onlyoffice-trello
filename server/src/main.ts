@@ -1,55 +1,33 @@
-import { join } from 'path';
-
-import { cpus } from 'os';
-
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
-import * as express from 'express';
-import { Request, Response } from 'express';
-import { AggregatorRegistry } from 'prom-client';
 import * as helmet from 'helmet';
+import { join } from 'path';
+import { cpus } from 'os';
 
 import { ServerModule } from '@modules/server.module';
-
 import { NotFoundExceptionFilter } from '@filters/notfound';
+
+import validationSchema from './validation';
 
 const cluster = require('cluster');
 
-const encKeysValid = (): boolean => {
-  const pKey = process.env.PROXY_ENCRYPTION_KEY;
-  const sKey = process.env.POWERUP_APP_ENCRYPTION_KEY;
-
-  return pKey.length === 32 && sKey.length === 32;
-};
-
 async function main() {
-  if (!encKeysValid()) throw new Error('Invalid encryption key/keys size');
+  const { error } = validationSchema
+    .prefs({ errors: { label: 'key' } })
+    .validate(process.env);
+
+  if (error && error.message.indexOf('NVM_INC') === -1) throw new Error(error.message);
 
   process.env.UV_THREADPOOL_SIZE = cpus().length.toString();
 
-  // const aggregatorRegistry = new AggregatorRegistry();
-
   if (cluster.isPrimary) {
-    // const metricsServer = express();
-
-    for (let cpu = 0; cpu < cpus().length; cpu++) {
+    for (let cpu = 0; cpu < cpus().length; cpu += 1) {
       cluster.fork();
     }
-
-    // metricsServer.get(
-    //   '/metrics',
-    //   async (_: Request, res: Response) => {
-    //     const metrics = await aggregatorRegistry.clusterMetrics();
-    //     res.set('Content-Type', aggregatorRegistry.contentType);
-    //     res.send(metrics);
-    //   },
-    // );
 
     cluster.on('exit', () => {
       cluster.fork();
     });
-
-    // metricsServer.listen(process.env.METRICS_SERVER_PORT || 3001);
   } else {
     const server = await NestFactory.create<NestExpressApplication>(
       ServerModule,

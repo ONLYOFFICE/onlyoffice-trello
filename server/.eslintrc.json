@@ -30,7 +30,8 @@
     "max-len": "warn",
     "no-empty-function": "off",
     "import/no-extraneous-dependencies": "off",
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "import/extensions": "off"
   },
   "overrides": [
     {
