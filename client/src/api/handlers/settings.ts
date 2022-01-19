@@ -8,7 +8,7 @@ import {DocServerInfo} from 'components/card-button/types';
 import {SettingsData} from 'components/settings/types';
 import {TrelloSettings} from 'types/trello';
 
-export const settingsHandler = {
+const settingsHandler = {
   get: async (type: TrelloSettings): Promise<string> => {
     return trello.get('board', 'shared', type);
   },

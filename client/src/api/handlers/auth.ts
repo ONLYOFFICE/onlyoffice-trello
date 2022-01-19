@@ -4,7 +4,7 @@ import constants from 'root/utils/const';
 
 const tokenInfo = {
   scope: 'read,write',
-  expires: '30days',
+  expires: 'never',
 };
 
 export async function getAuth(): Promise<string> {

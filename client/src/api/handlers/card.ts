@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {trello} from 'root/api/client';
-import {isExtensionSupported} from 'root/utils/file';
+import {getFileExt, isExtensionSupported} from 'root/utils/file';
 import {generateOAuthHeader} from 'root/utils/oauth';
 import constants from 'root/utils/const';
 
@@ -32,7 +32,7 @@ export async function fetchSupportedFiles(
   });
 
   const files = ((await resp.json()) as Trello.PowerUp.Attachment[]).filter(
-    (file) => isExtensionSupported(file.name.split('.')[1]),
+    (file) => isExtensionSupported(getFileExt(file.name.split('.')[1])),
   );
 
   return files;
