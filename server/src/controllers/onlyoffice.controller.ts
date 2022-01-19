@@ -82,8 +82,8 @@ export class OnlyofficeController {
         @Res() res: Response,
     ) {
       this.logger.debug(`A new callback call with status ${callback.status}`);
-      const session = JSON.parse(Buffer.from(encSession, 'base64url').toString('ascii')) as DocKeySession;
       try {
+        const session = JSON.parse(Buffer.from(encSession, 'base64url').toString('ascii')) as DocKeySession;
         const token = this.securityService
           .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
