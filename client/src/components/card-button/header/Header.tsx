@@ -9,7 +9,7 @@ import './styles.css';
 
 export function Header(): JSX.Element {
   return (
-      <div className='modal_header'>
+      <div className='onlyoffice_modal-header'>
           <img
               alt='ONLYOFFICE'
               src={logo as string}

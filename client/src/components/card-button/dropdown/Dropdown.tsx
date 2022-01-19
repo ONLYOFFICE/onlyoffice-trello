@@ -3,6 +3,7 @@ import React, {useState} from 'react';
 import Select, {components} from 'react-select';
 
 import {useStore} from 'root/context';
+
 import {CheckIcon} from 'components/card-button/dropdown/CheckIcon';
 
 import {SortBy, SortOrder} from 'components/card-button/types';
@@ -51,20 +52,20 @@ function Menu(props: any): JSX.Element {
                   <button
                       type='button'
                       onClick={() => handleSortOrder(SortOrder.Asc)}
-                      className='dropdown-button'
+                      className='onlyoffice_dropdown__button'
                   >
                       Ascending
-                      <div className='dropdown-button_checksection'>
+                      <div className='onlyoffice_dropdown__button_checksection'>
                           {selected === SortOrder.Asc && <CheckIcon/>}
                       </div>
                   </button>
                   <button
                       type='button'
                       onClick={() => handleSortOrder(SortOrder.Desc)}
-                      className='dropdown-button'
+                      className='onlyoffice_dropdown__button'
                   >
                       Descending
-                      <div className='dropdown-button_checksection'>
+                      <div className='onlyoffice_dropdown__button_checksection'>
                           {selected === SortOrder.Desc && <CheckIcon/>}
                       </div>
                   </button>

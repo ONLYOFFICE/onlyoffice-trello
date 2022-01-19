@@ -1,4 +1,4 @@
-.dropdown-button {
+.onlyoffice_dropdown__button {
   background-color: #fff;
   border: none;
   display: flex;
@@ -10,11 +10,11 @@
   margin: 0;
 }
 
-.dropdown-button_checksection {
+.onlyoffice_dropdown__button_checksection {
   width: 10%;
 }
 
-.checkicon {
+.onlyoffice_checkicon {
   display:inline-block;
   width: 22px;
   height:22px;
@@ -23,7 +23,7 @@
   transform: rotate(45deg);
 }
 
-.checkicon_base {
+.onlyoffice_checkicon__base {
   position: absolute;
   width:3px;
   height:3px;
@@ -32,7 +32,7 @@
   top:12px;
 }
 
-.checkicon_tip {
+.onlyoffice_checkicon__tip {
   position: absolute;
   width:3px;
   height:9px;

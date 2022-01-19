@@ -17,6 +17,9 @@ import {Editor} from 'components/card-button/editor/Editor';
 import {Error} from 'components/card-button/error/Error';
 import {Dropdown} from 'components/card-button/dropdown/Dropdown';
 
+import {getFileExt, isFileEditable} from 'root/utils/file';
+import {filterFiles} from 'root/utils/sort';
+
 import {Trello} from 'types/trello';
 import {
   ProxyPayloadResource,
@@ -24,9 +27,6 @@ import {
   DocServerInfo,
   TrelloCard,
 } from 'components/card-button/types';
-
-import {getFileExt, isFileEditable} from 'root/utils/file';
-import {filterFiles} from 'root/utils/sort';
 
 import './styles.css';
 

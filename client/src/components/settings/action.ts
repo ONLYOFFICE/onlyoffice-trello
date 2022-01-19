@@ -1,12 +1,5 @@
 import {Trello} from 'types/trello';
-
-type SettingsOptions = {
-  context: {
-    permissions: {
-      organization: string;
-    };
-  };
-};
+import {SettingsOptions} from 'components/settings/types';
 
 export function getSettings(
   t: Trello.PowerUp.IFrame,

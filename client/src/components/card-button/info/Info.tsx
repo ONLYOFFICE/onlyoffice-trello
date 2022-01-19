@@ -4,12 +4,11 @@ import constants from 'root/utils/const';
 
 import info from 'public/images/info.svg';
 import cross from 'public/images/cross.svg';
-
 import './styles.css';
 
 const handleCloseAnimation = (): void => {
-  const infoContainer = document.getElementById('onlyoffice_info_container');
-  infoContainer?.classList.add('info-container_close');
+  const infoContainer = document.getElementById('onlyoffice_info-container');
+  infoContainer?.classList.add('onlyoffice_info-container_close');
 };
 
 export function Info(): JSX.Element | null {
@@ -40,13 +39,13 @@ export function Info(): JSX.Element | null {
 
   return (
       <div
-          id='onlyoffice_info_container'
-          className='info-container'
+          id='onlyoffice_info-container'
+          className='onlyoffice_info-container'
       >
-          <div className='info-container__top'>
+          <div className='onlyoffice_info-container__top'>
               <img
                   alt='info badge'
-                  className='info-container__top__icon'
+                  className='onlyoffice_info-container__top_icon'
                   style={{
                     marginLeft: '1rem',
                     marginRight: '0.5rem',
@@ -54,13 +53,13 @@ export function Info(): JSX.Element | null {
                   }}
                   src={info as string}
               />
-              <b className='info-container__main-text'>
+              <b className='onlyoffice_info-container__text'>
                   ONLYOFFICE Power-Up proxy can handle files less than 1.5 MB
               </b>
               {/* eslint-disable-next-line */}
               <img
                   alt='info close button'
-                  className='info-container__top__icon'
+                  className='onlyoffice_info-container__top_icon'
                   style={{paddingRight: '1rem', width: '0.5rem'}}
                   src={cross as string}
                   onClick={handleClose}
@@ -70,7 +69,7 @@ export function Info(): JSX.Element | null {
           <a
               role='button'
               tabIndex={0}
-              className='info-container__bottom'
+              className='onlyoffice_info-container__bottom'
               onClick={handlePermanentClose}
               onKeyPress={
                 (e) => (e.key === 'Enter' ? handlePermanentClose() : null)

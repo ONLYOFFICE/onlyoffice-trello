@@ -12,17 +12,17 @@ export function Searchbar(): JSX.Element {
     store.card.filters.search = query;
   }, [query, store]);
   return (
-      <div id='searchbar_container'>
+      <div id='onlyoffice_searchbar-container'>
           <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               onKeyPress={handleQuery}
-              id='searchbar_container__input'
+              id='onlyoffice_searchbar-container__input'
               type='text'
               placeholder='Search'
           />
           <button
-              id='searchbar_container__btn'
+              id='onlyoffice_searchbar-container__btn'
               type='submit'
               onClick={handleQuery}
           >

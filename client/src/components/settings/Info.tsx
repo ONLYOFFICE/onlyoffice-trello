@@ -7,13 +7,13 @@ const handleClick = (): void => {
 export function Info(): JSX.Element {
   return (
       <div
-          className='onlyoffice-settings_info'
+          className='onlyoffice_settings__info'
       >
-          <p className='onlyoffice-settings_info__text'>
+          <p className='onlyoffice_settings__info__text'>
               Full access to ONLYOFFICE Docs server
           </p>
           <button
-              className='onlyoffice-settings_info__button'
+              className='onlyoffice_settings__info__button'
               type='button'
               onClick={handleClick}
           >

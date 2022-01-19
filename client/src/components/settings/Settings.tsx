@@ -19,15 +19,15 @@ export default function SettingsComponent(): JSX.Element {
     const handler = async (): Promise<void> => {
       const data = await fetchSettings();
       setSettingsData(data);
-      await trello.sizeTo('#onlyoffice-settings');
+      await trello.sizeTo('#onlyoffice_settings');
     };
     // eslint-disable-next-line
     handler().then(() => trello.render((): void => {}));
   }, []);
   return (
-      <div id='onlyoffice-settings'>
-          <div className='onlyoffice-settings_container'>
-              <p className='onlyoffice-settings_container__header'>
+      <div id='onlyoffice_settings'>
+          <div className='onlyoffice_settings_container'>
+              <p className='onlyoffice_settings_container__header'>
                   Configure ONLYOFFICE
               </p>
               <p>Document Server Address</p>

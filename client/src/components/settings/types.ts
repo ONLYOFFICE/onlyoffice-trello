@@ -3,3 +3,11 @@ export type SettingsData = {
   Jwt?: string,
   Header?: string,
 };
+
+export type SettingsOptions = {
+  context: {
+    permissions: {
+      organization: string;
+    };
+  };
+};

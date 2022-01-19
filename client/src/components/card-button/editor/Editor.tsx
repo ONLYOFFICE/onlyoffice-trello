@@ -12,7 +12,7 @@ const cleanup = (id: string): void => {
   trello.remove('card', 'shared', id);
 };
 
-const forceCleanup = (e: MessageEvent<{action: string, id: string}>): void => {
+const cleanupOnEvent = (e: MessageEvent<{action: string, id: string}>): void => {
   const {data, isTrusted} = e;
 
   if (isTrusted && data.action === 'cleanup') {
@@ -45,10 +45,10 @@ export function Editor({signature, payload, setError}: {
       checkEditorLoaded();
     }, 8000);
 
-    window.addEventListener('message', forceCleanup);
+    window.addEventListener('message', cleanupOnEvent);
 
     return () => {
-      window.removeEventListener('message', forceCleanup);
+      window.removeEventListener('message', cleanupOnEvent);
     };
   });
 

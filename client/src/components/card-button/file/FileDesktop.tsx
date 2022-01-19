@@ -1,9 +1,9 @@
 import React from 'react';
 import dateFormat from 'dateformat';
 
-import {getIconByExt} from 'root/utils/file';
-
 import {Trello} from 'types/trello';
+
+import {getIconByExt} from 'root/utils/file';
 
 export function DesktopFile(
   {file}: { file: Trello.PowerUp.Attachment },

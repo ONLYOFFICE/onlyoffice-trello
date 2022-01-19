@@ -3,16 +3,16 @@ import React from 'react';
 import {File} from 'components/card-button/file/File';
 
 import {Trello} from 'types/trello';
+import {OpenHandler} from 'components/card-button/file/types';
 
 import './styles.css';
-import {OpenHandler} from './types';
 
 const scroll = (): void => {
   // eslint-disable-next-line max-len
   setTimeout(() => document.getElementById('onlyoffice-file-container')?.scrollTo({
     top: 0,
     behavior: 'smooth',
-  }), 300);
+  }), 400);
 };
 
 export function FileList({files, openHandler}: {

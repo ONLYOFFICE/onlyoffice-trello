@@ -1,4 +1,4 @@
-.onlyoffice-error {
+.onlyoffice_error {
   position: relative;
   overflow: hidden;
   height: 100vh;
@@ -10,7 +10,7 @@
   color: #42526e;
 }
 
-.onlyoffice-error_header {
+.onlyoffice_error__header {
   font-family: sans-serif;
   font-weight: 500;
   font-style: normal;
@@ -19,7 +19,7 @@
   text-align: center;
 }
 
-.onlyoffice-error_text {
+.onlyoffice_error__text {
   font-family: sans-serif;
   font-weight: 400;
   font-style: normal;
@@ -29,47 +29,47 @@
   text-align: center;
 }
 
-.onlyoffice-error_background {
+.onlyoffice_error__background {
   position: absolute;
   border-radius: 50%;
   mix-blend-mode: multiply;
 }
 
-.onlyoffice-error_background:nth-of-type(1) {
+.onlyoffice_error__background:nth-of-type(1) {
   background-color: #F8FBFF;
   width: 1036px;
   height: 1036px;
 }
 
-.onlyoffice-error_background:nth-of-type(2) {
+.onlyoffice_error__background:nth-of-type(2) {
   background-color: #F8FBFF;
   width: 724px;
   height: 724px;
 }
 
-.onlyoffice-error_background:nth-of-type(3) {
+.onlyoffice_error__background:nth-of-type(3) {
   background-color: #F8FBFF;
   width: 466px;
   height: 466px;
 }
 
 @media all and (max-width: 730px) {
-    .onlyoffice-error_header {
+    .onlyoffice_error__header {
         font-size: 1.4rem;
         line-height: 2.4rem;
     }
-    .onlyoffice-error_text {
+    .onlyoffice_error__text {
         font-size: 0.9rem;
         line-height: 1.5rem;
     }
 }
 
 @media all and (max-width: 450px) {
-    .onlyoffice-error_header {
+    .onlyoffice_error__header {
         font-size: 1.4rem;
         line-height: 2.4rem;
     }
-    .onlyoffice-error_text {
+    .onlyoffice_error__text {
         font-size: 0.8rem;
         line-height: 1.5rem;
     }

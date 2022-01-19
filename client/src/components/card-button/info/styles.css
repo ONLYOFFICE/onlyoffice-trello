@@ -1,4 +1,4 @@
-.info-container {
+.onlyoffice_info-container {
     position: relative;
     width: 100%;
     flex-grow: 0;
@@ -79,17 +79,17 @@
     }
   }
 
-.info-container_close {
+.onlyoffice_info-container_close {
     animation: zoom-out 310ms ease-in-out;
 }
 
-.info-container__top {
+.onlyoffice_info-container__top {
     display: flex;
     justify-content: space-between;
     margin-bottom: 0.5rem;
 }
 
-.info-container__bottom {
+.onlyoffice_info-container__bottom {
     align-self: center;
     font-size: 0.85rem;
     font-weight: 700;
@@ -97,30 +97,30 @@
     color: #0052CC;
 }
 
-.info-container__main-text {
+.onlyoffice_info-container__text {
     font-size: 1rem;
     width: 100%;
     margin-left: 0.5rem;
 }
 
-.info-container__top__icon {
+.onlyoffice_info-container__top_icon {
     cursor: pointer;
 }
 
 @media all and (max-width: 583px) {
-    .info-container__main-text {
+    .onlyoffice_info-container__text {
         font-size: 0.9rem;
     }
 }
 
 @media all and (max-width: 525px) {
-    .info-container__main-text {
+    .onlyoffice_info-container__text {
         font-size: 0.8rem;
     }
 }
 
 @media all and (max-width: 411px) {
-    .info-container__main-text {
+    .onlyoffice_info-container__text {
         font-size: 0.8rem;
     }
 }
