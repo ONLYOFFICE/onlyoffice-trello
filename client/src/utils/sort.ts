@@ -3,7 +3,7 @@
 import {SortBy, SortOrder} from 'components/card-button/types';
 import {Trello} from 'types/trello';
 
-import {getFileTypeByExt} from './file';
+import {getFileExt} from './file';
 
 const sortNames = (
   order: SortOrder,
@@ -26,8 +26,8 @@ const sortTypes = (
   f1: Trello.PowerUp.Attachment,
   f2: Trello.PowerUp.Attachment,
 ) => {
-  const typeO = getFileTypeByExt(f1.name.split('.')[1]);
-  const typeT = getFileTypeByExt(f2.name.split('.')[1]);
+  const typeO = getFileExt(f1.name);
+  const typeT = getFileExt(f2.name);
   if (typeO < typeT) {
     return order === SortOrder.Desc ? 1 : -1;
   }
