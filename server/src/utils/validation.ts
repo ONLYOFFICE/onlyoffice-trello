@@ -1,9 +1,9 @@
 import axios from 'axios';
-import {Injectable} from '@nestjs/common';
-import {validate} from 'class-validator';
+import { Injectable } from '@nestjs/common';
+import { validate } from 'class-validator';
 
-import { FileUtils } from './file';
-import { OAuthUtil } from './oauth';
+import { FileUtils } from '@utils/file';
+import { OAuthUtil } from '@utils/oauth';
 
 import { EditorPayload } from '@models/payload';
 
@@ -12,72 +12,78 @@ import { EditorPayload } from '@models/payload';
  */
 @Injectable()
 export class ValidatorUtils {
-    constructor(
+  constructor(
         private readonly fileUtils: FileUtils,
         private readonly oauthUtil: OAuthUtil,
-    ) {}
-    /**
+  ) {}
+
+  /**
    * Validates onlyoffice document servers' urls (https://documentserverhost/)
    *
    * @param url preferably a document server's url
    * @returns validity flag
    */
-    validURL(url: string): boolean {
-        const pattern = new RegExp(
-            '^(https:\\/\\/)' + // only with https
-        '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}\\/$)',
-            'i',
-        ); // fragment locator
-        return Boolean(pattern.test(url));
-    }
+  validURL(url: string): boolean {
+    const pattern = new RegExp(
+      '^(https:\\/\\/)' // only with https
+        + '((([a-z\\d]([a-z\\d-]*[a-z\\d])*)\\.)+[a-z]{2,}\\/$)',
+      'i',
+    ); // fragment locator
+    return Boolean(pattern.test(url));
+  }
 
-    /**
+  /**
      *
      * @param payload
      */
-    async validateEditorPayload(payload: EditorPayload) {
-        const validationErr = await validate(payload);
-        if (validationErr.length > 0) {
-            throw new Error('Invalid form payload');
-        }
-
-        if (!this.validURL(payload.ds)) {
-            throw new Error('Invalid document server url');
-        }
-
-        const fileExt = payload.filename.split('.')[1];
-        const [fileSupported, fileEditable] = this.fileUtils.isExtensionSupported(fileExt);
-        if (!fileSupported) {
-            throw new Error('File type is not supported');
-        }
-
-        payload.isEditable = fileEditable;
-        payload.fileExtension = fileExt;
+  async validateEditorPayload(payload: EditorPayload): Promise<EditorPayload> {
+    const validationErr = await validate(payload);
+    if (validationErr.length > 0) {
+      throw new Error('Invalid form payload');
     }
 
-    /**
+    if (!this.validURL(payload.ds)) {
+      throw new Error('Invalid document server url');
+    }
+
+    const fileExt = this.fileUtils.getFileExtension(payload.filename);
+    const [fileSupported, fileEditable] = this.fileUtils.isExtensionSupported(fileExt);
+    if (!fileSupported) {
+      throw new Error('File type is not supported');
+    }
+
+    const validPayload: EditorPayload = {
+      ...payload,
+      isEditable: fileEditable,
+      fileExtension: fileExt,
+    };
+
+    return validPayload;
+  }
+
+  /**
      *
      * @param fileUrl
      * @param token
      */
-    async validateFileSize(fileUrl: string, token: string) {
-        const header = this.oauthUtil.getAuthHeaderForRequest(
-            {
-                url: fileUrl,
-                method: 'HEAD',
-            },
-            token,
-        );
+  async validateFileSize(fileUrl: string, token: string) {
+    const header = this.oauthUtil.getAuthHeaderForRequest(
+      {
+        url: fileUrl,
+        method: 'HEAD',
+      },
+      token,
+    );
 
-        const fileInfo = await axios.head(fileUrl, {
-            headers: {
-                Authorization: header.Authorization,
-            },
-        });
+    const fileInfo = await axios.head(fileUrl, {
+      headers: {
+        Authorization: header.Authorization,
+      },
+    });
 
-        const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
-        if (fileSize > 1.6) {
-            throw new Error('File size error');
-        }
+    const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
+    if (fileSize > 1.6) {
+      throw new Error('File size error');
     }
+  }
 }

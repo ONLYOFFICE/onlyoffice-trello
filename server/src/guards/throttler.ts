@@ -1,6 +1,6 @@
-import { Injectable, ExecutionContext } from "@nestjs/common";
-import { ThrottlerGuard, ThrottlerException } from "@nestjs/throttler";
-import { Request } from "express";
+import { Injectable, ExecutionContext } from '@nestjs/common';
+import { ThrottlerGuard, ThrottlerException } from '@nestjs/throttler';
+import { Request } from 'express';
 
 /**
  * Callback specific rate limiter
@@ -21,7 +21,7 @@ export class DocumentServerThrottlerGuard extends ThrottlerGuard {
   ): Promise<boolean> {
     const req = context.switchToHttp().getRequest() as Request;
     const key = this.generateKey(context, req.ips[0]);
-    let ttls = await this.storageService.getRecord(key);
+    const ttls = await this.storageService.getRecord(key);
 
     if (ttls.length >= limit) {
       throw new ThrottlerException('Rate limit exceeded');

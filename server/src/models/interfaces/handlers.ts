@@ -1,4 +1,5 @@
-import {Callback, DocKeySession} from '@models/callback';
+/* eslint-disable no-unused-vars */
+import { Callback, DocKeySession } from '@models/callback';
 
 export interface CallbackHandler {
     id: string;

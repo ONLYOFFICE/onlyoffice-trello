@@ -1,6 +1,6 @@
-import { Injectable } from "@nestjs/common";
-import { EventEmitter } from "events";
-import { fromEvent } from "rxjs";
+import { Injectable } from '@nestjs/common';
+import { EventEmitter } from 'events';
+import { fromEvent } from 'rxjs';
 
 /**
  * A handy wrapper over event emitter (SSE)
@@ -8,10 +8,11 @@ import { fromEvent } from "rxjs";
 @Injectable()
 export class EventService {
     private readonly emitter: EventEmitter;
+
     private readonly eventName = 'DOCUMENT_KEY';
 
     constructor() {
-        this.emitter = new EventEmitter();
+      this.emitter = new EventEmitter();
     }
 
     /**
@@ -19,7 +20,7 @@ export class EventService {
      * @returns
      */
     subscribe() {
-        return fromEvent(this.emitter, this.eventName);
+      return fromEvent(this.emitter, this.eventName);
     }
 
     /**
@@ -27,6 +28,6 @@ export class EventService {
      * @param id
      */
     async emit(id: string) {
-        this.emitter.emit(this.eventName, id);
+      this.emitter.emit(this.eventName, id);
     }
 }

@@ -1,17 +1,17 @@
 import axios from 'axios';
-import {Injectable, Logger} from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import * as FormData from 'form-data';
 import * as mime from 'mime-types';
 
-import {RegistryService} from '@services/registry.service';
-
-import {OAuthUtil} from '@utils/oauth';
-import {Constants} from '@utils/const';
-
-import {Callback, DocKeySession} from '@models/callback';
-import {CallbackHandler} from '@models/interfaces/handlers';
-import { FileUtils } from '@utils/file';
+import { RegistryService } from '@services/registry.service';
 import { EventService } from '@services/event.service';
+
+import { OAuthUtil } from '@utils/oauth';
+import { Constants } from '@utils/const';
+import { FileUtils } from '@utils/file';
+
+import { Callback, DocKeySession } from '@models/callback';
+import { CallbackHandler } from '@models/interfaces/handlers';
 
 /**
  * Status 2 callback handler
@@ -19,6 +19,7 @@ import { EventService } from '@services/event.service';
 @Injectable()
 export class ConventionalSaveCallbackHandler implements CallbackHandler {
     private readonly logger = new Logger(ConventionalSaveCallbackHandler.name);
+
     id: string =
         new Date().getTime().toString() + ConventionalSaveCallbackHandler.name;
 
@@ -29,7 +30,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         private readonly fileUtils: FileUtils,
         private readonly constants: Constants,
     ) {
-        this.registry.subscribe(this);
+      this.registry.subscribe(this);
     }
 
     /**
@@ -39,45 +40,45 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
    * @returns
    */
     async handle(callback: Callback, token: string, session: DocKeySession) {
-        if (!callback.url || callback.status !== 2) {
-            return;
-        }
+      if (!callback.url || callback.status !== 2) {
+        return;
+      }
 
-        this.logger.debug(`Trying to save ${session.File} changes`);
-        this.eventService.emit(session.Attachment);
+      this.logger.debug(`Trying to save ${session.File} changes`);
+      this.eventService.emit(session.Attachment);
 
-        const response = await axios({
-            url: callback.url!,
-            method: 'GET',
-            responseType: 'stream',
-        });
+      const response = await axios({
+        url: callback.url!,
+        method: 'GET',
+        responseType: 'stream',
+      });
 
-        const r = {
-            url: `${this.constants.URL_TRELLO_API_BASE}/cards/${session.Card}/attachments`,
-            method: 'POST',
-        };
+      const r = {
+        url: `${this.constants.URL_TRELLO_API_BASE}/cards/${session.Card}/attachments`,
+        method: 'POST',
+      };
 
-        const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, token);
-        const formData = new FormData();
-        formData.append('file', response.data, {
-            filename: decodeURI(session.File),
-            contentType: mime.contentType(this.fileUtils.getFileExtension(session.File)) as string,
-            knownLength: response.data?.length,
-        });
-        formData.submit(
-            {
-                host: 'api.trello.com',
-                protocol: 'https:',
-                path: `/1/cards/${session.Card}/attachments`,
-                headers: {
-                    Authorization: authHeader.Authorization,
-                },
-            },
-            (err) => {
-                if (err) {
-                    this.logger.error(`[${session.File}]: ${err}`);
-                }
-            },
-        );
+      const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, token);
+      const formData = new FormData();
+      formData.append('file', response.data, {
+        filename: decodeURI(session.File),
+        contentType: mime.contentType(this.fileUtils.getFileExtension(session.File)) as string,
+        knownLength: response.data?.length,
+      });
+      formData.submit(
+        {
+          host: 'api.trello.com',
+          protocol: 'https:',
+          path: `/1/cards/${session.Card}/attachments`,
+          headers: {
+            Authorization: authHeader.Authorization,
+          },
+        },
+        (err) => {
+          if (err) {
+            this.logger.error(`[${session.File}]: ${err}`);
+          }
+        },
+      );
     }
 }
