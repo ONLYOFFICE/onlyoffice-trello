@@ -6,16 +6,15 @@ import (
 	"encoding/hex"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
-	"github.com/mergermarket/go-pkcs7"
 )
 
 type Encryptor struct {
 	key []byte
 }
 
-func NewEncryptor(key string) *Encryptor {
+func NewEncryptor(key []byte) *Encryptor {
 	return &Encryptor{
-		key: []byte(key),
+		key,
 	}
 }
 
@@ -26,26 +25,29 @@ func (e *Encryptor) Decrypt(text string) (string, error) {
 		return "", err
 	}
 
+	if len(cipherText) < 17 {
+		return "", internal.ErrAesInvalidTextLength
+	}
+
 	block, err := aes.NewCipher(e.key)
+	if err != nil {
+		return "", internal.ErrAesBlockCreationError
+	}
+
+	aead, err := cipher.NewGCMWithNonceSize(block, len(e.key)/2)
+
+	if err != nil {
+		return "", internal.ErrAesAeadCreationError
+	}
+
+	nonce := cipherText[0:aead.NonceSize()]
+	data := cipherText[aead.NonceSize():]
+
+	decrypted, err := aead.Open(nil, nonce, data, nil)
 
 	if err != nil {
 		return "", err
 	}
 
-	if len(cipherText) < aes.BlockSize {
-		return "", internal.ErrAesInvalidTextLength
-	}
-
-	iv := cipherText[:aes.BlockSize]
-	cipherText = cipherText[aes.BlockSize:]
-
-	if len(cipherText)%aes.BlockSize != 0 {
-		return "", internal.ErrAesInvalidTextLength
-	}
-
-	mode := cipher.NewCBCDecrypter(block, iv)
-	mode.CryptBlocks(cipherText, cipherText)
-
-	cipherText, _ = pkcs7.Unpad(cipherText, aes.BlockSize)
-	return string(cipherText), nil
+	return string(decrypted), nil
 }

@@ -30,3 +30,5 @@ var ErrRegistryInvalidService = errors.New("registry received an invalid service
 var ErrRegistryNoService = errors.New("service does not exist")
 
 var ErrAesInvalidTextLength = errors.New("cipher text is too short")
+var ErrAesBlockCreationError = errors.New("could not create a new cipher block")
+var ErrAesAeadCreationError = errors.New("could not initialize aead")
