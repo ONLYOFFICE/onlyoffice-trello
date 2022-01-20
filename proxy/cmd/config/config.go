@@ -28,7 +28,7 @@ func (t ConfigType) Validate() error {
 type ServerConfiguration struct {
 	Host   string `validate:"required"`
 	Port   int    `validate:"required"`
-	Secret string `validate:"required,len=32"`
+	Secret []byte `validate:"required,len=32"`
 	Limit  int    `validate:"required,min=1"`
 }
 
@@ -79,8 +79,8 @@ func NewConfig(params ConfigParameters) (Config, error) {
 		return config, internal.ErrConfigUnmarshalling
 	}
 
-	if err != nil {
-		return config, err
+	if val, ok := viper.Get("PROXY_SECRET").(string); ok {
+		config.Server.Secret = []byte(val)
 	}
 
 	if err = config.Validate(); err != nil {

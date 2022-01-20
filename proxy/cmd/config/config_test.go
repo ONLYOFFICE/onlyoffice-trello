@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"testing"
 )
 
@@ -42,6 +43,7 @@ func TestNewConfig(t *testing.T) {
 		tt := test
 
 		t.Run(tt.name, func(t *testing.T) {
+			os.Setenv("PROXY_SECRET", "mockmockmockmockmockmockmockmock")
 			if _, actualErr := NewConfig(tt.params); (actualErr != nil) != tt.withErr {
 				t.Fatalf("expected error %t, got %s", tt.withErr, actualErr)
 			}
