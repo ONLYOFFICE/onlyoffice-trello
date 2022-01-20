@@ -26,10 +26,11 @@ func (t ConfigType) Validate() error {
 }
 
 type ServerConfiguration struct {
-	Host   string `validate:"required"`
-	Port   int    `validate:"required"`
-	Secret []byte `validate:"required,len=32"`
-	Limit  int    `validate:"required,min=1"`
+	Host    string `validate:"required"`
+	Port    int    `validate:"required"`
+	Secret  []byte `validate:"required,len=32"`
+	Limit   int    `validate:"required,min=1"`
+	IPLimit int    `validate:"required,min=1"`
 }
 
 type Config struct {

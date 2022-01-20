@@ -4,7 +4,6 @@ go 1.17
 
 require (
 	github.com/didip/tollbooth v4.0.2+incompatible
-	github.com/mergermarket/go-pkcs7 v0.0.0-20170926155232-153b18ea13c9
 	go.uber.org/zap v1.19.1
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )

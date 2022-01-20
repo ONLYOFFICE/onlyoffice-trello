@@ -25,8 +25,7 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			res, err := cipher.Decrypt(secret)
 
 			if err != nil {
-				logger.Error(err.Error())
-				pkg.ResponseError(w, http.StatusInternalServerError, "secrets decryption error")
+				pkg.ResponseError(w, http.StatusForbidden, "secrets decryption error")
 				return
 			}
 
@@ -34,7 +33,6 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			err = json.Unmarshal([]byte(res), &p)
 
 			if err != nil {
-				logger.Error(err.Error())
 				pkg.ResponseError(w, http.StatusInternalServerError, "secrets unmarshalling error")
 				return
 			}
@@ -42,21 +40,18 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			rdecoded, err := base64.StdEncoding.DecodeString(resource)
 
 			if err != nil {
-				logger.Error(err.Error())
-				pkg.ResponseError(w, http.StatusInternalServerError, "resource decoding error")
+				pkg.ResponseError(w, http.StatusForbidden, "resource decoding error")
 				return
 			}
 
 			err = json.Unmarshal(rdecoded, &p)
 
 			if err != nil {
-				logger.Error(err.Error())
 				pkg.ResponseError(w, http.StatusInternalServerError, "could not populate proxy parameters")
 				return
 			}
 
 			if p.Due <= time.Now().UnixMilli() {
-				logger.Error("encrypted payload is not valid")
 				pkg.ResponseError(w, http.StatusInternalServerError, "encrypted payload is not valid")
 				return
 			}
@@ -67,7 +62,6 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			err = pkg.ValidateJWT(token, []byte(p.DocsJwt))
 
 			if err != nil {
-				logger.Error(err.Error())
 				pkg.ResponseError(w, http.StatusForbidden, "invalid jwt")
 				return
 			}

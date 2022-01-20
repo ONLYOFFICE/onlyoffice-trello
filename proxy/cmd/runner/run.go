@@ -11,56 +11,31 @@ import (
 	"time"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
-	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	srv "github.com/ONLYOFFICE/onlyoffice-trello/server"
-	"github.com/ONLYOFFICE/onlyoffice-trello/server/middleware"
-	"github.com/didip/tollbooth"
-	"github.com/didip/tollbooth/limiter"
-	"github.com/gorilla/mux"
 	"go.uber.org/zap"
 )
 
-func Run(container *pkg.BasicContainer) (<-chan error, error) {
-	var logger *zap.Logger
-	var config config.Config
-	err := container.GetService(&config)
+func Run() (<-chan error, error) {
+	logger, _ := zap.NewProduction()
+	config, err := config.NewConfig(config.ConfigParameters{
+		Filename: "config.yml",
+		Type:     config.ConfigYML,
+	})
+
 	if err != nil {
-		panic("config initialization error")
-	}
-	err = container.GetService(&logger)
-	if err != nil {
-		panic("logger initialization error")
+		logger.Fatal(err.Error())
+		return nil, err
 	}
 
-	router := mux.NewRouter()
-
-	prhandler := srv.NewProxyHandler(config, logger)
-	phandler := srv.NewPingHandler()
-
-	proxyRouter := router.Methods(http.MethodGet).Subrouter()
-	proxyRouter.HandleFunc(prhandler.GetPath(), middleware.Chain(prhandler.GetHandle(), middleware.GetEncryptionMiddleware(config, logger)).ServeHTTP)
-
-	router.HandleFunc(phandler.GetPath(), phandler.GetHandle()).Methods(phandler.GetMethod())
-
-	lmt := tollbooth.NewLimiter(float64(config.Server.Limit), &limiter.ExpirableOptions{
-		DefaultExpirationTTL: 1 * time.Second,
-	}).
-		SetIPLookups([]string{"RemoteAddr", "X-Forwarded-For", "X-Real-IP"}).
-		SetMethods([]string{"GET"}).
-		SetOnLimitReached(func(w http.ResponseWriter, r *http.Request) {
-			w.WriteHeader(http.StatusServiceUnavailable)
-		})
-
-	mux := tollbooth.LimitHandler(lmt, router)
-
-	server := http.Server{
-		Addr:         fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port),
-		ReadTimeout:  2 * time.Millisecond,
-		WriteTimeout: 4 * time.Second,
-		IdleTimeout:  120 * time.Second,
-		ErrorLog:     log.Default(),
-		Handler:      http.TimeoutHandler(mux, 4*time.Second, "Proxy timeout\n"),
-	}
+	mux := srv.NewRouter(config, logger)
+	server := srv.NewServer(
+		mux,
+		srv.WithAddr(fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port)),
+		srv.WithReadTimeout(500*time.Millisecond),
+		srv.WithWriteTimeout(4*time.Second),
+		srv.WithIdleTimeout(120*time.Second),
+		srv.WithErrLogging(log.Default()),
+	)
 
 	errC := make(chan error, 1)
 	ctx, stop := signal.NotifyContext(context.Background(), os.Interrupt, syscall.SIGTERM, syscall.SIGQUIT)

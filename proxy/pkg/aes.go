@@ -40,7 +40,7 @@ func (e *Encryptor) Decrypt(text string) (string, error) {
 		return "", internal.ErrAesAeadCreationError
 	}
 
-	nonce := cipherText[0:aead.NonceSize()]
+	nonce := cipherText[:aead.NonceSize()]
 	data := cipherText[aead.NonceSize():]
 
 	decrypted, err := aead.Open(nil, nonce, data, nil)

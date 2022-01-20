@@ -1,7 +1,8 @@
 server:
   host: "127.0.0.1"
   port: 8080
-  limit: 10
+  limit: 20
+  iplimit: 3
 proxy:
   to: "google.com"
   path: "/"

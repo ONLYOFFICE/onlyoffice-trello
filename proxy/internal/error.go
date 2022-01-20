@@ -13,6 +13,14 @@ func (e *ErrConfigInitialization) Error() string {
 	return fmt.Sprintf("config initialization error: %q", e.Reason)
 }
 
+type ErrContainerGet struct {
+	Reason string
+}
+
+func (e *ErrContainerGet) Error() string {
+	return fmt.Sprintf("container could not get: %q", e.Reason)
+}
+
 var ErrConfigUnmarshalling = errors.New("config unmarshalling error")
 var ErrConfigInvalidType = errors.New("config invalid type error")
 
