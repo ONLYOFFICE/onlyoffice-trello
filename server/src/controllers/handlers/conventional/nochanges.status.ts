@@ -34,6 +34,6 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
         return;
       }
       this.logger.debug(`No file ${session.Attachment} changes! Cleaning up`);
-      setTimeout(() => this.eventService.emit(session.Attachment), 500);
+      setTimeout(() => this.eventService.emit(session.Attachment), 600);
     }
 }

@@ -40,7 +40,7 @@ export class SecurityService {
     }
 
     /**
-   * AES CBC Encryption
+   * AES GCM Encryption
    *
    * @param text
    * @param key
@@ -50,22 +50,14 @@ export class SecurityService {
       if (key.length !== this.blockSize * 2) {
         throw new Error('Invalid key length');
       }
-      this.logger.debug('Trying to encrypt a new buffer');
-      const iv = randomBytes(this.blockSize);
-      const cipher = createCipheriv('aes-256-cbc', key, iv);
-      let cipherText;
-      try {
-        cipherText = cipher.update(text, 'utf8', 'hex');
-        cipherText += cipher.final('hex');
-        cipherText = iv.toString('hex') + cipherText;
-      } catch (e) {
-        cipherText = null;
-      }
-      return cipherText;
+      const nonce = randomBytes(this.blockSize);
+      const cipher = createCipheriv('aes-256-gcm', key, nonce);
+
+      return Buffer.concat([nonce, cipher.update(text), cipher.final(), cipher.getAuthTag()]).toString('hex');
     }
 
     /**
-   * AES CBC Decryption
+   * AES GCM Decryption
    *
    * @param text
    * @param key
@@ -77,12 +69,13 @@ export class SecurityService {
       }
       const contents = Buffer.from(text, 'hex');
       const iv = contents.slice(0, this.blockSize);
-      const textBytes = contents.slice(this.blockSize).toString('hex');
+      const textBytes = contents.slice(this.blockSize, contents.length - this.blockSize);
+      const tag = contents.slice(contents.length - this.blockSize);
 
-      const decipher = createDecipheriv('aes-256-cbc', key, iv);
-      let decrypted = decipher.update(textBytes, 'hex', 'utf8');
-      decrypted += decipher.final('utf8');
-      return decrypted;
+      const decipher = createDecipheriv('aes-256-gcm', key, iv);
+      decipher.setAuthTag(tag);
+
+      return decipher.update(textBytes.toString('hex'), 'hex', 'utf8');
     }
 
     /**
