@@ -4,6 +4,10 @@ go 1.17
 
 require (
 	github.com/didip/tollbooth v4.0.2+incompatible
+	github.com/go-playground/validator/v10 v10.9.0
+	github.com/golang-jwt/jwt v3.2.2+incompatible
+	github.com/gorilla/mux v1.8.0
+	github.com/spf13/viper v1.9.0
 	go.uber.org/zap v1.19.1
 	golang.org/x/net v0.0.0-20211206223403-eba003a116a9
 )
@@ -27,15 +31,8 @@ require (
 	go.uber.org/multierr v1.7.0 // indirect
 	golang.org/x/crypto v0.0.0-20210817164053-32db794688a5 // indirect
 	golang.org/x/sys v0.0.0-20210823070655-63515b42dcdf // indirect
+	golang.org/x/text v0.3.6 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	gopkg.in/ini.v1 v1.63.2 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-)
-
-require (
-	github.com/go-playground/validator/v10 v10.9.0
-	github.com/golang-jwt/jwt v3.2.2+incompatible
-	github.com/gorilla/mux v1.8.0
-	github.com/spf13/viper v1.9.0
-	golang.org/x/text v0.3.6 // indirect
 )

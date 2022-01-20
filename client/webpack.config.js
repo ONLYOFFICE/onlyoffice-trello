@@ -4,7 +4,6 @@ const fs = require("fs");
 
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
-const ReactRefreshWebpackPlugin = require("@pmmmwh/react-refresh-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const analyzer = parseInt(process.env.ENABLE_BUNDLE_ANALYZER, 10) || 0 === 1;
 const BundleAnalyzerPlugin =
@@ -74,7 +73,6 @@ module.exports = (env) => {
                 filename: "index.html",
             }),
             !env.WEBPACK_BUILD && new webpack.HotModuleReplacementPlugin(),
-            !env.WEBPACK_BUILD && new ReactRefreshWebpackPlugin(),
         ].filter(Boolean),
         optimization: !env.WEBPACK_BUILD
             ? {

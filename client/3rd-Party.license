@@ -1,0 +1,161 @@
+ONLYOFFICE Trello Powerup Client uses code from the following 3rd party projects:
+
+Core-js       - Modular standard library for JavaScript. Includes polyfills for ECMAScript up to 2021: promises, symbols, collections, iterators, typed arrays, many other features, ECMAScript proposals, some cross-platform WHATWG / W3C features and proposals like URL. (https://github.com/zloirock/core-js)
+License:        MIT
+License File:   corejs.license
+
+Crypto-js     - JavaScript library of crypto standards. (https://github.com/brix/crypto-js)
+License:        MIT
+License File:   cryptojs.license
+
+Dateformat    - A node.js package for Steven Levithan's excellent dateFormat() function. (https://github.com/felixge/node-dateformat)
+License:        MIT
+License File:   dateformat.license
+
+Jsonwebtoken  - An implementation of JSON Web Tokens. (https://github.com/auth0/node-jsonwebtoken)
+License:        MIT
+License File:   jsonwebtoken.license
+
+Oauth-1.0a    - OAuth 1.0a Request Authorization for Node and Browser. (https://github.com/ddo/oauth-1.0a)
+License:        MIT
+License File:   oauth-1.0a.license
+
+Mobx          - Simple, scalable state management. (https://github.com/mobxjs/mobx)
+License:        MIT
+License File:   mobx.license
+
+Mobx-react-lite - This is a lighter version of mobx-react which supports React functional components only and as such makes the library slightly faster and smaller (only 1.5kB gzipped). (https://github.com/mobxjs/mobx)
+License:        MIT
+License File:   mobx-react-lite.license
+
+React         - A declarative, efficient, and flexible JavaScript library for building user interfaces. (https://github.com/facebook/react)
+License:        MIT
+License File:   react.license
+
+ReactDOM      - This package serves as the entry point to the DOM and server renderers for React. (https://github.com/facebook/react)
+License:        MIT
+License File:   react-dom.license
+
+React-router  - Declarative routing for React. (https://github.com/remix-run/react-router)
+License:        MIT
+License File:   react-router.license
+
+React-router-dom - The react-router-dom package contains bindings for using React Router in web applications. (https://github.com/remix-run/react-router)
+License:        MIT
+License File:   react-router-dom.license
+
+React-select  - The Select Component for React.js. (https://github.com/JedWatson/react-select)
+License:        MIT
+License File:   react-select.license
+
+Babel         - Babel compiler. (https://github.com/babel/babel)
+License:        MIT
+License File:   babel.license
+
+Compression-webpack-plugin - Prepare compressed versions of assets to serve them with Content-Encoding. (https://github.com/webpack-contrib/compression-webpack-plugin)
+License:        MIT
+License File:   compression-webpack-plugin.license
+
+Cors          - CORS is a node.js package for providing a Connect/Express middleware that can be used to enable CORS with various options. (https://github.com/expressjs/cors)
+License:        MIT
+License File:   cors.license
+
+Css-loader    - The css-loader interprets @import and url() like import/require() and will resolve them. (https://www.npmjs.com/package/css-loader)
+License:        MIT
+License File:   css-loader.license
+
+Dotenv        - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env. (https://github.com/motdotla/dotenv)
+License:        BSD-2-Clause
+License File:   dotenv.license
+
+Eslint        - ESLint is a tool for identifying and reporting on patterns found in ECMAScript/JavaScript code. (https://github.com/eslint/eslint)
+License:        MIT
+License File:   eslint.license
+
+Eslint-plugin-import - This plugin intends to support linting of ES2015+ (ES6+) import/export syntax, and prevent issues with misspelling of file paths and import names. All the goodness that the ES2015+ static module syntax intends to provide, marked up in your editor.
+License:        MIT
+License File:   eslint-plugin-import.license
+
+Eslint-config-airbnb-base - This package provides Airbnb's base JS .eslintrc (without React plugins) as an extensible shared config. (https://github.com/airbnb/javascript)
+License:        MIT
+License File:   eslint-airbnb.license
+
+Eslint-import-resolver-typescript - This plugin adds TypeScript support to `eslint-plugin-import`. (https://github.com/alexgorbatchev/eslint-import-resolver-typescript)
+License:        ISC
+License File:   eslint-import-resolver-typescript.license
+
+Eslint-import-resolver-webpack - Webpack-literate module resolution plugin for eslint-plugin-import. (https://github.com/import-js/eslint-plugin-import)
+License:        MIT
+License File:   eslint-import-resolver-webpack.license
+
+Eslint-plugin-jsx-a11y - Static AST checker for accessibility rules on JSX elements. (https://github.com/jsx-eslint/eslint-plugin-jsx-a11y)
+License:        MIT
+License File:   eslint-plugin-jsx-a11y.license
+
+Eslint-plugin-react - React specific linting rules for ESLint. (https://github.com/yannickcr/eslint-plugin-react)
+License:        MIT
+License File:   eslint-plugin-react.license
+
+Eslint-plugin-react-hooks - This ESLint plugin enforces the Rules of Hooks. (https://github.com/facebook/react)
+License:        MIT
+License File:   eslint-plugin-react-hooks.license
+
+Express       - Fast, unopinionated, minimalist web framework for node. (https://github.com/expressjs/express)
+License:        MIT
+License File:   express.license
+
+Html-webpack-plugin - Plugin that simplifies creation of HTML files to serve your bundles. (https://github.com/jantimon/html-webpack-plugin)
+License:        MIT
+License File:   html-webpack-plugin.license
+
+Mini-css-extract-plugin - This plugin extracts CSS into separate files. It creates a CSS file per JS file which contains CSS. It supports On-Demand-Loading of CSS and SourceMaps. (https://github.com/webpack-contrib/mini-css-extract-plugin)
+License:        MIT
+License File:   mini-css-extract-plugin.license
+
+Rimraf        - The UNIX command rm -rf for node. (https://github.com/isaacs/rimraf)
+License:        ISC
+License File:   rimraf.license
+
+Sass          - A pure JavaScript implementation of Sass. Sass makes CSS fun again. (https://github.com/sass/dart-sass)
+License:        MIT
+License File:   sass.license
+
+Sass-loader   - Compiles Sass to CSS. (https://github.com/webpack-contrib/sass-loader)
+License:        MIT
+License File:   sass-loader.license
+
+Source-map-loader - Extracts source maps from existing source files (from their sourceMappingURL). (https://github.com/webpack-contrib/source-map-loader)
+License:        MIT
+License File:   source-map-loader.license
+
+Style-loader  - Inject CSS into the DOM. (https://github.com/webpack-contrib/style-loader)
+License:        MIT
+License File:   style-loader.license
+
+Ts-loader     - This is the TypeScript loader for webpack. (https://github.com/TypeStrong/ts-loader)
+License:        MIT
+License File:   ts-loader.license
+
+Ts-node       - TypeScript execution and REPL for node.js, with source map and native ESM support. (https://github.com/TypeStrong/ts-node)
+License:        MIT
+License File:   ts-node.license
+
+Type-fest     - A collection of essential TypeScript types. (https://github.com/sindresorhus/type-fest)
+License:        MIT
+License File:   typefest.license
+
+Typescript    - TypeScript is a language for application-scale JavaScript. (https://github.com/Microsoft/TypeScript)
+License:        Apache-2.0
+License File:   typescript.license
+
+Url-loader    - A loader for webpack which transforms files into base64 URIs. (https://github.com/webpack-contrib/url-loader)
+License:        MIT
+License File:   url-loader.license
+
+Webpack       - Webpack is a module bundler. Its main purpose is to bundle JavaScript files for usage in a browser, yet it is also capable of transforming, bundling, or packaging just about any resource or asset. (https://github.com/webpack/webpack)
+License:        MIT
+License File:   webpack.license
+
+Webpack-bundle-analyzer - Webpack plugin and CLI utility that represents bundle content as convenient interactive zoomable treemap. (https://github.com/webpack-contrib/webpack-bundle-analyzer)
+License:        MIT
+License File:   webpack-bundle-analyzer.license

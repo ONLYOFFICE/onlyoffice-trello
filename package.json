@@ -1,21 +1,19 @@
 {
   "name": "onlyoffice-trello",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Add tests\"",
     "pre-commit": "lint-staged",
     "prepare": "husky install"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Nsenz/onlyoffice-trello.git"
+    "url": "git+https://github.com/ONLYOFFICE/onlyoffice-trello.git"
   },
   "author": "",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/Nsenz/onlyoffice-trello/issues"
+    "url": "https://github.com/ONLYOFFICE/onlyoffice-trello/issues"
   },
   "homepage": "https://github.com/Nsenz/onlyoffice-trello#readme",
   "devDependencies": {
