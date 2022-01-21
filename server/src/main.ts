@@ -8,6 +8,7 @@ import { ServerModule } from '@modules/server.module';
 import { NotFoundExceptionFilter } from '@filters/notfound';
 
 import validationSchema from './validation';
+import WinstonLogger from './logger';
 
 const cluster = require('cluster');
 
@@ -29,13 +30,9 @@ async function main() {
       cluster.fork();
     });
   } else {
-    const server = await NestFactory.create<NestExpressApplication>(
-      ServerModule,
-      {
-        logger:
-          process.env.IS_DEBUG === '1' ? ['error', 'warn', 'debug', 'log'] : ['error', 'warn', 'log'],
-      },
-    );
+    const server = await NestFactory.create<NestExpressApplication>(ServerModule, {
+      logger: WinstonLogger,
+    });
 
     server.use(
       helmet({

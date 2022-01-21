@@ -1,5 +1,6 @@
 import {
   CacheModule,
+  Logger,
   MiddlewareConsumer,
   Module,
   NestModule,
@@ -44,6 +45,7 @@ import { EventService } from '@services/event.service';
     PrometheusController,
   ],
   providers: [
+    Logger,
     SecurityService,
     RegistryService,
     CacheService,

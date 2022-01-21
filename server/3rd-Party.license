@@ -131,3 +131,11 @@ License File:   typedoc.license
 Typescript    - TypeScript is a language for application-scale JavaScript. (https://github.com/Microsoft/TypeScript)
 License:        Apache-2.0
 License File:   typescript.license
+
+Winston       - A logger for just about everything. (https://github.com/winstonjs/winston)
+License:        MIT
+License File:   winston.license
+
+Nest-winston  - A Nest module wrapper form winston logger. (https://github.com/gremo/nest-winston)
+License:        MIT
+License File:   nest-winston.license
