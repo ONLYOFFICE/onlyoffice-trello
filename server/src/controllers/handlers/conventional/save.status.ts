@@ -44,7 +44,8 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         return;
       }
 
-      this.logger.debug(`Trying to save ${session.File} changes`);
+      this.logger.debug(`Trying to save ${session.Attachment} changes`);
+      this.logger.debug(`Sending a cleanup event for ${session.Attachment}`);
       this.eventService.emit(session.Attachment);
 
       const response = await axios({
@@ -76,7 +77,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         },
         (err) => {
           if (err) {
-            this.logger.error(`[${session.File}]: ${err}`);
+            this.logger.error(`[${session.Attachment}]: ${err}`);
           }
         },
       );

@@ -31,7 +31,7 @@ export class SettingsController {
       try {
         const encryptedKey = this.securityService
           .encrypt(payload.secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
-        if (!encryptedKey) throw new Error('Payload encryption error');
+        if (!encryptedKey) throw new Error('payload encryption error');
         res.status(200);
         res.send(encryptedKey);
       } catch (err) {

@@ -19,18 +19,18 @@ export class TokenEditorVerificationMiddleware implements NestMiddleware {
     ) {}
 
     async use(req: Request, res: Response, next: NextFunction) {
-      this.logger.debug("Trying to verify a trello client's token");
+      this.logger.debug("trying to verify a trello client's token (editor)");
       const signature = req.query.signature as string;
       try {
         const sig = await this.securityService.verifyTrello(signature);
-        if (sig.due <= Number(new Date())) {
-          throw new Error('Token has expired');
+        if (!sig.due || sig.due <= Number(new Date())) {
+          throw new Error(`token has expired or has no expiration stamp [exp: ${sig.due}]`);
         }
         res.set(this.constants.HEADER_ONLYOFFICE_DOC_KEY, sig.docKey);
-        this.logger.debug('OK');
+        this.logger.debug("client's token is valid");
         next();
       } catch (err) {
-        this.logger.debug(err);
+        this.logger.error(err);
         res.status(403);
         res.send({ error: 1 }).end();
       }
@@ -46,14 +46,14 @@ export class TokenSettingsVerificationMiddleware implements NestMiddleware {
     ) {}
 
     async use(req: Request, res: Response, next: NextFunction) {
-      this.logger.debug("Trying to verify a trello client's token");
+      this.logger.debug("trying to verify a trello client's token (settings)");
       const signature = req.query.signature as string;
       try {
         const sig = await this.securityService.verifyTrello(signature);
-        if (sig.due <= Number(new Date())) {
-          throw new Error('Token has expired');
+        if (!sig.due || sig.due <= Number(new Date())) {
+          throw new Error(`token has expired or has no expiration stamp [exp: ${sig.due}]`);
         }
-        this.logger.debug('OK');
+        this.logger.debug("client's token is valid");
         next();
       } catch (err) {
         this.logger.debug(err);

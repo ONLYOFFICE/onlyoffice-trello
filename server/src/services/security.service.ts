@@ -27,14 +27,14 @@ export class SecurityService {
    */
     private async getTrelloKeys() {
       if (!this.trelloPublicKeys || this.trelloKeysExiry < Date.now()) {
-        this.logger.debug('Fetching new Trello public keys');
+        this.logger.debug('fetching new Trello public keys');
         const resp = await axios.get(
           'https://api.trello.com/1/resource/jwt-public-keys',
         );
         this.trelloPublicKeys = resp.data.keys;
         this.trelloKeysExiry = Date.now() + 14400000;
       }
-      this.logger.debug('Using existing Trello public keys');
+      this.logger.debug('using existing Trello public keys');
 
       return this.trelloPublicKeys;
     }
@@ -48,7 +48,7 @@ export class SecurityService {
    */
     public encrypt(text: string, key: string): string {
       if (key.length !== this.blockSize * 2) {
-        throw new Error('Invalid key length');
+        throw new Error(`invalid key length (expected: ${this.blockSize * 2})`);
       }
       const nonce = randomBytes(this.blockSize);
       const cipher = createCipheriv('aes-256-gcm', key, nonce);
@@ -65,7 +65,7 @@ export class SecurityService {
    */
     public decrypt(text: string, key: string): string {
       if (key.length !== this.blockSize * 2) {
-        throw new Error('Invalid key or iv format');
+        throw new Error(`invalid key or iv format (expected length: ${this.blockSize * 2})`);
       }
       const contents = Buffer.from(text, 'hex');
       const iv = contents.slice(0, this.blockSize);
@@ -85,7 +85,7 @@ export class SecurityService {
    * @returns void or throws a validation error
    */
     public async verifyTrello(token: string) {
-      this.logger.debug('Trying to verify a trello type token');
+      this.logger.debug('trying to verify a trello type token');
       const publicKeys = await this.getTrelloKeys();
       const errors = [];
       // eslint-disable-next-line no-restricted-syntax
@@ -111,7 +111,7 @@ export class SecurityService {
    * @returns A jwt token
    */
     public sign(data: Object, secret: string, exp?: number): string {
-      this.logger.debug('Issuing a new token');
+      this.logger.debug('issuing a new token');
       return exp ? sign(data, secret, {
         expiresIn: exp,
       }) : sign(data, secret);
@@ -125,7 +125,7 @@ export class SecurityService {
    * @returns The decoded version of the jwt passed or throws a validation error
    */
     public async verify(token: string, secret: string) {
-      this.logger.debug('Trying to verify a token');
+      this.logger.debug('trying to verify a token');
       try {
         const decoded = verify(token, secret) as any;
         return decoded;

@@ -33,7 +33,7 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
       if (callback.status !== 4) {
         return;
       }
-      this.logger.debug(`No file ${session.Attachment} changes! Cleaning up`);
+      this.logger.debug(`No file ${session.Attachment} changes! Sending a cleanup event`);
       setTimeout(() => this.eventService.emit(session.Attachment), 600);
     }
 }

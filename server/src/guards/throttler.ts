@@ -24,7 +24,7 @@ export class DocumentServerThrottlerGuard extends ThrottlerGuard {
     const ttls = await this.storageService.getRecord(key);
 
     if (ttls.length >= limit) {
-      throw new ThrottlerException('Rate limit exceeded');
+      throw new ThrottlerException('rate limit exceeded');
     }
 
     await this.storageService.addRecord(key, ttl);

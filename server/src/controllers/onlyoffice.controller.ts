@@ -56,6 +56,7 @@ export class OnlyofficeController {
     ) {}
 
     private getDefaultProxySecret(fileUrl: string, token: string, dsjwt: string): string {
+      this.logger.debug('Default proxy secret generation');
       const header = this.oauthUtil.getAuthHeaderForRequest(
         { url: fileUrl, method: 'GET' },
         token,
@@ -81,7 +82,7 @@ export class OnlyofficeController {
         @Req() req: Request,
         @Res() res: Response,
     ) {
-      this.logger.debug(`A new callback call with status ${callback.status}`);
+      this.logger.debug(`A new callback (${callback.key}) call with status ${callback.status}`);
       try {
         const session = JSON.parse(Buffer.from(encSession, 'base64url').toString('ascii')) as DocKeySession;
         const token = this.securityService
@@ -100,8 +101,11 @@ export class OnlyofficeController {
 
         res.status(200);
         res.send({ error: 0 });
+        this.logger.debug(`Callback (${callback.key}) has been processed without errors`);
       } catch (err) {
-        this.logger.error(err);
+        this.logger.error(
+          `Callback (${callback.key}) with status ${callback.status} has an error: ${err}`,
+        );
         res.status(403);
         res.send({ error: 1 });
       }
@@ -116,8 +120,9 @@ export class OnlyofficeController {
     @UsePipes(new ValidationPipe())
     async openEditor(@Body() form: EditorPayloadForm, @Res() res: Response) {
       try {
+        this.logger.debug(`A new editor request: ${form.payload}`);
         const documentKey = res.getHeader(this.constants.HEADER_ONLYOFFICE_DOC_KEY).toString();
-        if (!documentKey) throw new Error('Malformed document key');
+        if (!documentKey) throw new Error('malformed document key');
         const payload = Object.setPrototypeOf(
           JSON.parse(form.payload),
           EditorPayload.prototype,
@@ -137,7 +142,7 @@ export class OnlyofficeController {
 
         const me = await this.oauthUtil.getMe(`${this.constants.URL_TRELLO_API_BASE}/members/me`, validPayload.token);
 
-        if (!me.id || !me.username) throw new Error('Unknown user');
+        if (!me.id || !me.username) throw new Error('unknown user');
 
         const session: DocKeySession = {
           Address: validPayload.ds,
@@ -176,8 +181,9 @@ export class OnlyofficeController {
           apijs: `${validPayload.ds}web-apps/apps/api/documents/api.js`,
           config: JSON.stringify(config),
         });
+        this.logger.debug(`Now opening an editor session with fileID = ${payload.attachment} and key = ${documentKey}`);
       } catch (err) {
-        this.logger.debug(err);
+        this.logger.error(`An editor request had an error: ${err}`);
         res.setHeader('X-ONLYOFFICE-REASON', err);
         res.render('error');
       }

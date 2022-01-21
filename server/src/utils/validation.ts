@@ -49,7 +49,7 @@ export class ValidatorUtils {
     const fileExt = this.fileUtils.getFileExtension(payload.filename);
     const [fileSupported, fileEditable] = this.fileUtils.isExtensionSupported(fileExt);
     if (!fileSupported) {
-      throw new Error('File type is not supported');
+      throw new Error(`file type is not supported (extension: ${fileExt}`);
     }
 
     const validPayload: EditorPayload = {
@@ -83,7 +83,7 @@ export class ValidatorUtils {
 
     const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
     if (fileSize > 1.6) {
-      throw new Error('File size error');
+      throw new Error(`file [${fileUrl}] size limit has been exceeded`);
     }
   }
 }
