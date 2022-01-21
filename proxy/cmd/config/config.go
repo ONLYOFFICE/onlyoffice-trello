@@ -3,6 +3,7 @@ package config
 import (
 	"path/filepath"
 	"runtime"
+	"strconv"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
@@ -26,11 +27,12 @@ func (t ConfigType) Validate() error {
 }
 
 type ServerConfiguration struct {
-	Host    string `validate:"required"`
-	Port    int    `validate:"required"`
-	Secret  []byte `validate:"required,len=32"`
-	Limit   int    `validate:"required,min=1"`
-	IPLimit int    `validate:"required,min=1"`
+	Host        string `validate:"required"`
+	Port        int    `validate:"required"`
+	Secret      []byte `validate:"required,len=32"`
+	Limit       int    `validate:"required,min=1"`
+	IPLimit     int    `validate:"required,min=1"`
+	Environment int    `validate:"required,min=1,max=2"`
 }
 
 type Config struct {
@@ -82,6 +84,14 @@ func NewConfig(params ConfigParameters) (Config, error) {
 
 	if val, ok := viper.Get("PROXY_SECRET").(string); ok {
 		config.Server.Secret = []byte(val)
+	}
+
+	config.Server.Environment = 1
+	if val, ok := viper.Get("ENV").(string); ok {
+		config.Server.Environment, err = strconv.Atoi(val)
+		if err != nil {
+			return config, err
+		}
 	}
 
 	if err = config.Validate(); err != nil {

@@ -14,7 +14,7 @@ import (
 )
 
 func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next http.Handler) http.Handler {
-	logger.Sugar().Infof("registering encryption middleware with secret: %s", config.Server.Secret)
+	logger.Sugar().Infof("registering encryption middleware with secret")
 	cipher := pkg.NewEncryptor(config.Server.Secret)
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -25,6 +25,8 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			res, err := cipher.Decrypt(secret)
 
 			if err != nil {
+				logger.Error("could not decrypt secrets")
+				logger.Debug(err.Error())
 				pkg.ResponseError(w, http.StatusForbidden, "secrets decryption error")
 				return
 			}
@@ -33,6 +35,8 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			err = json.Unmarshal([]byte(res), &p)
 
 			if err != nil {
+				logger.Error("could not unmarshall secrets")
+				logger.Debug(err.Error())
 				pkg.ResponseError(w, http.StatusInternalServerError, "secrets unmarshalling error")
 				return
 			}
@@ -40,6 +44,8 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			rdecoded, err := base64.StdEncoding.DecodeString(resource)
 
 			if err != nil {
+				logger.Error("could not decode resources")
+				logger.Debug(err.Error())
 				pkg.ResponseError(w, http.StatusForbidden, "resource decoding error")
 				return
 			}
@@ -47,11 +53,14 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			err = json.Unmarshal(rdecoded, &p)
 
 			if err != nil {
+				logger.Error("could not populate proxy resource parameters")
+				logger.Debug(err.Error())
 				pkg.ResponseError(w, http.StatusInternalServerError, "could not populate proxy parameters")
 				return
 			}
 
 			if p.Due <= time.Now().UnixMilli() {
+				logger.Error("encrypted payload has expired")
 				pkg.ResponseError(w, http.StatusInternalServerError, "encrypted payload is not valid")
 				return
 			}
@@ -62,6 +71,7 @@ func GetEncryptionMiddleware(config config.Config, logger *zap.Logger) func(next
 			err = pkg.ValidateJWT(token, []byte(p.DocsJwt))
 
 			if err != nil {
+				logger.Sugar().Errorf("jwt %s is invalid", token)
 				pkg.ResponseError(w, http.StatusForbidden, "invalid jwt")
 				return
 			}

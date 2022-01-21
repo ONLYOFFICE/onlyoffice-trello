@@ -4,6 +4,8 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 type Option func(*http.Server)
@@ -38,9 +40,9 @@ func WithErrLogging(log *log.Logger) func(*http.Server) {
 	}
 }
 
-func NewServer(mux http.Handler, opts ...Option) http.Server {
+func NewServer(router *mux.Router, opts ...Option) http.Server {
 	server := http.Server{
-		Handler: http.TimeoutHandler(mux, 4*time.Second, "Proxy timeout\n"),
+		Handler: http.TimeoutHandler(router, 4*time.Second, "Proxy timeout\n"),
 	}
 
 	for _, opt := range opts {

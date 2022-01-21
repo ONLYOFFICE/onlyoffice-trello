@@ -27,6 +27,7 @@ func (ph ProxyHandler) GetMethod() string {
 func (ph ProxyHandler) GetHandle() http.HandlerFunc {
 	ph.logger.Info("registering a new proxy handler")
 	return func(rw http.ResponseWriter, r *http.Request) {
+		ph.logger.Debug("proxying a new request")
 		ph.rp.ServeHTTP(rw, r)
 	}
 }

@@ -1,8 +1,8 @@
 ONLYOFFICE Trello Powerup Proxy uses code from the following 3rd party projects:
 
-Tollbooth     - Simple middleware to rate-limit HTTP requests. (https://github.com/didip/tollbooth)
-License:        MIT
-License File:   tollbooth.license
+Go-limiter    - A supersonic rate limiting package for Go with HTTP middleware. (https://github.com/sethvargo/go-limiter)
+License:        Apache-2.0
+License File:   go-limiter.license
 
 Validator     - Go Struct and Field validation, including Cross Field, Cross Struct, Map, Slice and Array diving. (https://github.com/go-playground/validator)
 License:        MIT
@@ -27,3 +27,7 @@ License File:   zap.license
 Golang.org/x/net - This repository holds supplementary Go networking libraries. (https://pkg.go.dev/golang.org/x/net#section-readme)
 License:        BSD-3-Clause
 License File:   xnet.license
+
+Lumberjack    - lumberjack is a log rolling package for Go. (https://github.com/natefinch/lumberjack)
+License:        MIT
+License File:   lumberjack.license

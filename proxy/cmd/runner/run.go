@@ -11,12 +11,13 @@ import (
 	"time"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/cmd/config"
+	logging "github.com/ONLYOFFICE/onlyoffice-trello/cmd/log"
 	srv "github.com/ONLYOFFICE/onlyoffice-trello/server"
 	"go.uber.org/zap"
 )
 
 func Run() (<-chan error, error) {
-	logger, _ := zap.NewProduction()
+	logger, _ := zap.NewDevelopment()
 	config, err := config.NewConfig(config.ConfigParameters{
 		Filename: "config.yml",
 		Type:     config.ConfigYML,
@@ -27,7 +28,18 @@ func Run() (<-chan error, error) {
 		return nil, err
 	}
 
-	mux := srv.NewRouter(config, logger)
+	if config.Server.Environment == 2 {
+		logger, err = logging.NewProductionLogger()
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	mux, err := srv.NewRouter(config, logger)
+	if err != nil {
+		return nil, err
+	}
+
 	server := srv.NewServer(
 		mux,
 		srv.WithAddr(fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port)),
@@ -54,7 +66,7 @@ func Run() (<-chan error, error) {
 		if err := server.Shutdown(ctxTimeout); err != nil {
 			errC <- err
 		}
-		logger.Info("Stopping the server now")
+		logger.Debug("Stopping the server now")
 	}()
 
 	go func() {
