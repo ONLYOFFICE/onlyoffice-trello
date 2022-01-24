@@ -10,7 +10,7 @@
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true,
-        "project": "./server/tsconfig.json"
+        "project": "."
       }
     }
   },
@@ -38,7 +38,7 @@
       "files": ["*.ts"],
       "parserOptions": {
         "alwaysTryTypes": true,
-        "project": ["./server/tsconfig.json"]
+        "project": ["./tsconfig.json"]
       }
     }
   ]
