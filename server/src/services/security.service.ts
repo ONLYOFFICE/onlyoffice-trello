@@ -84,7 +84,7 @@ export class SecurityService {
    * @param token A jwt
    * @returns void or throws a validation error
    */
-    public async verifyTrello(token: string) {
+    public async verifyTrello(token: string): Promise<[any, string]> {
       this.logger.debug('trying to verify a trello type token');
       const publicKeys = await this.getTrelloKeys();
       const errors = [];
@@ -92,7 +92,7 @@ export class SecurityService {
       for (const key of publicKeys) {
         try {
           const decoded = verify(token, key);
-          return JSON.parse((decoded as any).state);
+          return [JSON.parse((decoded as any).state), (decoded as any).organizationMembership];
         } catch (err) {
           errors.push(err);
         }

@@ -22,7 +22,7 @@ export class TokenEditorVerificationMiddleware implements NestMiddleware {
       this.logger.debug("trying to verify a trello client's token (editor)");
       const signature = req.query.signature as string;
       try {
-        const sig = await this.securityService.verifyTrello(signature);
+        const [sig] = await this.securityService.verifyTrello(signature);
         if (!sig.due || sig.due <= Number(new Date())) {
           throw new Error(`token has expired or has no expiration stamp [exp: ${sig.due}]`);
         }
@@ -49,14 +49,17 @@ export class TokenSettingsVerificationMiddleware implements NestMiddleware {
       this.logger.debug("trying to verify a trello client's token (settings)");
       const signature = req.query.signature as string;
       try {
-        const sig = await this.securityService.verifyTrello(signature);
+        const [sig, role] = await this.securityService.verifyTrello(signature);
         if (!sig.due || sig.due <= Number(new Date())) {
           throw new Error(`token has expired or has no expiration stamp [exp: ${sig.due}]`);
+        }
+        if (role !== 'admin') {
+          throw new Error('invalid role to mutate settings');
         }
         this.logger.debug("client's token is valid");
         next();
       } catch (err) {
-        this.logger.debug(err);
+        this.logger.error(err);
         res.status(403);
         res.send({ error: 1 }).end();
       }
