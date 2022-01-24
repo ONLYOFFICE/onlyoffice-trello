@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, {useState, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
+import Spinner from '@atlaskit/spinner';
 
 import {fetchDocsInfo} from 'root/api/handlers/settings';
 import {generateDocKeySignature} from 'root/api/handlers/signature';
@@ -11,7 +12,6 @@ import {useStore} from 'root/context';
 import {Header} from 'components/card-button/header/Header';
 import {Info} from 'components/card-button/info/Info';
 import {Main} from 'components/card-button/main/Main';
-import {Loader} from 'components/card-button/loader/Loader';
 import {FileList} from 'components/card-button/file/FileList';
 import {Editor} from 'components/card-button/editor/Editor';
 import {Error} from 'components/card-button/error/Error';
@@ -108,7 +108,7 @@ const CardButton = observer(() => {
                   <Info/>
                   {isLoading && (
                   <div className='onlyoffice_loader-container'>
-                      <Loader/>
+                      <Spinner size='xlarge'/>
                   </div>
                   )}
                   {!isLoading && (

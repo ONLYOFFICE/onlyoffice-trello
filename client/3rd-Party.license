@@ -159,3 +159,7 @@ License File:   webpack.license
 Webpack-bundle-analyzer - Webpack plugin and CLI utility that represents bundle content as convenient interactive zoomable treemap. (https://github.com/webpack-contrib/webpack-bundle-analyzer)
 License:        MIT
 License File:   webpack-bundle-analyzer.license
+
+Atlaskit/spinner - A spinner is an animated spinning icon that lets users know content is being loaded. (https://www.npmjs.com/package/@atlaskit/spinner)
+License:        Apache-2.0
+License File:   atlaskit-spinner.license

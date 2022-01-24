@@ -11,6 +11,7 @@
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --fix"
   },
   "dependencies": {
+    "@atlaskit/spinner": "^15.1.4",
     "core-js": "^3.9.1",
     "crypto-js": "^4.1.1",
     "dateformat": "^5.0.2",
