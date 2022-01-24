@@ -43,7 +43,7 @@ func Run() (<-chan error, error) {
 	server := srv.NewServer(
 		mux,
 		srv.WithAddr(fmt.Sprintf("%s:%d", config.Server.Host, config.Server.Port)),
-		srv.WithReadTimeout(500*time.Millisecond),
+		srv.WithReadTimeout(3*time.Second),
 		srv.WithWriteTimeout(4*time.Second),
 		srv.WithIdleTimeout(120*time.Second),
 		srv.WithErrLogging(log.Default()),
