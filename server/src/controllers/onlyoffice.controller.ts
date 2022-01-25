@@ -77,7 +77,6 @@ export class OnlyofficeController {
     @Throttle(30, 1)
     @UseGuards(DocumentServerThrottlerGuard)
     async callback(
-        @Query('token') encToken: string,
         @Query('session') encSession: string,
         @Body() callback: Callback,
         @Req() req: Request,
@@ -87,8 +86,6 @@ export class OnlyofficeController {
       try {
         const session = await this.securityService
           .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
-        const token = await this.cacheManager.get(encToken) || this.securityService
-          .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
         session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
           .decrypt(session.Secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
@@ -99,7 +96,7 @@ export class OnlyofficeController {
 
         await this.securityService.verify(dsToken, session.Secret);
 
-        this.registryService.run(callback, token, session);
+        this.registryService.run(callback, session);
 
         res.status(200);
         res.send({ error: 0 });
@@ -150,19 +147,21 @@ export class OnlyofficeController {
           .encrypt(documentServerSecret.secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
         await this.cacheManager.set(encryptedSecret, documentServerSecret.secret);
 
+        const encToken = this.securityService
+          .encrypt(validPayload.token, process.env.POWERUP_APP_ENCRYPTION_KEY);
+
         const session: DocKeySession = {
           Address: validPayload.ds,
           Header: validPayload.dsheader,
           Secret: encryptedSecret,
+          Token: encToken,
           Attachment: validPayload.attachment,
           File: encodeURI(validPayload.filename),
           Card: validPayload.card,
         };
+
         const encSession = this.securityService
           .sign(session, process.env.POWERUP_APP_ENCRYPTION_KEY, 60 * 60 * 10);
-        const encToken = this.securityService
-          .encrypt(validPayload.token, process.env.POWERUP_APP_ENCRYPTION_KEY);
-        await this.cacheManager.set(encToken, validPayload.token);
 
         const config: Config = {
           document: {
@@ -172,7 +171,7 @@ export class OnlyofficeController {
             url: `${process.env.PROXY_ADDRESS}/proxy?secret=${validPayload.proxySecret}&resource=${validPayload.proxyResource}`,
           },
           editorConfig: {
-            callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?token=${encToken}&session=${encSession}`,
+            callbackUrl: `${process.env.SERVER_HOST}${OnlyofficeController.baseRoute}/callback?session=${encSession}`,
             user: {
               id: me.id,
               name: me.username,

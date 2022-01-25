@@ -32,9 +32,9 @@ export class RegistryService {
      * @param token A Trello User token
      * @param session A Sesssion object
      */
-    public run(callback: Callback, token: string, session: DocKeySession) {
+    public run(callback: Callback, session: DocKeySession) {
       this.observers.forEach((handler) => {
-        handler.handle(callback, token, session);
+        handler.handle(callback, session);
       });
     }
 }

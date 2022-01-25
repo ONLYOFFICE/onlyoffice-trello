@@ -29,7 +29,7 @@ export class ConventionalNoChangesCallbackHandler implements CallbackHandler {
    * @param payload
    * @returns
    */
-    async handle(callback: Callback, _: string, session: DocKeySession) {
+    async handle(callback: Callback, session: DocKeySession) {
       if (callback.status !== 4) {
         return;
       }

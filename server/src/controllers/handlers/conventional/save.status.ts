@@ -5,6 +5,7 @@ import * as mime from 'mime-types';
 
 import { RegistryService } from '@services/registry.service';
 import { EventService } from '@services/event.service';
+import { SecurityService } from '@services/security.service';
 
 import { OAuthUtil } from '@utils/oauth';
 import { Constants } from '@utils/const';
@@ -26,6 +27,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
     constructor(
         private readonly registry: RegistryService,
         private readonly eventService: EventService,
+        private readonly securityService: SecurityService,
         private readonly oauthUtil: OAuthUtil,
         private readonly fileUtils: FileUtils,
         private readonly constants: Constants,
@@ -39,7 +41,7 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
    * @param payload
    * @returns
    */
-    async handle(callback: Callback, token: string, session: DocKeySession) {
+    async handle(callback: Callback, session: DocKeySession) {
       if (!callback.url || callback.status !== 2) {
         return;
       }
@@ -58,6 +60,9 @@ export class ConventionalSaveCallbackHandler implements CallbackHandler {
         url: `${this.constants.URL_TRELLO_API_BASE}/cards/${session.Card}/attachments`,
         method: 'POST',
       };
+
+      const token = this.securityService
+        .decrypt(session.Token, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
       const authHeader = this.oauthUtil.getAuthHeaderForRequest(r, token);
       const formData = new FormData();

@@ -47,6 +47,7 @@ export class SecurityService {
    * @returns
    */
     public encrypt(text: string, key: string): string {
+      this.logger.debug('trying to encrypt text');
       if (key.length !== this.blockSize * 2) {
         throw new Error(`invalid key length (expected: ${this.blockSize * 2})`);
       }
@@ -64,6 +65,7 @@ export class SecurityService {
    * @returns
    */
     public decrypt(text: string, key: string): string {
+      this.logger.debug(`trying to decrypt ${text}`);
       if (key.length !== this.blockSize * 2) {
         throw new Error(`invalid key or iv format (expected length: ${this.blockSize * 2})`);
       }

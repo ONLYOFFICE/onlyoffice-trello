@@ -58,6 +58,7 @@ import { EventService } from '@services/event.service';
   ],
   exports: [
     RegistryService,
+    SecurityService,
     OAuthUtil,
     CacheService,
     EventService,

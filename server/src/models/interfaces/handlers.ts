@@ -3,5 +3,5 @@ import { Callback, DocKeySession } from '@models/callback';
 
 export interface CallbackHandler {
     id: string;
-    handle: (callback: Callback, token: string, session: DocKeySession) => void;
+    handle: (callback: Callback, session: DocKeySession) => void;
 }

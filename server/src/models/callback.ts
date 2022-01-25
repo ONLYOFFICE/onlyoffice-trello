@@ -15,6 +15,7 @@ export type DocKeySession = {
     Address: string,
     Header: string,
     Secret: string,
+    Token: string,
     Attachment: string,
     File: string,
     Card: string,
