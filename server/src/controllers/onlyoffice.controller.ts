@@ -87,7 +87,7 @@ export class OnlyofficeController {
       try {
         const session = await this.securityService
           .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
-        const token = this.securityService
+        const token = await this.cacheManager.get(encToken) || this.securityService
           .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
         session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
@@ -162,6 +162,7 @@ export class OnlyofficeController {
           .sign(session, process.env.POWERUP_APP_ENCRYPTION_KEY, 60 * 60 * 10);
         const encToken = this.securityService
           .encrypt(validPayload.token, process.env.POWERUP_APP_ENCRYPTION_KEY);
+        await this.cacheManager.set(encToken, validPayload.token);
 
         const config: Config = {
           document: {
