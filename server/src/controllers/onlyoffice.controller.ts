@@ -87,7 +87,6 @@ export class OnlyofficeController {
       try {
         const session = await this.securityService
           .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
-        this.logger.warn(encSession);
         const token = this.securityService
           .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
