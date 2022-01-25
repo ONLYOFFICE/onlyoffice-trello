@@ -4,7 +4,6 @@ import {observer} from 'mobx-react-lite';
 import Spinner from '@atlaskit/spinner';
 
 import {fetchDocsInfo} from 'root/api/handlers/settings';
-import {generateDocKeySignature} from 'root/api/handlers/signature';
 import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
 import {getAuth} from 'root/api/handlers/auth';
 import {useStore} from 'root/context';
@@ -17,7 +16,6 @@ import {Editor} from 'components/card-button/editor/Editor';
 import {Error} from 'components/card-button/error/Error';
 import {Dropdown} from 'components/card-button/dropdown/Dropdown';
 
-import {getFileExt, isFileEditable} from 'root/utils/file';
 import {filterFiles} from 'root/utils/sort';
 
 import {Trello} from 'types/trello';
@@ -36,7 +34,6 @@ const CardButton = observer(() => {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(false);
   const [token, setToken] = useState('');
-  const [signature, setSignature] = useState('');
   const [currentCard, setCurrentCard] = useState<TrelloCard>();
   const [files, setFiles] = useState<Trello.PowerUp.Attachment[]>([]);
   const [docServerInfo, setDocServerInfo] = useState<DocServerInfo>();
@@ -59,12 +56,11 @@ const CardButton = observer(() => {
     init();
   }, []);
 
-  const startEditor = async (attachment: string, filename: string)
-    : Promise<void> => {
+  const startEditor = (attachment: string, filename: string)
+    : void => {
     if (!isError) {
       const resource: ProxyPayloadResource = {
         to: 'api.trello.com',
-        // eslint-disable-next-line max-len
         path: `/1/cards/${currentCard!.id}/attachments/${attachment}/download/${filename}`,
         docsHeader: docServerInfo!.docsHeader,
       };
@@ -81,8 +77,6 @@ const CardButton = observer(() => {
           dsheader: docServerInfo!.docsHeader,
           dsjwt: docServerInfo!.docsJwt,
         });
-        const isEditable = isFileEditable(getFileExt(filename));
-        setSignature(await generateDocKeySignature(attachment, isEditable));
         setIsEditor(true);
       } catch (e) {
         setIsError(true);
@@ -97,7 +91,6 @@ const CardButton = observer(() => {
           <>
               {isEditor && (
               <Editor
-                  signature={signature}
                   payload={editorPayload!}
                   setError={setIsError}
               />

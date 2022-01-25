@@ -1,5 +1,7 @@
 import {trello} from 'root/api/client';
+
 import constants from 'root/utils/const';
+import {delay} from 'root/utils/withTimeout';
 
 type KeyInfo = {
   key: string,
@@ -44,6 +46,9 @@ const getEditableDocKey = async (attachment: string): Promise<KeyInfo> => {
       await trello.remove('card', 'shared', entries[0][0]);
       await trello.set('card', 'shared', attachment, keyInfo.key);
     }
+
+    await delay(1500);
+
     const savedKey = await trello.get('card', 'shared', attachment) as string;
 
     /* Refetch in order to avoid conflicting sessions */
@@ -75,7 +80,7 @@ export const generateDocKeySignature = async (
   } catch {
     throw new Error('Could not generate a document key');
   }
-  const timestamp = Number(new Date()) + (2 * 60 * 1000);
+  const timestamp = Number(new Date()) + (1 * 60 * 1000);
   try {
     const signature = await trello.jwt({
       state: JSON.stringify({

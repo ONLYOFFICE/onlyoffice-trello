@@ -1,7 +1,7 @@
 import React from 'react';
 
 const handleClick = (): void => {
-  window.open('https://www.onlyoffice.com/en/docs-enterprise-prices.aspx');
+  window.open('https://www.onlyoffice.com/docs-enterprise-prices.aspx');
 };
 
 export function Info(): JSX.Element {

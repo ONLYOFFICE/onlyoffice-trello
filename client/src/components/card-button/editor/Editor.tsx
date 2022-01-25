@@ -1,18 +1,27 @@
-/* eslint-disable max-len */
+/* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
+import Spinner from '@atlaskit/spinner';
 
+import {generateDocKeySignature} from 'root/api/handlers/signature';
 import {trello} from 'root/api/client';
+
+import {getFileExt, isFileEditable} from 'root/utils/file';
+
 import {EditorPayload} from 'components/card-button/types';
 
 import './styles.css';
 
 const cleanup = (id: string): void => {
-  // eslint-disable-next-line @typescript-eslint/no-floating-promises
   trello.remove('card', 'shared', id);
 };
 
-const cleanupOnEvent = (e: MessageEvent<{action: string, id: string}>): void => {
+const isEditorLoaded = (): boolean => {
+  return Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.
+    contentWindow?.length);
+};
+
+const reactOnEvent = (e: MessageEvent<{action: string, id: string}>): void => {
   const {data, isTrusted} = e;
 
   if (isTrusted && data.action === 'cleanup') {
@@ -20,42 +29,51 @@ const cleanupOnEvent = (e: MessageEvent<{action: string, id: string}>): void => 
   }
 };
 
-const isEditorLoaded = (): boolean => {
-  return Boolean((document.getElementById('iframeEditor') as HTMLIFrameElement)?.contentWindow?.length);
-};
-
-export function Editor({signature, payload, setError}: {
-  signature: string,
+export function Editor({payload, setError}: {
   payload: EditorPayload,
   setError: React.Dispatch<React.SetStateAction<boolean>>,
 }): JSX.Element {
+  // A temporary workaround to catch the second (editor's) onLoad event
+  const frameLoadCounter = useRef(0);
   const checkEditorLoaded = (): void => {
-    if (!isEditorLoaded()) {
+    if (frameLoadCounter.current === 1 && !isEditorLoaded()) {
       setError(true);
       cleanup(payload.attachment);
+    }
+    frameLoadCounter.current += 1;
+  };
+
+  const init = async (): Promise<void> => {
+    const isEditable = isFileEditable(getFileExt(payload.filename));
+    try {
+      const signature = await generateDocKeySignature(payload.attachment, isEditable);
+      const form = (document.getElementById('onlyoffice-editor-form') as HTMLFormElement);
+      form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}`;
+      (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).
+        value = JSON.stringify(payload);
+      form.submit();
+
+      setTimeout(() => {
+        if (!isEditorLoaded()) {
+          setError(true);
+        }
+      }, 8000);
+    } catch {
+      setError(true);
     }
   };
 
   useEffect(() => {
-    const form = (document.getElementById('onlyoffice-editor-form') as HTMLFormElement);
-    form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}`;
-    (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).value = JSON.stringify(payload);
-    form.submit();
-    setTimeout(() => {
-      if (!isEditorLoaded()) {
-        setError(true);
-      }
-    }, 8000);
+    init();
 
-    window.addEventListener('message', cleanupOnEvent);
-
+    window.addEventListener('message', reactOnEvent);
     return () => {
-      window.removeEventListener('message', cleanupOnEvent);
+      window.removeEventListener('message', reactOnEvent);
     };
   });
 
   return (
-      <>
+      <div>
           <form
               action=''
               method='POST'
@@ -69,11 +87,14 @@ export function Editor({signature, payload, setError}: {
                   type='hidden'
               />
           </form>
+          <div className='onlyoffice_editor__loader-container'>
+              <Spinner size='xlarge'/>
+          </div>
           <iframe
               name='iframeEditor'
               id='iframeEditor'
               onLoad={checkEditorLoaded}
           />
-      </>
+      </div>
   );
 }

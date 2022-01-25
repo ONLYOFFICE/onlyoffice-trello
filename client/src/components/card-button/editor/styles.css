@@ -5,3 +5,11 @@
     width: 100vw;
     border: none;
 }
+
+.onlyoffice_editor__loader-container {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+}

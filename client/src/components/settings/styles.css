@@ -7,6 +7,13 @@
     margin-bottom: 1rem;
 }
 
+.onlyoffice_settings_container__loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 95vh;
+}
+
 .onlyoffice_settings__info {
     display: flex;
     align-items: center;

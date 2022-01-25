@@ -163,3 +163,11 @@ License File:   webpack-bundle-analyzer.license
 Atlaskit/spinner - A spinner is an animated spinning icon that lets users know content is being loaded. (https://www.npmjs.com/package/@atlaskit/spinner)
 License:        Apache-2.0
 License File:   atlaskit-spinner.license
+
+Atlaskit/button - A button triggers an event or action. They let users know what will happen next. (https://www.npmjs.com/package/@atlaskit/button)
+License:        Apache-2.0
+License File:   atlaskit-button.license
+
+Atlaskit/icon - A React package that contains icons. (https://www.npmjs.com/package/@atlaskit/icon)
+License:        Apache-2.0
+License File:   atlaskit-icon.license

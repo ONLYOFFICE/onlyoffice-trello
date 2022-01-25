@@ -33,6 +33,28 @@ export const fetchSettings = async (): Promise<SettingsData> => {
     data.Address = await settingsHandler.get('docsAddress');
     data.Header = await settingsHandler.get('docsHeader');
     data.Jwt = await settingsHandler.get('docsJwt');
+    if (data.Jwt) {
+      const signature = await generateSettingsSignature();
+      const response = await fetchWithTimeout(
+        `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}/decrypt?signature=${signature}`,
+        {timeout: 3000},
+        {
+          method: 'POST',
+          cache: 'no-cache',
+          credentials: 'same-origin',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            secret: data.Jwt,
+          }),
+        },
+      );
+      if (response.status !== 200) {
+        throw new Error('Could not get ONLYOFFICE settings');
+      }
+      data.Jwt = await response.text();
+    }
   } catch {
     data = {};
     await trello.alert({
@@ -56,7 +78,7 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
   try {
     const signature = await generateSettingsSignature();
     const response = await fetchWithTimeout(
-      `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}?signature=${signature}`,
+      `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}/encrypt?signature=${signature}`,
       {timeout: 3000},
       {
         method: 'POST',
