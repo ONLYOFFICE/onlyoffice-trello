@@ -17,7 +17,8 @@ async function main() {
     .prefs({ errors: { label: 'key' } })
     .validate(process.env);
 
-  if (error && error.message.indexOf('NVM_INC') === -1) throw new Error(error.message);
+  if (error && error.message.indexOf('NVM_INC') === -1
+      && error.message.indexOf('TERM_PROGRAM') === -1) throw new Error(error.message);
 
   process.env.UV_THREADPOOL_SIZE = cpus().length.toString();
 
