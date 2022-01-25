@@ -34,7 +34,7 @@ import { EventService } from '@services/event.service';
       limit: 200,
     }),
     CacheModule.register({
-      ttl: 10,
+      ttl: 40,
       max: 200,
       isGlobal: true,
     }),

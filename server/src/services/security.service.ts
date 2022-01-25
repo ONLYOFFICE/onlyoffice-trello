@@ -79,20 +79,23 @@ export class SecurityService {
     }
 
     /**
-   * Fetches Trello's jwts and verifies the validity of the token specified
-   *
-   * @param token A jwt
-   * @returns void or throws a validation error
-   */
-    public async verifyTrello(token: string): Promise<[any, string]> {
+     * Fetches Trello's jwts and verifies the validity of the token specified
+     * @param token Trello issued jwt
+     * @returns [state: any, orgMembership: string, orgID: string] or throws an error
+     */
+    public async verifyTrello(token: string): Promise<[any, string, string]> {
       this.logger.debug('trying to verify a trello type token');
       const publicKeys = await this.getTrelloKeys();
       const errors = [];
       // eslint-disable-next-line no-restricted-syntax
       for (const key of publicKeys) {
         try {
-          const decoded = verify(token, key);
-          return [JSON.parse((decoded as any).state), (decoded as any).organizationMembership];
+          const decoded = (verify(token, key) as any);
+          return [
+            JSON.parse(decoded.state),
+            decoded.organizationMembership,
+            decoded.idOrganization,
+          ];
         } catch (err) {
           errors.push(err);
         }

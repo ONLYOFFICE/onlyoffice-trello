@@ -40,7 +40,7 @@ export class OAuthUtil {
      * @param token
      * @returns
      */
-  public async getMe(url: string, token: string) {
+  public async authorizedGet(url: string, token: string) {
     const request = {
       url,
       method: 'GET',

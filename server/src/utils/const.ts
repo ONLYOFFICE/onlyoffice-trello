@@ -13,6 +13,8 @@ export class Constants {
 
     public readonly HEADER_ONLYOFFICE_DOC_KEY = 'ONLYOFFICE_DOCUMENT_KEY';
 
+    public readonly HEADER_ONLYOFFICE_ORG_ID = 'ONLYOFFICE_TRELLO_ORGANIZATION_ID';
+
     /**
      *
      * @param ds

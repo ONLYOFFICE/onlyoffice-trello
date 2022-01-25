@@ -34,6 +34,7 @@ import {
 } from '@models/payload';
 import { Callback, DocKeySession } from '@models/callback';
 import { Config } from '@models/config';
+import { DocumentServerSecret } from '@models/settings';
 
 /**
  * Onlyoffice controller is responsible for managing users interaction with document servers
@@ -88,7 +89,7 @@ export class OnlyofficeController {
         const token = this.securityService
           .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
-        session.Secret = this.securityService
+        session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
           .decrypt(session.Secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
         const dsToken = (
@@ -127,8 +128,8 @@ export class OnlyofficeController {
           JSON.parse(form.payload),
           EditorPayload.prototype,
         ) as EditorPayload;
-        const secret = this.securityService
-          .decrypt(payload.dsjwt, process.env.POWERUP_APP_ENCRYPTION_KEY);
+        const documentServerSecret = JSON.parse(this.securityService
+          .decrypt(payload.dsjwt, process.env.POWERUP_APP_ENCRYPTION_KEY)) as DocumentServerSecret;
         const validPayload = await this.validationUtils.validateEditorPayload(payload);
 
         const fileUrl = this.fileUtils.buildTrelloFileUrl(validPayload);
@@ -137,17 +138,21 @@ export class OnlyofficeController {
 
         if (!validPayload.proxySecret) {
           validPayload.proxySecret = this
-            .getDefaultProxySecret(fileUrl, validPayload.token, secret);
+            .getDefaultProxySecret(fileUrl, validPayload.token, documentServerSecret.secret);
         }
 
-        const me = await this.oauthUtil.getMe(`${this.constants.URL_TRELLO_API_BASE}/members/me`, validPayload.token);
+        const me = await this.oauthUtil.authorizedGet(`${this.constants.URL_TRELLO_API_BASE}/members/me`, validPayload.token);
 
         if (!me.id || !me.username) throw new Error('unknown user');
+
+        const encryptedSecret = this.securityService
+          .encrypt(documentServerSecret.secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
+        await this.cacheManager.set(encryptedSecret, documentServerSecret.secret);
 
         const session: DocKeySession = {
           Address: validPayload.ds,
           Header: validPayload.dsheader,
-          Secret: validPayload.dsjwt,
+          Secret: encryptedSecret,
           Attachment: validPayload.attachment,
           File: encodeURI(validPayload.filename),
           Card: validPayload.card,
@@ -174,7 +179,7 @@ export class OnlyofficeController {
           attachment: validPayload.attachment,
         };
 
-        config.token = this.securityService.sign(config, secret);
+        config.token = this.securityService.sign(config, documentServerSecret.secret);
 
         res.status(200);
         res.render('editor', {
