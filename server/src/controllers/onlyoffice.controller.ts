@@ -85,7 +85,9 @@ export class OnlyofficeController {
     ) {
       this.logger.debug(`A new callback (${callback.key}) call with status ${callback.status}`);
       try {
-        const session = JSON.parse(Buffer.from(encSession, 'base64url').toString('ascii')) as DocKeySession;
+        const session = await this.securityService
+          .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
+        this.logger.warn(encSession);
         const token = this.securityService
           .decrypt(encToken, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
@@ -157,7 +159,8 @@ export class OnlyofficeController {
           File: encodeURI(validPayload.filename),
           Card: validPayload.card,
         };
-        const encSession = Buffer.from(JSON.stringify(session)).toString('base64url');
+        const encSession = this.securityService
+          .sign(session, process.env.POWERUP_APP_ENCRYPTION_KEY, 60 * 60 * 10);
         const encToken = this.securityService
           .encrypt(validPayload.token, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
