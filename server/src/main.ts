@@ -15,11 +15,11 @@ const cluster = require('cluster');
 async function main() {
   const { error } = validationSchema
     .prefs({ errors: { label: 'key' } })
-    .validate(process.env);
+    .validate(process.env, {
+      allowUnknown: true,
+    });
 
-  if (error && error.message.indexOf('NVM_INC') === -1
-      && error.message.indexOf('TERM_PROGRAM') === -1
-      && error.message.indexOf('APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL') === -1) throw new Error(error.message);
+  if (error) throw new Error(error.message);
 
   process.env.UV_THREADPOOL_SIZE = cpus().length.toString();
 
