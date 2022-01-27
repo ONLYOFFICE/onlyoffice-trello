@@ -1,4 +1,4 @@
-{
+module.exports = {
   "env": {
     "browser": true,
     "es2021": true
@@ -17,7 +17,10 @@
       "jsx": true
     },
     "ecmaVersion": 12,
-    "sourceType": "module"
+    "sourceType": "module",
+    "project": "./tsconfig.json",
+    "tsconfigRootDir": __dirname,
+    "alwaysTryTypes": true
   },
   "plugins": [
     "react",
@@ -35,7 +38,7 @@
     "import/resolver": {
       "typescript": {
         "alwaysTryTypes": true,
-        "project": "./client/tsconfig.json"
+        "project": __dirname + '/tsconfig.json'
       }
     }
   },
@@ -562,7 +565,8 @@
       "files": ["*.ts", "*.tsx"],
       "parserOptions": {
         "alwaysTryTypes": true,
-        "project": ["./client/tsconfig.json"]
+        "project": ["./tsconfig.json"],
+        "tsconfigRootDir": __dirname,
       }
     }
   ]
