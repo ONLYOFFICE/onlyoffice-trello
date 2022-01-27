@@ -1,5 +1,5 @@
 import React, {Suspense} from 'react';
-import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 
 const CardButton = React.lazy(
   () => import('components/card-button/CardButton'),
@@ -10,20 +10,16 @@ function TrelloRouter(): JSX.Element {
   return (
       <Suspense fallback={<div style={{margin: '6px'}}/>}>
           <Router basename='/'>
-              <Switch>
+              <Routes>
                   <Route
-                      exact={true}
                       path='/card-button'
-                  >
-                      <CardButton/>
-                  </Route>
+                      element={<CardButton/>}
+                  />
                   <Route
-                      exact={true}
                       path='/show-settings'
-                  >
-                      <Settings/>
-                  </Route>
-              </Switch>
+                      element={<Settings/>}
+                  />
+              </Routes>
           </Router>
       </Suspense>
   );
