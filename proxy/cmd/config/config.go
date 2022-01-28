@@ -1,13 +1,14 @@
 package config
 
 import (
+	"context"
 	"path/filepath"
 	"runtime"
-	"strconv"
 
 	"github.com/ONLYOFFICE/onlyoffice-trello/internal"
 	"github.com/ONLYOFFICE/onlyoffice-trello/pkg"
 	"github.com/go-playground/validator/v10"
+	"github.com/sethvargo/go-envconfig"
 	"github.com/spf13/viper"
 )
 
@@ -27,12 +28,13 @@ func (t ConfigType) Validate() error {
 }
 
 type ServerConfiguration struct {
-	Host        string `validate:"required"`
-	Port        int    `validate:"required"`
-	Secret      []byte `validate:"required,len=32"`
-	Limit       int    `validate:"required,min=1"`
-	IPLimit     int    `validate:"required,min=1"`
-	Environment int    `validate:"required,min=1,max=2"`
+	Host        string `env:"HOST" validate:"required"`
+	Port        int    `env:"PORT" validate:"required"`
+	Key         string `env:"PROXY_KEY" validate:"required,len=32"`
+	Secret      []byte
+	Limit       int `env:"LIMIT" validate:"required,min=1"`
+	IPLimit     int `env:"IP_LIMIT" validate:"required,min=1"`
+	Environment int `env:"ENV" validate:"required,min=1,max=2"`
 }
 
 type Config struct {
@@ -50,9 +52,10 @@ type ConfigParameters struct {
 	Type     ConfigType
 }
 
-/// TODO: Flags
+/// TODO: Flags, Refactoring
 func NewConfig(params ConfigParameters) (Config, error) {
 	var config Config
+	config.Server.Environment = 1
 
 	err := params.Type.Validate()
 
@@ -70,33 +73,28 @@ func NewConfig(params ConfigParameters) (Config, error) {
 
 	viper.AutomaticEnv()
 
-	err = viper.ReadInConfig()
+	verr := viper.ReadInConfig()
 
-	if err != nil {
-		return config, &internal.ErrConfigInitialization{
-			Reason: err.Error(),
+	if verr != nil {
+		ctx := context.Background()
+		if err = envconfig.Process(ctx, &config.Server); err != nil {
+			return config, &internal.ErrConfigInitialization{
+				Reason: err.Error(),
+			}
 		}
-	}
-
-	if err = viper.Unmarshal(&config); err != nil {
-		return config, internal.ErrConfigUnmarshalling
-	}
-
-	if val, ok := viper.Get("PROXY_SECRET").(string); ok {
-		config.Server.Secret = []byte(val)
-	}
-
-	config.Server.Environment = 1
-	if val, ok := viper.Get("ENV").(string); ok {
-		config.Server.Environment, err = strconv.Atoi(val)
-		if err != nil {
-			return config, err
+	} else {
+		if err = viper.Unmarshal(&config); err != nil {
+			return config, &internal.ErrConfigInitialization{
+				Reason: err.Error(),
+			}
 		}
 	}
 
 	if err = config.Validate(); err != nil {
 		return config, err
 	}
+
+	config.Server.Secret = []byte(config.Server.Key)
 
 	return config, nil
 }

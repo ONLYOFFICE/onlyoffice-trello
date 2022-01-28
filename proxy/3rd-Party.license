@@ -31,3 +31,7 @@ License File:   xnet.license
 Lumberjack    - lumberjack is a log rolling package for Go. (https://github.com/natefinch/lumberjack)
 License:        MIT
 License File:   lumberjack.license
+
+Go-envconfig  - A Go library for parsing struct tags from environment variables. (https://github.com/sethvargo/go-envconfig)
+License:        Apache-2.0
+License File:   go-envconfig.license

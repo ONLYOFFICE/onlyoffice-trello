@@ -3,6 +3,7 @@ server:
   port: 8080
   limit: 20
   iplimit: 3
+  key: "11111111111111111111111111111111"
 proxy:
   to: "google.com"
   path: "/"

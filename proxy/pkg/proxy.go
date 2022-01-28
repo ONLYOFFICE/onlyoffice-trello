@@ -4,33 +4,21 @@ import (
 	"net/http"
 	"net/http/httputil"
 
-	"github.com/go-playground/validator/v10"
 	"golang.org/x/net/http2"
 )
 
 type ProxyParametersHeader struct{}
 
-// TODO: Custom validators
 type ProxyParameters struct {
-	To         string `json:"to" validate:"required"`
-	Path       string `json:"path" validate:"required"`
+	To         string `json:"to"`
+	Path       string `json:"path"`
 	AuthValue  string `json:"authValue"`
 	DocsHeader string `json:"docsHeader"`
 	DocsJwt    string `json:"docsJwt"`
 	Due        int64  `json:"due"`
 }
 
-func (pp *ProxyParameters) Validate() error {
-	validator := validator.New()
-
-	return validator.Struct(pp)
-}
-
 func NewProxy(fallback ProxyParameters) (*httputil.ReverseProxy, error) {
-	if err := fallback.Validate(); err != nil {
-		return nil, err
-	}
-
 	tr := &http.Transport{}
 	err := http2.ConfigureTransport(tr)
 	if err != nil {
@@ -42,8 +30,9 @@ func NewProxy(fallback ProxyParameters) (*httputil.ReverseProxy, error) {
 			var key ProxyParametersHeader
 			params, ok := req.Context().Value(key).(ProxyParameters)
 
-			if !ok || params.Validate() != nil {
-				params = fallback
+			if !ok {
+				req.Close = true
+				return
 			}
 
 			req.Header.Add("X-Forwarded-Host", req.Host)

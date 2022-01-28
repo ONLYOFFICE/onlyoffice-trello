@@ -7,6 +7,7 @@ require (
 	github.com/golang-jwt/jwt v3.2.2+incompatible
 	github.com/gorilla/mux v1.8.0
 	github.com/natefinch/lumberjack v2.0.0+incompatible
+	github.com/sethvargo/go-envconfig v0.4.0
 	github.com/sethvargo/go-limiter v0.7.2
 	github.com/spf13/viper v1.9.0
 	go.uber.org/zap v1.19.1
