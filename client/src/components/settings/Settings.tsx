@@ -47,7 +47,8 @@ export default function SettingsComponent(): JSX.Element {
                   <input
                       disabled={saving}
                       type='text'
-                      value={settingsData?.Address || defaultAddress}
+                      placeholder={defaultAddress}
+                      value={settingsData?.Address}
                       autoComplete='on'
                       onChange={(e) => setSettingsData({
                         ...settingsData,
@@ -59,6 +60,7 @@ export default function SettingsComponent(): JSX.Element {
                       <input
                           disabled={saving}
                           type={hideSecret ? 'password' : 'text'}
+                          placeholder='secret'
                           value={settingsData?.Jwt}
                           autoComplete='on'
                           onChange={(e) => setSettingsData({
@@ -82,7 +84,8 @@ export default function SettingsComponent(): JSX.Element {
                   <input
                       disabled={saving}
                       type='text'
-                      value={settingsData?.Header || defaultHeader}
+                      placeholder={defaultHeader}
+                      value={settingsData?.Header}
                       autoComplete='on'
                       onChange={(e) => setSettingsData({
                         ...settingsData,

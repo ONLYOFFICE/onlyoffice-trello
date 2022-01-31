@@ -7,6 +7,7 @@ import {fetchWithTimeout} from 'root/utils/withTimeout';
 import {DocServerInfo} from 'components/card-button/types';
 import {SettingsData} from 'components/settings/types';
 import {TrelloSettings} from 'types/trello';
+import {validURL} from 'root/utils/validation';
 
 const settingsHandler = {
   get: async (type: TrelloSettings): Promise<string> => {
@@ -76,6 +77,10 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
     return;
   }
   try {
+    const isValid = validURL(settings.Address);
+    if (!isValid) {
+      throw new Error('Invalid URL format');
+    }
     const signature = await generateSettingsSignature();
     const response = await fetchWithTimeout(
       `${constants.ONLYOFFICE_SETTINGS_ENDPOINT}/encrypt?signature=${signature}`,
