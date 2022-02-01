@@ -1,7 +1,7 @@
 {
   "name": "onlyoffice-trello-server",
   "version": "1.0.0",
-  "author": "",
+  "author": "Ascensio System SIA",
   "license": "Apache-2.0",
   "scripts": {
     "prebuild": "rimraf dist",

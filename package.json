@@ -1,6 +1,8 @@
 {
   "name": "onlyoffice-trello",
   "version": "1.0.0",
+  "author": "Ascensio System SIA",
+  "license": "Apache-2.0",
   "main": "index.js",
   "scripts": {
     "pre-commit": "lint-staged",
@@ -10,12 +12,10 @@
     "type": "git",
     "url": "git+https://github.com/ONLYOFFICE/onlyoffice-trello.git"
   },
-  "author": "",
-  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/ONLYOFFICE/onlyoffice-trello/issues"
   },
-  "homepage": "https://github.com/Nsenz/onlyoffice-trello#readme",
+  "homepage": "https://github.com/ONLYOFFICE/onlyoffice-trello",
   "devDependencies": {
     "@commitlint/cli": "^14.1.0",
     "@commitlint/config-conventional": "^14.1.0",
