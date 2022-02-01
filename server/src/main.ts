@@ -48,7 +48,7 @@ async function main() {
     });
     server.set('trust proxy', 'loopback');
     server.setViewEngine('hbs');
-    server.setBaseViewsDir(join(__dirname, '..', 'views'));
+    server.setBaseViewsDir(join(__dirname, 'views'));
     server.useGlobalFilters(new NotFoundExceptionFilter());
 
     await server.listen(process.env.SERVER_PORT!);
