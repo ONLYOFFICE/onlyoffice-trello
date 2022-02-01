@@ -1,1 +1,1 @@
-Onlyoffice x Trello
+ONLYOFFICE Trello Power-Up

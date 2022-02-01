@@ -37,7 +37,7 @@ import { Config } from '@models/config';
 import { DocumentServerSecret } from '@models/settings';
 
 /**
- * Onlyoffice controller is responsible for managing users interaction with document servers
+ * ONLYOFFICE controller is responsible for managing users interaction with document servers
  */
 @Controller({ path: OnlyofficeController.baseRoute })
 export class OnlyofficeController {

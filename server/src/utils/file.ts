@@ -56,7 +56,7 @@ const AllowedExtensions = new Map([
 //
 
 /**
- * Performs operations related to file management (Trello side, Onlyoffice file utils)
+ * Performs operations related to file management (Trello side, ONLYOFFICE file utils)
  */
 @Injectable()
 export class FileUtils {

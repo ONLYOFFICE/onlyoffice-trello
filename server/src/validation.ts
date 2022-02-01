@@ -28,27 +28,27 @@ export default joi
     POWERUP_NAME: joi
       .string()
       .min(4)
-      .description('Powerup name')
+      .description('Power-Up name')
       .required(),
     POWERUP_ID: joi
       .string()
       .min(20)
-      .description('Powerup unique id')
+      .description('Power-Up unique id')
       .required(),
     POWERUP_APP_KEY: joi
       .string()
       .min(30)
-      .description('Powerup public key')
+      .description('Power-Up public key')
       .required(),
     POWERUP_APP_SECRET: joi
       .string()
       .min(60)
-      .description('Powerup secret key')
+      .description('Power-Up secret key')
       .required(),
     POWERUP_APP_ENCRYPTION_KEY: joi
       .string()
       .length(32)
-      .description('Powerup secret encryption key (internal)')
+      .description('Power-Up secret encryption key (internal)')
       .required(),
     PROXY_ADDRESS: joi
       .string()
