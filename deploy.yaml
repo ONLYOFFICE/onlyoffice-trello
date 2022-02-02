@@ -1,0 +1,400 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: onlyoffice-trello
+  labels:
+    app: onlyoffice-trello
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: onlyoffice-trello
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: onlyoffice-trello
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - onlyoffice-trello
+              topologyKey: kubernetes.io/hostname
+            weight: 100
+      imagePullSecrets:
+        - name: myregistrykey
+      containers:
+      - name: onlyoffice-trello-server
+        image: onlyoffice/trello-server:1.0.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 1111
+          name: http-server
+        env:
+        - name: IS_DEVELOPMENT
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: IS_DEVELOPMENT
+        - name: IS_DEBUG
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: IS_DEBUG
+        - name: SERVER_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: SERVER_HOST
+        - name: SERVER_PORT
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: SERVER_PORT
+        - name: CLIENT_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: CLIENT_HOST
+        - name: POWERUP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_NAME
+        - name: PROXY_ADDRESS
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_ADDRESS
+        - name: POWERUP_ID
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_ID
+        - name: POWERUP_APP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_APP_KEY
+        - name: POWERUP_APP_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_APP_SECRET
+        - name: POWERUP_APP_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_APP_ENCRYPTION_KEY
+        - name: PROXY_ENCRYPTION_KEY
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_ENCRYPTION_KEY
+
+      - name: onlyoffice-trello-client
+        image: onlyoffice/trello-client:1.0.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 80
+          name: http-client
+        env:
+        - name: ENABLE_BUNDLE_ANALYZER
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: ENABLE_BUNDLE_ANALYZER
+        - name: BACKEND_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: SERVER_HOST
+        - name: POWERUP_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_NAME
+        - name: POWERUP_APP_KEY
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: POWERUP_APP_KEY
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+
+      - name: onlyoffice-trello-proxy
+        image: onlyoffice/trello-proxy:1.0.0
+        imagePullPolicy: IfNotPresent
+        resources:
+          requests:
+            memory: "256Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "100m"
+        ports:
+        - containerPort: 8080
+          name: http-proxy
+        env:
+        - name: HOST
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_HOST
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_PORT
+        - name: LIMIT
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_LIMIT
+        - name: IP_LIMIT
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_IP_LIMIT
+        - name: ENV
+          valueFrom:
+            configMapKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_ENV
+        - name: PROXY_SECRET
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_ENCRYPTION_KEY
+        - name: PROXY_KEY
+          valueFrom:
+            secretKeyRef:
+              name: onlyoffice-trello
+              key: PROXY_ENCRYPTION_KEY
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: nginx-conf
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: onlyoffice-trello
+spec:
+  ports:
+  - port: 1111
+    name: http-server
+    targetPort: 1111
+  - port: 80
+    name: http-client
+    targetPort: 80
+  - port: 8080
+    name: http-proxy
+    targetPort: 8080
+  selector:
+    app: onlyoffice-trello
+  type: ClusterIP
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: onlyoffice-trello
+data:
+  IS_DEVELOPMENT: "0"
+  IS_DEBUG: "1"
+  SERVER_HOST: ""
+  SERVER_PORT: "1111"
+  CLIENT_HOST: ""
+  POWERUP_NAME: ""
+  PROXY_ADDRESS: ""
+  ENABLE_BUNDLE_ANALYZER: "0"
+  PROXY_HOST: "0.0.0.0"
+  PROXY_PORT: "8080"
+  PROXY_LIMIT: "10"
+  PROXY_IP_LIMIT: "1"
+  PROXY_ENV: "1"
+
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: onlyoffice-trello
+type: Opaque
+stringData:
+  POWERUP_ID: ""
+  POWERUP_APP_KEY: ""
+  POWERUP_APP_SECRET: ""
+  POWERUP_APP_ENCRYPTION_KEY: ""
+  PROXY_ENCRYPTION_KEY: ""
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-conf
+data:
+  default.conf: |-
+    server {
+        listen 80;
+        listen [::]:80;
+        root   /usr/share/nginx/html;
+        index  index.html index.htm;
+
+        server_name localhost;
+
+        location / {
+                try_files $uri $uri/ /index.html;
+        }
+    }
+
+#---
+#apiVersion: v1
+#kind: Pod
+#metadata:
+#  name: nginx-frontend-proxy
+#  labels:
+#    app: nginx-frontend-proxy
+#spec:
+#  containers:
+#  - name: nginx-frontend-proxy
+#    image: nginx
+#    resources:
+#      requests:
+#        memory: "256Mi"
+#        cpu: "100m"
+#      limits:
+#        memory: "256Mi"
+#        cpu: "100m"
+#    ports:
+#    - containerPort: 80
+#      name: http
+#    - containerPort: 443
+#      name: https
+#    - containerPort: 1111
+#      name: server
+#    - containerPort: 8080
+#      name: proxy
+#    volumeMounts:
+#    - name: proxy-frontend
+#      mountPath: /etc/nginx/conf.d/default.conf
+#      subPath: default.conf
+#    - name: tls
+#      mountPath: "/etc/godaddy/live"
+#      readOnly: true
+#  volumes:
+#  - name: proxy-frontend
+#    configMap:
+#      name: proxy-frontend
+#  - name: tls
+#    secret:
+#      secretName: tls
+#      items:
+#      - key: cert.crt
+#        path: cert.crt
+#      - key: generated-private-key.key
+#        path: generated-private-key.key
+
+#---
+#apiVersion: v1
+#kind: Service
+#metadata:
+#  name: nginx-frontend-proxy
+#spec:
+#  ports:
+#  - port: 80
+#    name: http
+#    targetPort: 80
+#  - port: 443
+#    name: https
+#    targetPort: 443
+#  - port: 1111
+#    name: server
+#    targetPort: 1111
+#  - port: 8080
+#    name: proxy
+#    targetPort: 8080
+#  selector:
+#    app: nginx-frontend-proxy
+#  type: LoadBalancer
+
+#---
+#apiVersion: v1
+#kind: ConfigMap
+#metadata:
+#  name: proxy-frontend
+#data:
+#  default.conf: |-
+#    #proxy_set_header Upgrade $http_upgrade;
+#    #proxy_set_header X-Forwarded-Host $the_host;
+#    proxy_set_header   Host             $host;
+#    proxy_set_header X-Forwarded-Proto $scheme;
+#    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+#    #proxy_set_header X-REWRITER-URL $the_scheme://$the_host;
+#    server {
+#       listen 80;
+#       listen [::]:80;
+#       server_name example.com;
+#       return 301 https://$host$request_uri;
+#    }
+#    server {
+#      listen 0.0.0.0:443 ssl;
+#      listen [::]:443 ssl;
+#      server_name example.com;
+#      server_tokens off;
+#      client_max_body_size    4G;
+#      ssl_certificate /etc/godaddy/live/cert.crt;
+#      ssl_certificate_key /etc/godaddy/live/generated-private-key.key;
+#      #ssl_verify_client off;
+#    location / {
+#         proxy_pass http://onlyoffice-trello;
+#    }
+#    }
+#    server {
+#      listen 0.0.0.0:1111 ssl;
+#      listen [::]:1111 ssl;
+#      server_name example.com;
+#      ssl_certificate /etc/godaddy/live/cert.crt;
+#      ssl_certificate_key /etc/godaddy/live/generated-private-key.key;
+#      server_tokens off;
+#      client_max_body_size    4G;
+#    location / {
+#         proxy_pass http://onlyoffice-trello:1111;
+#    }
+#    }
+#    server {
+#      listen 0.0.0.0:8080 ssl;
+#      listen [::]:8080 ssl;
+#      server_name example.com;
+#      ssl_certificate /etc/godaddy/live/cert.crt;
+#      ssl_certificate_key /etc/godaddy/live/generated-private-key.key;
+#      server_tokens off;
+#      client_max_body_size    4G;
+#    location / {
+#         proxy_pass http://onlyoffice-trello:8080;
+#    }
+#    }

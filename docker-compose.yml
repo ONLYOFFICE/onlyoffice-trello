@@ -1,0 +1,60 @@
+version: '3.8'
+services:
+  server:
+    container_name: server
+    build:
+      context: .
+      target: server
+    image: onlyoffice/trello-server:${PRODUCT_VERSION}
+    environment:
+      - IS_DEVELOPMENT=1
+      - IS_DEBUG=1
+      - SERVER_HOST=https://host.domainzone
+      - SERVER_PORT=1111
+      - CLIENT_HOST=https://client.domainzone
+      - POWERUP_NAME=<PLUGIN_NAME>
+      - POWERUP_ID=<PLUGIN_ID>
+      - POWERUP_APP_KEY=<PLUGIN_PUBLIC_KEY>
+      - POWERUP_APP_SECRET=<PLUGIN_SECRET_KEY>
+      - POWERUP_APP_ENCRYPTION_KEY=<PLUGIN_SYMMETRIC_ENCRYPTION_KEY>
+      - PROXY_ADDRESS=https://proxy.domainzone
+      - PROXY_ENCRYPTION_KEY=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
+    stdin_open: true
+    restart: always
+    ports:
+      - '1111:1111'
+
+  client:
+    build:
+      context: .
+      target: client
+    image: onlyoffice/trello-client:${PRODUCT_VERSION}
+    container_name: client
+    environment:
+      - ENABLE_BUNDLE_ANALYZER=0
+      - BACKEND_HOST=https://host.domainzone
+      - POWERUP_NAME=<PLUGIN_NAME>
+      - POWERUP_APP_KEY=<PLUGIN_PUBLIC_KEY>
+    stdin_open: true
+    restart: always
+    ports:
+      - '80:80'
+
+  proxy:
+    build:
+      context: .
+      target: proxy
+    image: onlyoffice/trello-proxy:${PRODUCT_VERSION}
+    container_name: proxy
+    environment:
+      - PROXY_SECRET=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
+      - HOST=0.0.0.0
+      - PORT=8080
+      - PROXY_KEY=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
+      - LIMIT=10
+      - IP_LIMIT=1
+      - ENV=1
+    stdin_open: true
+    restart: always
+    ports:
+      - '8080:8080'
