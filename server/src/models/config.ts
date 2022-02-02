@@ -31,7 +31,8 @@ type Document = {
 type EditorConfig = {
     callbackUrl: string,
     user: User,
-    mode?: 'edit' | 'view'
+    mode?: 'edit' | 'view',
+    lang?: string
 };
 
 type User = {

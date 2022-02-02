@@ -133,7 +133,11 @@ export class OnlyofficeController {
 
     @Post('editor')
     @UsePipes(new ValidationPipe())
-    async openEditor(@Body() form: EditorPayloadForm, @Res() res: Response) {
+    async openEditor(
+      @Body() form: EditorPayloadForm,
+      @Query('lang') lang: string,
+      @Res() res: Response,
+    ) {
       try {
         this.logger.debug(`A new editor request: ${form.payload}`);
         const documentKey = res.getHeader(this.constants.HEADER_ONLYOFFICE_DOC_KEY).toString();
@@ -193,6 +197,7 @@ export class OnlyofficeController {
               name: me.username,
             },
             mode: validPayload.isEditable ? 'edit' : 'view',
+            lang,
           },
           attachment: validPayload.attachment,
         };

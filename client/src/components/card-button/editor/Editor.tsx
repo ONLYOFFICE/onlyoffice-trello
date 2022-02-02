@@ -68,7 +68,7 @@ export function Editor({payload, setError}: {
     try {
       const signature = await generateDocKeySignature(payload.attachment, isEditable);
       const form = (document.getElementById('onlyoffice-editor-form') as HTMLFormElement);
-      form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}`;
+      form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}&lang=${window.locale}`;
       (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).
         value = JSON.stringify(payload);
       form.submit();
