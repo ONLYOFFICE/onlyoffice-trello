@@ -63,7 +63,7 @@ const getEditableDocKey = async (attachment: string): Promise<KeyInfo> => {
       await trello.set('card', 'shared', attachment, keyInfo.key);
     }
 
-    await delay(1500);
+    await delay(2000);
 
     const savedKey = await trello.get('card', 'shared', attachment) as string;
 
