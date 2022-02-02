@@ -76,7 +76,7 @@
 
         var onError = function (event) {
             window.parent.postMessage({
-                action: 'cleanup',
+                action: 'error',
                 id: conf.attachment,
             }, '*');
         };

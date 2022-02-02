@@ -16,7 +16,7 @@
 
 /* eslint-disable @typescript-eslint/no-floating-promises */
 /* eslint-disable jsx-a11y/iframe-has-title */
-import React, {useEffect, useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import Spinner from '@atlaskit/spinner';
 
 import {generateDocKeySignature} from 'root/api/handlers/signature';
@@ -28,8 +28,8 @@ import {EditorPayload} from 'components/card-button/types';
 
 import './styles.css';
 
-const cleanup = (id: string): void => {
-  trello.remove('card', 'shared', id);
+const cleanup = async (id: string): Promise<void> => {
+  await trello.remove('card', 'shared', id);
 };
 
 const isEditorLoaded = (): boolean => {
@@ -37,11 +37,14 @@ const isEditorLoaded = (): boolean => {
     contentWindow?.length);
 };
 
-const reactOnEvent = (e: MessageEvent<{action: string, id: string}>): void => {
+const reactOnEvent = async (
+  e: MessageEvent<{action: string, id: string}>,
+): Promise<void> => {
   const {data, isTrusted} = e;
 
-  if (isTrusted && data.action === 'cleanup') {
-    cleanup(data.id);
+  const shouldClean = data.action === 'cleanup' || data.action === 'error';
+  if (isTrusted && shouldClean) {
+    await cleanup(data.id);
   }
 };
 
@@ -51,6 +54,7 @@ export function Editor({payload, setError}: {
 }): JSX.Element {
   // A temporary workaround to catch the second (editor's) onLoad event
   const frameLoadCounter = useRef(0);
+  const [force, setForce] = useState(false);
   const checkEditorLoaded = (): void => {
     if (frameLoadCounter.current === 1 && !isEditorLoaded()) {
       setError(true);
@@ -73,7 +77,7 @@ export function Editor({payload, setError}: {
         if (!isEditorLoaded()) {
           setError(true);
         }
-      }, 8000);
+      }, 10000);
     } catch {
       setError(true);
     }
@@ -81,10 +85,16 @@ export function Editor({payload, setError}: {
 
   useEffect(() => {
     init();
-
-    window.addEventListener('message', reactOnEvent);
+    const listenerHandler = (e: MessageEvent<{action: string, id: string}>): void => {
+      reactOnEvent(e).then(() => {
+        if (e.data.action === 'cleanup') {
+          setForce(!force);
+        }
+      });
+    };
+    window.addEventListener('message', listenerHandler);
     return () => {
-      window.removeEventListener('message', reactOnEvent);
+      window.removeEventListener('message', listenerHandler);
     };
   });
 

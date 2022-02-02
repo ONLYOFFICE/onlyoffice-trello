@@ -44,16 +44,9 @@ export function getCardButton(
           window.localStorage.
             removeItem(constants.ONLYOFFICE_LOCAL_STORAGE_ATTACHMENT_KEY);
 
-          const storedKey = (await t.
-            get('card', 'shared', attachment || '')) as string;
+          const storedKey = (await t.get('card', 'shared', attachment || '')) as string;
 
           if (attachmentKey === storedKey) {
-            await t.alert({
-              message: `Please do not close the tab.
-                ONLYOFFICE is waiting for a cleanup command`,
-              duration: 30,
-              display: 'warning',
-            });
             docKeyCleanup(t);
           }
         },
