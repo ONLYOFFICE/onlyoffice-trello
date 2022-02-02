@@ -18,6 +18,7 @@
 import React, {useState, useEffect} from 'react';
 import {observer} from 'mobx-react-lite';
 import Spinner from '@atlaskit/spinner';
+import {useTranslation} from 'react-i18next';
 
 import {fetchDocsInfo} from 'root/api/handlers/settings';
 import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
@@ -45,6 +46,7 @@ import {
 import './styles.css';
 
 const CardButton = observer(() => {
+  const {t, i18n} = useTranslation();
   const store = useStore();
   const [isEditor, setIsEditor] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -58,6 +60,7 @@ const CardButton = observer(() => {
   useEffect(() => {
     const init = async (): Promise<void> => {
       try {
+        await i18n.changeLanguage(window.locale);
         setToken(await getAuth());
         setDocServerInfo(await fetchDocsInfo());
         const card = await getCurrentCard();
@@ -70,7 +73,7 @@ const CardButton = observer(() => {
     };
     // eslint-disable-next-line @typescript-eslint/no-floating-promises
     init();
-  }, []);
+  }, [i18n]);
 
   const startEditor = (attachment: string, filename: string)
     : void => {
@@ -111,19 +114,18 @@ const CardButton = observer(() => {
                   setError={setIsError}
               />
               )}
-              {!isEditor && (
-              <Main>
-                  <Header/>
-                  <Info/>
-                  {isLoading && (
+              {isLoading && (
                   <div className='onlyoffice_loader-container'>
                       <Spinner size='xlarge'/>
                   </div>
-                  )}
-                  {!isLoading && (
+              )}
+              {!isEditor && !isLoading && (
+              <Main>
+                  <Header/>
+                  <Info/>
                   <>
                       <div className='file_header'>
-                          <h2>Files</h2>
+                          <h2>{t('onlyoffice.card.files.header')}</h2>
                           <div>
                               <Dropdown/>
                           </div>
@@ -133,7 +135,6 @@ const CardButton = observer(() => {
                           openHandler={startEditor}
                       />
                   </>
-                  )}
               </Main>
               )}
           </>

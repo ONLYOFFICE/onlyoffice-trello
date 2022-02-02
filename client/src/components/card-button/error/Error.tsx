@@ -15,21 +15,17 @@
 */
 
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 import './styles.css';
 
-const genericError = `
-    Something went wrong. Perhaps, the service is busy or there is
-    something wrong with your settings/token.
-    Please try again later or contant the your administrator
-`;
-
 export function Error(): JSX.Element {
+  const {t} = useTranslation();
   return (
       <div className='onlyoffice_error'>
-          <p className='onlyoffice_error__header'>System error</p>
+          <p className='onlyoffice_error__header'>{t('onlyoffice.files.error.header')}</p>
           <p className='onlyoffice_error__text'>
-              {genericError}
+              {t('onlyoffice.files.error.body')}
           </p>
           <div className='onlyoffice_error__background'/>
           <div className='onlyoffice_error__background'/>

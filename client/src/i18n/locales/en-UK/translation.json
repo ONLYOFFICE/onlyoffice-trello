@@ -1,0 +1,23 @@
+{
+    "onlyoffice.configure.header": "Configure ONLYOFFICE",
+    "onlyoffice.ds.address": "Document Server Address",
+    "onlyoffice.ds.jwt.secret": "JWT Secret",
+    "onlyoffice.ds.jwt.header": "JWT Header",
+    "onlyoffice.configure.button": "Save",
+    "onlyoffice.configure.info.main": "Full access to ONLYOFFICE Docs server",
+    "onlyoffice.configure.info.button": "See plans",
+    "onlyoffice.card.files.header": "Files",
+    "onlyoffice.card.files.sort.placeholder": "Sorting",
+    "onlyoffice.card.files.sort.asc": "Ascending",
+    "onlyoffice.card.files.sort.desc": "Descending",
+    "onlyoffice.files.sort.by.name": "Name",
+    "onlyoffice.files.sort.by.size": "Size",
+    "onlyoffice.files.sort.by.type": "Type",
+    "onlyoffice.files.sort.by.modified": "Modified",
+    "onlyoffice.files.error.header": "System error",
+    "onlyoffice.files.error.body": "Something went wrong. Perhaps, the service is busy or there is something wrong with your settings/token. Please try again later or contant the your administrator",
+    "onlyoffice.files.file.open": "Open in ONLYOFFICE",
+    "onlyoffice.files.info.main": "ONLYOFFICE Power-Up can handle files less than 1.5 MB",
+    "onlyoffice.files.info.footer": "Never show again",
+    "onlyoffice.files.searchbar": "Search"
+}

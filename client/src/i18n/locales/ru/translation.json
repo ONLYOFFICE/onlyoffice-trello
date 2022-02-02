@@ -1,0 +1,23 @@
+{
+    "onlyoffice.configure.header": "Настройки ONLYOFFICE",
+    "onlyoffice.ds.address": "Адрес документ сервера",
+    "onlyoffice.ds.jwt.secret": "JWT секрет",
+    "onlyoffice.ds.jwt.header": "JWT заголовок",
+    "onlyoffice.configure.button": "Сохранить",
+    "onlyoffice.configure.info.main": "Полный доступ к документ серверу ONLYOFFICE",
+    "onlyoffice.configure.info.button": "Планы",
+    "onlyoffice.card.files.header": "Файлы",
+    "onlyoffice.card.files.sort.placeholder": "Сортировка",
+    "onlyoffice.card.files.sort.asc": "Возрастание",
+    "onlyoffice.card.files.sort.desc": "Убывание",
+    "onlyoffice.files.sort.by.name": "Название",
+    "onlyoffice.files.sort.by.size": "Размер",
+    "onlyoffice.files.sort.by.type": "Тип",
+    "onlyoffice.files.sort.by.modified": "Дата изменения",
+    "onlyoffice.files.error.header": "Системная ошибка",
+    "onlyoffice.files.error.body": "Что то пошло не так. Возможно, наш сервер перегружен или что-то не так с вашими настройками/токеном. Пожалуйста попробуйте позже или сообщите об ошибке администратору",
+    "onlyoffice.files.file.open": "Открыть в ONLYOFFICE",
+    "onlyoffice.files.info.main": "ONLYOFFICE улучшение может работать с файлами меньше 1.5 MB",
+    "onlyoffice.files.info.footer": "Больше не показывать",
+    "onlyoffice.files.searchbar": "Поиск"
+}

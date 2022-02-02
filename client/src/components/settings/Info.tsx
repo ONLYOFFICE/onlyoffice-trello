@@ -15,25 +15,27 @@
 */
 
 import React from 'react';
+import {useTranslation} from 'react-i18next';
 
 const handleClick = (): void => {
   window.open('https://www.onlyoffice.com/docs-enterprise-prices.aspx');
 };
 
 export function Info(): JSX.Element {
+  const {t} = useTranslation();
   return (
       <div
           className='onlyoffice_settings__info'
       >
           <p className='onlyoffice_settings__info__text'>
-              Full access to ONLYOFFICE Docs server
+              {t('onlyoffice.configure.info.main')}
           </p>
           <button
               className='onlyoffice_settings__info__button'
               type='button'
               onClick={handleClick}
           >
-              See plans
+              {t('onlyoffice.configure.info.button')}
           </button>
       </div>
   );

@@ -15,6 +15,7 @@
 */
 
 import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import constants from 'root/utils/const';
 
@@ -28,6 +29,7 @@ const handleCloseAnimation = (): void => {
 };
 
 export function Info(): JSX.Element | null {
+  const {t} = useTranslation();
   const [closed, setClosed] = useState(
     () => Boolean(
       localStorage.getItem(constants.ONLYOFFICE_LOCAL_STORAGE_INFO_CLOSED),
@@ -70,7 +72,7 @@ export function Info(): JSX.Element | null {
                   src={info as string}
               />
               <b className='onlyoffice_info-container__text'>
-                  ONLYOFFICE Power-Up proxy can handle files less than 1.5 MB
+                  {t('onlyoffice.files.info.main')}
               </b>
               {/* eslint-disable-next-line */}
               <img
@@ -91,7 +93,7 @@ export function Info(): JSX.Element | null {
                 (e) => (e.key === 'Enter' ? handlePermanentClose() : null)
               }
           >
-              Never show again
+              {t('onlyoffice.files.info.footer')}
           </a>
       </div>
   );

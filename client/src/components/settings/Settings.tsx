@@ -16,6 +16,7 @@
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import React, {useEffect, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 import Button from '@atlaskit/button';
 import ShowIcon from '@atlaskit/icon/glyph/hipchat/audio-only';
 import Spinner from '@atlaskit/spinner';
@@ -32,12 +33,14 @@ const defaultAddress = 'https://<host>/';
 const defaultHeader = 'Authorization';
 
 export default function SettingsComponent(): JSX.Element {
+  const {t, i18n} = useTranslation();
   const [settingsData, setSettingsData] = useState<SettingsData>({});
   const [hideSecret, setHideSecret] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     const handler = async (): Promise<void> => {
+      await i18n.changeLanguage(window.locale);
       const data = await fetchSettings();
       setSettingsData(data);
       setLoading(false);
@@ -45,7 +48,7 @@ export default function SettingsComponent(): JSX.Element {
     };
     // eslint-disable-next-line
     handler().then(() => trello.render((): void => {}));
-  }, []);
+  }, [i18n]);
   return (
       <div id='onlyoffice_settings'>
           <div className='onlyoffice_settings_container'>
@@ -57,9 +60,9 @@ export default function SettingsComponent(): JSX.Element {
               {!loading && (
               <form>
                   <p className='onlyoffice_settings_container__header'>
-                      Configure ONLYOFFICE
+                      {t('onlyoffice.configure.header')}
                   </p>
-                  <p>Document Server Address</p>
+                  <p>{t('onlyoffice.ds.address')}</p>
                   <input
                       disabled={saving}
                       type='text'
@@ -71,7 +74,7 @@ export default function SettingsComponent(): JSX.Element {
                         Address: e.target.value,
                       })}
                   />
-                  <p>JWT Secret</p>
+                  <p>{t('onlyoffice.ds.jwt.secret')}</p>
                   <div style={{display: 'flex'}}>
                       <input
                           disabled={saving}
@@ -96,7 +99,7 @@ export default function SettingsComponent(): JSX.Element {
                           onMouseUp={() => setHideSecret(true)}
                       />
                   </div>
-                  <p>JWT Header</p>
+                  <p>{t('onlyoffice.ds.jwt.header')}</p>
                   <input
                       disabled={saving}
                       type='text'
@@ -118,7 +121,7 @@ export default function SettingsComponent(): JSX.Element {
                         setSaving(false);
                       }}
                   >
-                      Save
+                      {t('onlyoffice.configure.button')}
                   </button>
               </form>
               )}

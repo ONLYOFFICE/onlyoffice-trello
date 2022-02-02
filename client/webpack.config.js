@@ -24,6 +24,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const analyzer = parseInt(process.env.ENABLE_BUNDLE_ANALYZER, 10) || 0 === 1;
 const BundleAnalyzerPlugin =
     require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const CopyPlugin = require("copy-webpack-plugin");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
@@ -81,6 +82,11 @@ module.exports = (env) => {
                 "POWERUP_APP_KEY",
             ]),
             new MiniCssExtractPlugin(),
+            new CopyPlugin({
+                patterns: [
+                    { from: path.join(__dirname, 'src', 'i18n', 'locales') }
+                ]
+            }),
             analyzer && new BundleAnalyzerPlugin(),
             new HtmlWebpackPlugin({
                 chunks: ["global", "index"],

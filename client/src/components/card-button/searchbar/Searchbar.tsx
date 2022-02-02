@@ -15,6 +15,7 @@
 */
 
 import React, {useCallback, useState} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'root/context';
 
@@ -22,6 +23,7 @@ import search from 'public/images/search.svg';
 import './styles.css';
 
 export function Searchbar(): JSX.Element {
+  const {t} = useTranslation();
   const store = useStore();
   const [query, setQuery] = useState<string>('');
   const handleQuery = useCallback(() => {
@@ -35,7 +37,7 @@ export function Searchbar(): JSX.Element {
               onKeyPress={handleQuery}
               id='onlyoffice_searchbar-container__input'
               type='text'
-              placeholder='Search'
+              placeholder={t('onlyoffice.files.searchbar')}
           />
           <button
               id='onlyoffice_searchbar-container__btn'

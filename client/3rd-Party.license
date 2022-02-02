@@ -84,6 +84,14 @@ Html-webpack-plugin - Plugin that simplifies creation of HTML files to serve you
 License:        MIT
 License File:   html-webpack-plugin.license
 
+I18next       - i18next is a very popular internationalization framework for browser or any other javascript environment. (https://github.com/i18next/i18next)
+License:        MIT
+License File:   i18next.license
+
+I18next-http-backend - This is a simple i18next backend to be used in Node.js, in the browser and for Deno. It will load resources from a backend server using the XMLHttpRequest or the fetch API. (https://github.com/i18next/i18next-http-backend)
+License:        MIT
+License File:   i18next-http-backend.license
+
 Jsonwebtoken  - An implementation of JSON Web Tokens. (https://github.com/auth0/node-jsonwebtoken)
 License:        MIT
 License File:   jsonwebtoken.license
@@ -111,6 +119,10 @@ License File:   react.license
 ReactDOM      - This package serves as the entry point to the DOM and server renderers for React. (https://github.com/facebook/react)
 License:        MIT
 License File:   react-dom.license
+
+React-i18next - Internationalization for react done right. Using the i18next i18n ecosystem. (https://github.com/i18next/react-i18next)
+License:        MIT
+License File:   react-i18next.license
 
 React-router  - Declarative routing for React. (https://github.com/remix-run/react-router)
 License:        MIT

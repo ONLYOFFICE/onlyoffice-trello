@@ -15,6 +15,7 @@
 */
 
 import React, {useState, useEffect} from 'react';
+import {useTranslation} from 'react-i18next';
 
 import {MobileFile} from 'components/card-button/file/FileMobile';
 import {DesktopFile} from 'components/card-button/file/FileDesktop';
@@ -29,6 +30,7 @@ export function File({file, openHandler} : {
   file: Trello.PowerUp.Attachment,
   openHandler: OpenHandler,
 }): JSX.Element {
+  const {t} = useTranslation();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 941);
 
   useEffect(() => {
@@ -65,7 +67,7 @@ export function File({file, openHandler} : {
                   type='button'
                   onClick={() => openHandler(file.id, file.name)}
               >
-                  Open in ONLYOFFICE
+                  {t('onlyoffice.files.file.open')}
               </button>
               )}
           </div>
