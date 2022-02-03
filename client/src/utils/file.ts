@@ -17,14 +17,9 @@
 import word from 'public/images/word.svg';
 import cell from 'public/images/cell.svg';
 import slide from 'public/images/slide.svg';
-
-import pdf from 'public/images/pdf.svg';
-import odt from 'public/images/odt.svg';
-import ott from 'public/images/ott.svg';
-import txt from 'public/images/txt.svg';
-import rtf from 'public/images/rtf.svg';
-import fb2 from 'public/images/fb2.svg';
-import epub from 'public/images/epub.svg';
+import docx from 'public/images/docx.svg';
+import xlsx from 'public/images/xlsx.svg';
+import pptx from 'public/images/pptx.svg';
 
 type FileType = {
   type: string,
@@ -51,9 +46,18 @@ const genericSlide: FileType = {
 };
 
 const EditExtensions = new Map<string, FileType>([
-  ['docx', genericWord],
-  ['xlsx', genericCell],
-  ['pptx', genericSlide],
+  ['docx', {
+    type: ONLYOFFICE_WORD,
+    icon: docx as string,
+  }],
+  ['xlsx', {
+    type: ONLYOFFICE_CELL,
+    icon: xlsx as string,
+  }],
+  ['pptx', {
+    type: ONLYOFFICE_SLIDE,
+    icon: pptx as string,
+  }],
 ]);
 
 const AllowedExtensions = new Map<string, FileType>([
@@ -79,41 +83,20 @@ const AllowedExtensions = new Map<string, FileType>([
   ['odp', genericSlide],
   ['fodp', genericSlide],
   ['otp', genericSlide],
-  ['pdf', {
-    type: ONLYOFFICE_WORD,
-    icon: pdf as string,
-  }],
+  ['pdf', genericWord],
   ['doc', genericWord],
   ['docx', genericWord],
   ['docm', genericWord],
   ['dot', genericWord],
   ['dotx', genericWord],
   ['dotm', genericWord],
-  ['odt', {
-    type: ONLYOFFICE_WORD,
-    icon: odt as string,
-  }],
+  ['odt', genericWord],
   ['fodt', genericWord],
-  ['ott', {
-    type: ONLYOFFICE_WORD,
-    icon: ott as string,
-  }],
-  ['rtf', {
-    type: ONLYOFFICE_WORD,
-    icon: rtf as string,
-  }],
-  ['txt', {
-    type: ONLYOFFICE_WORD,
-    icon: txt as string,
-  }],
-  ['fb2', {
-    type: ONLYOFFICE_WORD,
-    icon: fb2 as string,
-  }],
-  ['epub', {
-    type: ONLYOFFICE_WORD,
-    icon: epub as string,
-  }],
+  ['ott', genericWord],
+  ['rtf', genericWord],
+  ['txt', genericWord],
+  ['fb2', genericWord],
+  ['epub', genericWord],
 ]);
 
 export function getFileTypeByExt(fileExt: string): string {
