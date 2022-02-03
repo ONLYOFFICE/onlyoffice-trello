@@ -13,23 +13,23 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-
-require("dotenv").config({ path: `${__dirname}/.env` });
 const path = require("path");
 const fs = require("fs");
 
 const webpack = require("webpack");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
-const analyzer = parseInt(process.env.ENABLE_BUNDLE_ANALYZER, 10) || 0 === 1;
-const BundleAnalyzerPlugin =
-    require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer").BundleAnalyzerPlugin;
 const CopyPlugin = require("copy-webpack-plugin");
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = (relativePath) => path.resolve(appDirectory, relativePath);
 
-module.exports = (env) => {
+module.exports = (env, argv) => {
+    if (argv.mode === 'development') {
+        require("dotenv").config({ path: `${__dirname}/.env` });
+    }
+    const analyzer = parseInt(process.env.ENABLE_BUNDLE_ANALYZER, 10) || 0 === 1;
     return {
         output: {
             path: resolveApp("dist"),

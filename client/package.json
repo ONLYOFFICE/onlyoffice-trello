@@ -6,8 +6,8 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js --mode=production",
-    "build:dev": "webpack --config webpack.config.js --mode=development --watch",
-    "start:dev": "npm run build && node ./dev-server.js",
+    "build:dev": "webpack --config webpack.config.js --mode=development",
+    "start:dev": "npm run build:dev && node ./dev-server.js",
     "clean": "rimraf dist && rimraf node_modules",
     "lint": "eslint \"src/**/*.{js,ts,tsx}\" --fix"
   },
