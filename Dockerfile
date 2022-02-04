@@ -9,12 +9,19 @@ RUN npm run build && \
 
 FROM node:current-alpine AS build-client
 LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
+ARG ENABLE_BUNDLE_ANALYZER
+ARG BACKEND_HOST
+ARG POWERUP_NAME
+ARG POWERUP_APP_KEY
+ENV ENABLE_BUNDLE_ANALYZER=$ENABLE_BUNDLE_ANALYZER \
+    BACKEND_HOST=$BACKEND_HOST \
+    POWERUP_NAME=$POWERUP_NAME \
+    POWERUP_APP_KEY=$POWERUP_APP_KEY
 WORKDIR /usr/src/app
 COPY ./client/package*.json ./
 RUN npm install
 COPY client .
-RUN mv .env.example .env && \
-    npm run build
+RUN npm run build
 
 FROM golang:alpine AS proxy
 WORKDIR /usr/src/app
@@ -42,4 +49,3 @@ COPY --from=build-client \
     /usr/src/app/dist \
     /usr/share/nginx/html
 EXPOSE 80
-CMD ["nginx", "-g", "daemon off;"]

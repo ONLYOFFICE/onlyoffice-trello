@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  server:
+    build:
+      context: .
+      target: server
+    image: onlyoffice/trello-server:${PRODUCT_VERSION}
+
+  client:
+    build:
+      context: .
+      target: build-client
+      args:
+        ENABLE_BUNDLE_ANALYZER: ${ENABLE_BUNDLE_ANALYZER}
+        BACKEND_HOST: ${BACKEND_HOST}
+        POWERUP_NAME: ${POWERUP_NAME}
+        POWERUP_APP_KEY: ${POWERUP_APP_KEY}
+    image: onlyoffice/trello-client:${PRODUCT_VERSION}
+
+  proxy:
+    build:
+      context: .
+      target: proxy
+    image: onlyoffice/trello-proxy:${PRODUCT_VERSION}

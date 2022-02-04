@@ -1,59 +1,50 @@
 version: '3.8'
 services:
   server:
-    container_name: server
-    build:
-      context: .
-      target: server
     image: onlyoffice/trello-server:${PRODUCT_VERSION}
+    container_name: onlyoffice-trello-server
     environment:
-      - IS_DEVELOPMENT=1
-      - IS_DEBUG=1
-      - SERVER_HOST=https://host.domainzone
-      - SERVER_PORT=1111
-      - CLIENT_HOST=https://client.domainzone
-      - POWERUP_NAME=<PLUGIN_NAME>
-      - POWERUP_ID=<PLUGIN_ID>
-      - POWERUP_APP_KEY=<PLUGIN_PUBLIC_KEY>
-      - POWERUP_APP_SECRET=<PLUGIN_SECRET_KEY>
-      - POWERUP_APP_ENCRYPTION_KEY=<PLUGIN_SYMMETRIC_ENCRYPTION_KEY>
-      - PROXY_ADDRESS=https://proxy.domainzone
-      - PROXY_ENCRYPTION_KEY=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
+      - IS_DEVELOPMENT=${IS_DEVELOPMENT}
+      - IS_DEBUG=${IS_DEBUG}
+      - SERVER_HOST=${SERVER_HOST}
+      - SERVER_PORT=${SERVER_PORT}
+      - CLIENT_HOST=${CLIENT_HOST}
+      - POWERUP_NAME=${POWERUP_NAME}
+      - POWERUP_ID=${POWERUP_ID}
+      - POWERUP_APP_KEY=${POWERUP_APP_KEY}
+      - POWERUP_APP_SECRET=${POWERUP_APP_SECRET}
+      - POWERUP_APP_ENCRYPTION_KEY=${POWERUP_APP_ENCRYPTION_KEY}
+      - PROXY_ADDRESS=${PROXY_ADDRESS}
+      - PROXY_ENCRYPTION_KEY=${PROXY_ENCRYPTION_KEY}
     stdin_open: true
     restart: always
     ports:
       - '1111:1111'
 
   client:
-    build:
-      context: .
-      target: client
     image: onlyoffice/trello-client:${PRODUCT_VERSION}
-    container_name: client
+    container_name: onlyoffice-trello-client
     environment:
-      - ENABLE_BUNDLE_ANALYZER=0
-      - BACKEND_HOST=https://host.domainzone
-      - POWERUP_NAME=<PLUGIN_NAME>
-      - POWERUP_APP_KEY=<PLUGIN_PUBLIC_KEY>
+      - ENABLE_BUNDLE_ANALYZER=${ENABLE_BUNDLE_ANALYZER}
+      - BACKEND_HOST=${SERVER_HOST}
+      - POWERUP_NAME=${POWERUP_NAME}
+      - POWERUP_APP_KEY=${POWERUP_APP_KEY}
     stdin_open: true
     restart: always
     ports:
       - '80:80'
 
   proxy:
-    build:
-      context: .
-      target: proxy
     image: onlyoffice/trello-proxy:${PRODUCT_VERSION}
-    container_name: proxy
+    container_name: onlyoffice-trello-proxy
     environment:
-      - PROXY_SECRET=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
-      - HOST=0.0.0.0
-      - PORT=8080
-      - PROXY_KEY=<PROXY_SYMMETRIC_ENCRYPTION_KEY>
-      - LIMIT=10
-      - IP_LIMIT=1
-      - ENV=1
+      - PROXY_SECRET=${PROXY_ENCRYPTION_KEY}
+      - HOST=${PROXY_HOST}
+      - PORT=${PROXY_PORT}
+      - PROXY_KEY=${PROXY_ENCRYPTION_KEY}
+      - LIMIT=${PROXY_LIMIT}
+      - IP_LIMIT=${PROXY_IP_LIMIT}
+      - ENV=${PROXY_ENV}
     stdin_open: true
     restart: always
     ports:
