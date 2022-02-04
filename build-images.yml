@@ -9,7 +9,7 @@ services:
   client:
     build:
       context: .
-      target: build-client
+      target: client
       args:
         ENABLE_BUNDLE_ANALYZER: ${ENABLE_BUNDLE_ANALYZER}
         BACKEND_HOST: ${BACKEND_HOST}
