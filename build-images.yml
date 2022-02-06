@@ -10,11 +10,6 @@ services:
     build:
       context: .
       target: client
-      args:
-        ENABLE_BUNDLE_ANALYZER: ${ENABLE_BUNDLE_ANALYZER}
-        BACKEND_HOST: ${BACKEND_HOST}
-        POWERUP_NAME: ${POWERUP_NAME}
-        POWERUP_APP_KEY: ${POWERUP_APP_KEY}
     image: onlyoffice/trello-client:${PRODUCT_VERSION}
 
   proxy:
