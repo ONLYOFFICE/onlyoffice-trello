@@ -1,0 +1,23 @@
+﻿{
+    "onlyoffice.configure.header": "ONLYOFFICE konfigurieren",
+    "onlyoffice.ds.address": "Adresse vom Document Server",
+    "onlyoffice.ds.jwt.secret": "JWT-Secret",
+    "onlyoffice.ds.jwt.header": "JWT-Header",
+    "onlyoffice.configure.button": "Speichern",
+    "onlyoffice.configure.info.main": "Vollzugriff auf ONLYOFFICE Docs",
+    "onlyoffice.configure.info.button": "Pläne anzeigen",
+    "onlyoffice.card.files.header": "Dateien",
+    "onlyoffice.card.files.sort.placeholder": "Sortieren",
+    "onlyoffice.card.files.sort.asc": "Aufsteigend",
+    "onlyoffice.card.files.sort.desc": "Absteigend",
+    "onlyoffice.files.sort.by.name": "Name",
+    "onlyoffice.files.sort.by.size": "Größe",
+    "onlyoffice.files.sort.by.type": "Typ",
+    "onlyoffice.files.sort.by.modified": "Verändert",
+    "onlyoffice.files.error.header": "Systemfehler",
+    "onlyoffice.files.error.body": "Etwas ist schiefgelaufen. Vielleicht ist der Dienst ausgelastet oder es gibt einen Fehler in Ihren Einstellungen/Token. Bitte versuchen Sie es später noch einmal oder kontaktieren Sie Ihren Administrator",
+    "onlyoffice.files.file.open": "In ONLYOFFICE öffnen",
+    "onlyoffice.files.info.main": "ONLYOFFICE-Power-Up kann Dateien bis zu 1.5 MB verarbeiten",
+    "onlyoffice.files.info.footer": "Nie mehr anzeigen",
+    "onlyoffice.files.searchbar": "Suche"
+}

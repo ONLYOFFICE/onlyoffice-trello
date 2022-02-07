@@ -1,0 +1,23 @@
+﻿{
+    "onlyoffice.configure.header": "Confugurer ONLYOFFICE",
+    "onlyoffice.ds.address": "Adresse du serveur de documents",
+    "onlyoffice.ds.jwt.secret": "Secret JWT",
+    "onlyoffice.ds.jwt.header": "En-tête JWT",
+    "onlyoffice.configure.button": "Enregistrer",
+    "onlyoffice.configure.info.main": "Accès complet au serveur ONLYOFFICE Docs",
+    "onlyoffice.configure.info.button": "Voir les offres",
+    "onlyoffice.card.files.header": "Fichiers",
+    "onlyoffice.card.files.sort.placeholder": "Trier",
+    "onlyoffice.card.files.sort.asc": "Croissant",
+    "onlyoffice.card.files.sort.desc": "Décroissant",
+    "onlyoffice.files.sort.by.name": "Nom",
+    "onlyoffice.files.sort.by.size": "Taille",
+    "onlyoffice.files.sort.by.type": "Type",
+    "onlyoffice.files.sort.by.modified": "Modifié",
+    "onlyoffice.files.error.header": "Erreur système",
+    "onlyoffice.files.error.body": "Un problème est survenu. Peut-être que le service est occupé ou qu'il y a un problème avec vos paramètres/token. Veuillez réessayer plus tard ou contacter votre administrateur.",
+    "onlyoffice.files.file.open": "Ouvrir dans ONLYOFFICE",
+    "onlyoffice.files.info.main": "ONLYOFFICE Power-Up peut traiter des fichiers de moins de 1,5 Mo",
+    "onlyoffice.files.info.footer": "Ne plus afficher",
+    "onlyoffice.files.searchbar": "Recherche"
+}
