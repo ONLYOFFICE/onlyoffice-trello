@@ -38,6 +38,7 @@ export class TokenEditorVerificationMiddleware implements NestMiddleware {
       this.logger.debug("trying to verify a trello client's token (editor)");
       this.logger.debug(req.headers);
       const signature = req.query.signature as string;
+      this.logger.debug(`signature ${signature}`);
       try {
         const [sig] = await this.securityService.verifyTrello(signature);
         if (!sig.due || sig.due <= Number(new Date())) {
@@ -67,6 +68,7 @@ export class TokenSettingsVerificationMiddleware implements NestMiddleware {
       this.logger.debug("trying to verify a trello client's token (settings)");
       this.logger.debug(req.headers);
       const signature = req.query.signature as string;
+      this.logger.debug(`signature: ${signature}`);
       try {
         const [sig, role, orgID] = await this.securityService.verifyTrello(signature);
         if (!sig.due || sig.due <= Number(new Date()) || !orgID) {

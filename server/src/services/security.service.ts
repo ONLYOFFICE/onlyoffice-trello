@@ -102,7 +102,7 @@ export class SecurityService {
      * @returns [state: any, orgMembership: string, orgID: string] or throws an error
      */
     public async verifyTrello(token: string): Promise<[any, string, string]> {
-      this.logger.debug('trying to verify a trello type token');
+      this.logger.debug(`trying to verify a trello type token: ${token}`);
       const publicKeys = await this.getTrelloKeys();
       const errors = [];
       // eslint-disable-next-line no-restricted-syntax
@@ -146,7 +146,7 @@ export class SecurityService {
    * @returns The decoded version of the jwt passed or throws a validation error
    */
     public async verify(token: string, secret: string) {
-      this.logger.debug('trying to verify a token');
+      this.logger.debug(`trying to verify token: ${token} with secret: ${secret}`);
       try {
         const decoded = verify(token, secret) as any;
         return decoded;
