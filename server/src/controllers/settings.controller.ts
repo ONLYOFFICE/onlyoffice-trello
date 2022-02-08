@@ -41,10 +41,11 @@ export class SettingsController {
     @Throttle(200, 1)
     async encryptDocumentServerSecret(
         @Body() payload: SettingsEncryptionPayload,
-        @Req() _: Request,
+        @Req() req: Request,
         @Res() res: Response,
     ) {
       this.logger.debug('A new callback call to encrypt ds jwt secret');
+      this.logger.debug(req.headers);
       try {
         const orgID = res.getHeader(this.constants.HEADER_ONLYOFFICE_ORG_ID).toString();
         const secret: DocumentServerSecret = {
@@ -66,9 +67,11 @@ export class SettingsController {
     @Throttle(200, 1)
     async decryptDocumentServerSecret(
       @Body() payload: SettingsEncryptionPayload,
-      @Req() _: Request,
+      @Req() req: Request,
       @Res() res: Response,
     ) {
+      this.logger.debug('A new call to decrypt ds jwt secret');
+      this.logger.debug(req.headers);
       try {
         const orgID = res.getHeader(this.constants.HEADER_ONLYOFFICE_ORG_ID).toString();
         const decryptedPayload = JSON.parse(this.securityService

@@ -99,6 +99,7 @@ export class OnlyofficeController {
         @Res() res: Response,
     ) {
       this.logger.debug(`A new callback (${callback.key}) call with status ${callback.status}`);
+      this.logger.debug(req.headers);
       try {
         const session = await this.securityService
           .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
@@ -136,10 +137,12 @@ export class OnlyofficeController {
     async openEditor(
       @Body() form: EditorPayloadForm,
       @Query('lang') lang: string,
+      @Req() req: Request,
       @Res() res: Response,
     ) {
       try {
         this.logger.debug(`A new editor request: ${form.payload}`);
+        this.logger.debug(req.headers);
         const documentKey = res.getHeader(this.constants.HEADER_ONLYOFFICE_DOC_KEY).toString();
         if (!documentKey) throw new Error('malformed document key');
         const payload = Object.setPrototypeOf(

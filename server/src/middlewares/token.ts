@@ -36,6 +36,7 @@ export class TokenEditorVerificationMiddleware implements NestMiddleware {
 
     async use(req: Request, res: Response, next: NextFunction) {
       this.logger.debug("trying to verify a trello client's token (editor)");
+      this.logger.debug(req.headers);
       const signature = req.query.signature as string;
       try {
         const [sig] = await this.securityService.verifyTrello(signature);
@@ -64,6 +65,7 @@ export class TokenSettingsVerificationMiddleware implements NestMiddleware {
 
     async use(req: Request, res: Response, next: NextFunction) {
       this.logger.debug("trying to verify a trello client's token (settings)");
+      this.logger.debug(req.headers);
       const signature = req.query.signature as string;
       try {
         const [sig, role, orgID] = await this.securityService.verifyTrello(signature);
