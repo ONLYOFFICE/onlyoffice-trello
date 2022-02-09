@@ -107,9 +107,9 @@ export class OnlyofficeController {
         session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
           .decrypt(session.Secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
-        const dsToken = (
-                req.headers[session.Header.toLowerCase()] as string
-        ).split('Bearer ')[1];
+        const authHeader = req.headers[session.Header.toLowerCase()];
+        if (!authHeader) throw new Error('No authorization header');
+        const dsToken = (authHeader as string).split('Bearer ')[1];
 
         await this.securityService.verify(dsToken, session.Secret);
 
