@@ -50,7 +50,6 @@ export class TokenEditorVerificationMiddleware implements NestMiddleware {
       } catch (err) {
         this.logger.error(err);
         res.status(403);
-        res.send({ error: 1 }).end();
       }
     }
 }
@@ -82,7 +81,6 @@ export class TokenSettingsVerificationMiddleware implements NestMiddleware {
       } catch (err) {
         this.logger.error(err);
         res.status(403);
-        res.send({ error: 1 }).end();
       }
     }
 }
