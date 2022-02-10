@@ -51,9 +51,9 @@ func NewProxy(fallback ProxyParameters) (*httputil.ReverseProxy, error) {
 				return
 			}
 
-			req.Header.Add("X-Forwarded-Host", req.Host)
-			req.Header.Add("X-Origin-Host", params.To)
-			req.Header.Add("Authorization", params.AuthValue)
+			req.Header.Set("X-Forwarded-Host", req.Host)
+			req.Header.Set("X-Origin-Host", params.To)
+			req.Header.Set("Authorization", params.AuthValue)
 			req.Host = params.To
 			req.URL.Scheme = "https"
 			req.URL.Host = params.To
