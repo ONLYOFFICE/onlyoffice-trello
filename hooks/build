@@ -1,7 +1,7 @@
 #!/bin/bash
 
 export PRODUCT_VERSION=$DOCKER_TAG
-docker-compose -f build-images.yml build \
+docker-compose build \
   --build-arg ENABLE_BUNDLE_ANALYZER=$ENABLE_BUNDLE_ANALYZER \
   --build-arg SERVER_HOST=$SERVER_HOST \
   --build-arg POWERUP_NAME=$POWERUP_NAME \

@@ -1,6 +1,9 @@
 version: '3.8'
 services:
   server:
+    build:
+      context: .
+      target: server
     image: onlyoffice/trello-server:${PRODUCT_VERSION}
     container_name: onlyoffice-trello-server
     environment:
@@ -22,6 +25,9 @@ services:
       - '1111:1111'
 
   client:
+    build:
+      context: .
+      target: client
     image: onlyoffice/trello-client:${PRODUCT_VERSION}
     container_name: onlyoffice-trello-client
     environment:
@@ -35,6 +41,9 @@ services:
       - '80:80'
 
   proxy:
+    build:
+      context: .
+      target: proxy
     image: onlyoffice/trello-proxy:${PRODUCT_VERSION}
     container_name: onlyoffice-trello-proxy
     environment:
