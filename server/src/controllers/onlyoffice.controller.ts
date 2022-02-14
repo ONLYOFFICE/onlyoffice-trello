@@ -100,6 +100,7 @@ export class OnlyofficeController {
     ) {
       this.logger.debug(`A new callback (${callback.key}) call with status ${callback.status}`);
       this.logger.debug(req.headers);
+      let payload: Callback = callback;
       try {
         const session = await this.securityService
           .verify(encSession, process.env.POWERUP_APP_ENCRYPTION_KEY) as DocKeySession;
@@ -107,14 +108,12 @@ export class OnlyofficeController {
         session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
           .decrypt(session.Secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
-        let payload: Callback = callback;
+        const authHeader = req.headers[session.Header.toLowerCase()];
+        if (!authHeader && !callback.token) throw new Error('No authorization token');
 
         if (callback.token) {
           payload = await this.securityService.verify(callback.token, session.Secret) as Callback;
         }
-
-        const authHeader = req.headers[session.Header.toLowerCase()];
-        if (!authHeader && !callback.token) throw new Error('No authorization token');
 
         if (!callback.token) {
           const dsToken = (authHeader as string)?.split('Bearer ')[1];
@@ -128,7 +127,7 @@ export class OnlyofficeController {
         this.logger.debug(`Callback (${payload.key}) has been processed without errors`);
       } catch (err) {
         this.logger.error(
-          `Callback (${callback.key}) with status ${callback.status} has an error: ${err}`,
+          `Callback (${payload.key}) with status ${payload.status} has an error: ${err}`,
         );
         res.status(403);
         res.send({ error: 1 });
