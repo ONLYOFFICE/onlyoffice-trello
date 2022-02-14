@@ -25,6 +25,7 @@ export type Callback = {
     users: string[];
     actions: Action[];
     url?: string;
+    token?: string;
 };
 
 export type DocKeySession = {

@@ -107,17 +107,25 @@ export class OnlyofficeController {
         session.Secret = await this.cacheManager.get(session.Secret) || this.securityService
           .decrypt(session.Secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
 
+        let payload: Callback = callback;
+
+        if (callback.token) {
+          payload = await this.securityService.verify(callback.token, session.Secret) as Callback;
+        }
+
         const authHeader = req.headers[session.Header.toLowerCase()];
-        if (!authHeader) throw new Error('No authorization header');
-        const dsToken = (authHeader as string).split('Bearer ')[1];
+        if (!authHeader && !callback.token) throw new Error('No authorization token');
 
-        await this.securityService.verify(dsToken, session.Secret);
+        if (!callback.token) {
+          const dsToken = (authHeader as string)?.split('Bearer ')[1];
+          await this.securityService.verify(dsToken, session.Secret);
+        }
 
-        this.registryService.run(callback, session);
+        this.registryService.run(payload, session);
 
         res.status(200);
         res.send({ error: 0 });
-        this.logger.debug(`Callback (${callback.key}) has been processed without errors`);
+        this.logger.debug(`Callback (${payload.key}) has been processed without errors`);
       } catch (err) {
         this.logger.error(
           `Callback (${callback.key}) with status ${callback.status} has an error: ${err}`,
