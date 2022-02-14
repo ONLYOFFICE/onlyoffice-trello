@@ -98,7 +98,6 @@ export class OnlyofficeController {
         @Req() req: Request,
         @Res() res: Response,
     ) {
-      this.logger.debug(`A new callback (${callback.key}) call with status ${callback.status}`);
       this.logger.debug(req.headers);
       let payload: Callback = callback;
       try {
@@ -114,6 +113,8 @@ export class OnlyofficeController {
         if (callback.token) {
           payload = await this.securityService.verify(callback.token, session.Secret) as Callback;
         }
+
+        this.logger.debug(`A new callback (${payload.key}) call with status ${payload.status}`);
 
         if (!callback.token) {
           const dsToken = (authHeader as string)?.split('Bearer ')[1];
