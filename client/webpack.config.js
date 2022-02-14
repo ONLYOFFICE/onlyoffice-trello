@@ -84,7 +84,9 @@ module.exports = (env, argv) => {
             new MiniCssExtractPlugin(),
             new CopyPlugin({
                 patterns: [
-                    { from: path.join(__dirname, 'src', 'i18n', 'locales') }
+                    { from: path.join(__dirname, 'src', 'i18n', 'locales') },
+                    { from: path.join(__dirname, 'public', '64.png') },
+                    { from: path.join(__dirname, 'public', '144.png') },
                 ]
             }),
             analyzer && new BundleAnalyzerPlugin(),
