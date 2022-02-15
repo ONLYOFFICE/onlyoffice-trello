@@ -15,7 +15,9 @@
 */
 
 /* eslint-disable max-classes-per-file */
-import { MinLength, IsDefined, IsNotEmpty } from 'class-validator';
+import {
+  MinLength, IsDefined, IsNotEmpty, NotContains,
+} from 'class-validator';
 
 export class EditorPayload {
     @MinLength(40)
@@ -38,6 +40,7 @@ export class EditorPayload {
 
     @MinLength(1)
     @IsDefined()
+    @NotContains('/')
         filename: string;
 
     @IsDefined()

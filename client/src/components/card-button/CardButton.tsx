@@ -80,7 +80,7 @@ const CardButton = observer(() => {
     if (!isError) {
       const resource: ProxyPayloadResource = {
         to: 'api.trello.com',
-        path: `/1/cards/${currentCard!.id}/attachments/${attachment}/download/${filename}`,
+        path: `/1/cards/${currentCard!.id}/attachments/${attachment}/download/${encodeURIComponent(filename)}`,
         docsHeader: docServerInfo!.docsHeader,
       };
       try {

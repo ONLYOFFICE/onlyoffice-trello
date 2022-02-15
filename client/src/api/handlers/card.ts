@@ -48,7 +48,7 @@ export async function fetchSupportedFiles(
   });
 
   const files = ((await resp.json()) as Trello.PowerUp.Attachment[]).filter(
-    (file) => isExtensionSupported(file.name.split('.')[1]),
+    (file) => file.name.indexOf('/') === -1 && isExtensionSupported(file.name.split('.')[1]),
   );
 
   return files;
