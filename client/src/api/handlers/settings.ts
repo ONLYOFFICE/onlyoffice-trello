@@ -93,7 +93,9 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
     return;
   }
   try {
-    const isValid = validURL(settings.Address);
+    const formattedAddress = settings.Address.
+      endsWith('/') ? settings.Address : `${settings.Address}/`;
+    const isValid = validURL(formattedAddress);
     if (!isValid) {
       throw new Error('Invalid URL format');
     }
@@ -118,7 +120,7 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
     }
     const secureSecret = await response.text();
     await Promise.all([
-      settingsHandler.set('docsAddress', settings.Address),
+      settingsHandler.set('docsAddress', formattedAddress),
       settingsHandler.set('docsHeader', settings.Header),
       settingsHandler.set('docsJwt', secureSecret),
     ]);

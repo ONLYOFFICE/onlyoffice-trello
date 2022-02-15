@@ -46,11 +46,6 @@ export default joi
       .min(4)
       .description('Power-Up name')
       .required(),
-    POWERUP_ID: joi
-      .string()
-      .min(20)
-      .description('Power-Up unique id')
-      .required(),
     POWERUP_APP_KEY: joi
       .string()
       .min(30)

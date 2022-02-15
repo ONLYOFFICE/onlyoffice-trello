@@ -1,6 +1,0 @@
-global:
-  scrape_interval: 5s
-scrape_configs:
-  - job_name: "onlyoffice"
-    static_configs:
-      - targets: ["4a54-152-89-163-22.ngrok.io"]
