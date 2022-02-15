@@ -20,3 +20,12 @@
   align-items: center;
   height: 100vh;
 }
+
+.onlyoffice-plugin {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.onlyoffice-plugin::-webkit-scrollbar{
+  display: none;
+}
