@@ -36,7 +36,7 @@ export function DesktopFile(
                   alt={file.name}
                   src={extIcon}
               />
-              <h2>{file.name}</h2>
+              <h2 id='file_container_item__main__header'>{file.name}</h2>
           </div>
           <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
               <p

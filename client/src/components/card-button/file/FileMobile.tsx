@@ -33,7 +33,9 @@ export function MobileFile(
               src={extIcon}
           />
           <div className='file_container_item__main_mobile'>
-              <h2>{file.name}</h2>
+              <h2 id='file_container_item__main__header'>
+                  {file.name}
+              </h2>
               <div className='file_container_item__main__text'>
                   <p className='file_container_item__main__text__item'>
                       {`${fileSize} MB`}

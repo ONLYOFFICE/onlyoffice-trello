@@ -27,11 +27,9 @@
 
 /* Layout */
 .file_container {
-  scroll-snap-type: y mandatory;
   -ms-overflow-style: none;
   scrollbar-width: none;
   overflow-y: scroll;
-  scroll-behavior: smooth;
 }
 
 .file_container::-webkit-scrollbar {
@@ -40,7 +38,6 @@
 
 .file_container_item {
   width: 100%;
-  scroll-snap-align: start;
   min-height: 7.5rem;
   display: flex;
   align-items: center;
@@ -70,10 +67,12 @@
   margin-left: 2rem;
 }
 
-.file_container_item__main > h2 {
-  white-space: nowrap;
+#file_container_item__main__header {
+  display: inline-block;
+  text-overflow: ellipsis;
   overflow: hidden;
-  text-overflow: clip;
+  white-space: nowrap;
+  width: calc(95%);
   margin: 0 0 0 1rem;
 }
 
@@ -86,9 +85,6 @@
 }
 
 .file_container_item__main_mobile > h2 {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: clip;
   margin: 0 0 0 1rem;
 }
 
@@ -105,8 +101,7 @@
   justify-content: flex-end;
   flex-grow: 0;
   flex-shrink: 1;
-  width: 30%;
-  margin-right: 1rem;
+  margin: 0 1rem 0 2rem;
 }
 
 .file_container_item__size {
