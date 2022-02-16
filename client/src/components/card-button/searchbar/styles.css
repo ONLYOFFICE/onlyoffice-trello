@@ -15,8 +15,10 @@
 */
 
 #onlyoffice_searchbar-container {
+  position: relative;
   display: flex;
   width: 50%;
+  min-height: 3rem;
   margin: 0;
   justify-content: end;
 }
@@ -38,9 +40,8 @@
 #onlyoffice_searchbar-container__btn,
 #onlyoffice_searchbar-container__btn:hover,
 #onlyoffice_searchbar-container__btn:focus {
-  position: absolute;
+  position: relative;
   transform: translateX(-5%);
-  float: left;
   padding: 10px;
   cursor: pointer;
   outline: none;

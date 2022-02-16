@@ -15,9 +15,10 @@
 */
 
 .onlyoffice_modal-header {
+  position: relative;
   display: flex;
   justify-content: space-between;
-  height: auto;
+  min-height: 4rem;
   margin-bottom: 1rem;
 }
 

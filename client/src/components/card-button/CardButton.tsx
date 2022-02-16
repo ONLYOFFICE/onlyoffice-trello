@@ -123,18 +123,16 @@ const CardButton = observer(() => {
               <Main>
                   <Header/>
                   <Info/>
-                  <>
-                      <div className='file_header'>
-                          <h2>{t('onlyoffice.card.files.header')}</h2>
-                          <div>
-                              <Dropdown/>
-                          </div>
+                  <div className='file_header'>
+                      <h2>{t('onlyoffice.card.files.header')}</h2>
+                      <div>
+                          <Dropdown/>
                       </div>
-                      <FileList
-                          files={filterFiles(files, store.card.filters)}
-                          openHandler={startEditor}
-                      />
-                  </>
+                  </div>
+                  <FileList
+                      files={filterFiles(files, store.card.filters)}
+                      openHandler={startEditor}
+                  />
               </Main>
               )}
           </>
