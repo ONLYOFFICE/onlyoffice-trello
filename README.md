@@ -21,12 +21,14 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 
 ## Configuring ONLYOFFICE Trello Power-Up
 
-You can configure ONLYOFFICE app via Power-Ups section within Trello (Board -> Power-Ups -> Add Power-Ups -> ONLYOFFICE).
+You can configure ONLYOFFICE app via Power-Ups section within Trello (Board -> Power-Ups -> ONLYOFFICE -> Settings -> Edit Power-Up settings).
 In the Settings window, enter:
 
 * **Document Server Address**: The URL of the installed ONLYOFFICE Document Server.
 
 * **JWT Secret**: Enables JWT to protect your documents from unauthorized access (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
+
+* **JWT Header**: If JWT protection is enabled, it is necessary to specify a custom header name. This header should be specified in the ONLYOFFICE Docs signature settings as well (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
 
 ## Using ONLYOFFICE Trello Power-Up
 
@@ -36,7 +38,7 @@ DOCX, XLSX, and PPTX files can be opened for editing. Other file formats are sup
 
 **Access rights**
 
-DOCX, XLSX, and PPTX files are available for editing for those who have access to the card with Admin and Normal rights, for viewing — for users with Observer rights.
+DOCX, XLSX, and PPTX files are available for editing for those who have access to the card with Admin and Normal rights, for viewing â€” for users with Observer rights.
 
 Other file formats are available for viewing for those who have access to the card.
 
