@@ -103,7 +103,8 @@ export const filterFiles = (files: Trello.PowerUp.Attachment[], filter: {
 }): Trello.PowerUp.Attachment[] => {
   let filtered = files;
   if (filter.search) {
-    filtered = files.filter((f) => f.name.includes(filter.search!));
+    filtered = files.
+      filter((f) => f.name.toLowerCase().includes(filter.search!.toLowerCase()));
   }
   if (filter.sortBy && filter.sortOrder) {
     filtered = filtered.sort(
