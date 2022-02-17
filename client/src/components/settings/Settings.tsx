@@ -104,7 +104,7 @@ export default function SettingsComponent(): JSX.Element {
                       disabled={saving}
                       type='text'
                       placeholder={defaultHeader}
-                      value={settingsData?.Header}
+                      value={settingsData?.Header || 'Authorization'}
                       autoComplete='on'
                       onChange={(e) => setSettingsData({
                         ...settingsData,
