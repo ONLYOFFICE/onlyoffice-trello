@@ -21,8 +21,10 @@ import {Trello} from 'types/trello';
 
 import {getIconByExt} from 'root/utils/file';
 
+import {OpenHandler} from './types';
+
 export function DesktopFile(
-  {file}: { file: Trello.PowerUp.Attachment },
+  {file, open}: { file: Trello.PowerUp.Attachment, open: OpenHandler },
 ): JSX.Element {
   const extIcon = getIconByExt(file.name.split('.')[1]);
   const fileSize = (file.bytes / 1000000).toFixed(2);
@@ -36,7 +38,20 @@ export function DesktopFile(
                   alt={file.name}
                   src={extIcon}
               />
-              <h2 id='file_container_item__main__header'>{file.name}</h2>
+              <h2 id='file_container_item__main__header'>
+                  <div
+                      role='button'
+                      tabIndex={0}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          open(file.id, file.name);
+                        }
+                      }}
+                      onClick={() => open(file.id, file.name)}
+                  >
+                      {file.name}
+                  </div>
+              </h2>
           </div>
           <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
               <p

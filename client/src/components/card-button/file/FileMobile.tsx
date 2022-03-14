@@ -21,8 +21,10 @@ import {Trello} from 'types/trello';
 
 import {getIconByExt} from 'root/utils/file';
 
+import {OpenHandler} from './types';
+
 export function MobileFile(
-  {file}: {file: Trello.PowerUp.Attachment},
+  {file, open}: { file: Trello.PowerUp.Attachment, open: OpenHandler },
 ): JSX.Element {
   const extIcon = getIconByExt(file.name.split('.')[1]);
   const fileSize = (file.bytes / 1000000).toFixed(2);
@@ -34,7 +36,18 @@ export function MobileFile(
           />
           <div className='file_container_item__main_mobile'>
               <h2 id='file_container_item__main__header'>
-                  {file.name}
+                  <div
+                      role='button'
+                      tabIndex={0}
+                      onKeyPress={(e) => {
+                        if (e.key === 'Enter') {
+                          open(file.id, file.name);
+                        }
+                      }}
+                      onClick={() => open(file.id, file.name)}
+                  >
+                      {file.name}
+                  </div>
               </h2>
               <div className='file_container_item__main__text'>
                   <p className='file_container_item__main__text__item'>

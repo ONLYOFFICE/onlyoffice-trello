@@ -48,8 +48,18 @@ export function File({file, openHandler} : {
 
   return (
       <div className='file_container_item'>
-          {isMobile && <MobileFile file={file}/>}
-          {!isMobile && <DesktopFile file={file}/>}
+          {isMobile && (
+          <MobileFile
+              file={file}
+              open={openHandler}
+          />
+          )}
+          {!isMobile && (
+          <DesktopFile
+              file={file}
+              open={openHandler}
+          />
+          )}
           <div className='file_container_item__controls'>
               <button type='button'>
                   <a
