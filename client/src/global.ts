@@ -22,7 +22,7 @@ import {Trello} from 'types/trello';
 import {ActionProps} from 'types/power-up';
 
 const actionProps: ActionProps = {
-  baseUrl: `${process.env.BACKEND_HOST}/64.png`,
+  baseUrl: `${window.location.href}/64.png`,
 };
 
 // @ts-ignore: Trello powerup initialization (power-up.min.js from their CDN)
