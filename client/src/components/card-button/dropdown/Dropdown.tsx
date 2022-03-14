@@ -114,7 +114,13 @@ export function Dropdown(): JSX.Element {
               styles={{
                 control: (css) => ({
                   ...css,
+                  position: 'relative',
                   width: '10rem',
+                  height: '45px',
+                }),
+                valueContainer: (css) => ({
+                  ...css,
+                  height: '45px',
                 }),
               }}
               closeMenuOnSelect={false}
