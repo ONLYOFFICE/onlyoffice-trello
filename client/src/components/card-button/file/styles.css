@@ -29,14 +29,9 @@
 
 /* Layout */
 .file_container {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+  scrollbar-width: 1rem;
   overflow-y: scroll;
   height: auto;
-}
-
-.file_container::-webkit-scrollbar {
-  display: none;
 }
 
 .file_container_item {
