@@ -41,7 +41,7 @@
 
 .file_container_item {
   width: 100%;
-  min-height: 7.5rem;
+  min-height: 6.5rem;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #ececec;
@@ -77,6 +77,8 @@
   white-space: nowrap;
   width: calc(95%);
   margin: 0 0 0 1rem;
+  font-size: 16px;
+  font-weight: 700;
 }
 
 .file_container_item__main_mobile {
