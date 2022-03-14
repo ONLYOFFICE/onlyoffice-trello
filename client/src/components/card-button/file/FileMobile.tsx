@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-element-interactions */
 /*
 * (c) Copyright Ascensio System SIA 2022
 *
@@ -35,19 +36,16 @@ export function MobileFile(
               src={extIcon}
           />
           <div className='file_container_item__main_mobile'>
-              <h2 id='file_container_item__main__header'>
-                  <div
-                      role='button'
-                      tabIndex={0}
-                      onKeyPress={(e) => {
-                        if (e.key === 'Enter') {
-                          open(file.id, file.name);
-                        }
-                      }}
-                      onClick={() => open(file.id, file.name)}
-                  >
-                      {file.name}
-                  </div>
+              <h2
+                  id='file_container_item__main__header'
+                  onKeyPress={(e) => {
+                    if (e.key === 'Enter') {
+                      open(file.id, file.name);
+                    }
+                  }}
+                  onClick={() => open(file.id, file.name)}
+              >
+                  {file.name}
               </h2>
               <div className='file_container_item__main__text'>
                   <p className='file_container_item__main__text__item'>

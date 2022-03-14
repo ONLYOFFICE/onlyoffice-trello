@@ -81,6 +81,10 @@
   font-weight: 700;
 }
 
+#file_container_item__main__header:hover {
+  cursor: pointer;
+}
+
 .file_container_item__main_mobile {
   display: flex;
   justify-self: flex-end;
