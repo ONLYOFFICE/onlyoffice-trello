@@ -103,6 +103,8 @@ const CardButton = observer(() => {
     }
   };
 
+  const isInitialized = !!docServerInfo?.docsAddress && !!docServerInfo?.docsJwt;
+
   return (
       <>
           {isError && <Error/>}
@@ -132,6 +134,7 @@ const CardButton = observer(() => {
                   <FileList
                       files={filterFiles(files, store.card.filters)}
                       openHandler={startEditor}
+                      isInitialized={isInitialized}
                   />
               </Main>
               )}

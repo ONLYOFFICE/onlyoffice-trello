@@ -31,9 +31,10 @@ const scroll = (): void => {
   }), 400);
 };
 
-export function FileList({files, openHandler}: {
+export function FileList({files, openHandler, isInitialized}: {
     files: Trello.PowerUp.Attachment[],
     openHandler: OpenHandler,
+    isInitialized: boolean,
 }): JSX.Element {
   scroll();
   return (
@@ -46,6 +47,7 @@ export function FileList({files, openHandler}: {
                   key={file.id}
                   file={file}
                   openHandler={openHandler}
+                  isInitialized={isInitialized}
               />
           ))}
       </div>

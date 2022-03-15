@@ -26,9 +26,11 @@ import {OpenHandler} from 'components/card-button/file/types';
 import download from 'public/images/download.svg';
 import './styles.css';
 
-export function File({file, openHandler} : {
+// TODO: Reafactoring (use store)
+export function File({file, openHandler, isInitialized} : {
   file: Trello.PowerUp.Attachment,
   openHandler: OpenHandler,
+  isInitialized: boolean,
 }): JSX.Element {
   const {t} = useTranslation();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 941);
@@ -52,12 +54,14 @@ export function File({file, openHandler} : {
           <MobileFile
               file={file}
               open={openHandler}
+              isInitialized={isInitialized}
           />
           )}
           {!isMobile && (
           <DesktopFile
               file={file}
               open={openHandler}
+              isInitialized={isInitialized}
           />
           )}
           <div className='file_container_item__controls'>
@@ -75,6 +79,7 @@ export function File({file, openHandler} : {
               {limitOK && (
               <button
                   type='button'
+                  disabled={!isInitialized}
                   onClick={() => openHandler(file.id, file.name)}
               >
                   {t('onlyoffice.files.file.open')}

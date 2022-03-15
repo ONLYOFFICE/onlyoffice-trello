@@ -121,6 +121,9 @@ export function Dropdown(): JSX.Element {
                 valueContainer: (css) => ({
                   ...css,
                   height: '45px',
+                  display: 'flex',
+                  justifyContent: 'center',
+                  alignContent: 'center',
                 }),
               }}
               closeMenuOnSelect={false}
