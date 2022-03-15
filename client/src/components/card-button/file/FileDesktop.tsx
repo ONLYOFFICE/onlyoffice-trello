@@ -49,6 +49,7 @@ export function DesktopFile(
                     }
                   }}
                   onClick={() => isInitialized && open(file.id, file.name)}
+                  title={file.name}
               >
                   {file.name}
               </h2>
