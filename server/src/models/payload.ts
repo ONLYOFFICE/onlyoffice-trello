@@ -30,6 +30,9 @@ export class EditorPayload {
     @IsDefined()
         token: string;
 
+    @IsDefined()
+        isWriteMember: boolean;
+
     @MinLength(10)
     @IsDefined()
         card: string;

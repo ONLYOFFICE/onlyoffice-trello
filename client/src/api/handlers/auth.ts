@@ -43,3 +43,7 @@ export async function getAuth(): Promise<string> {
 
   return token;
 }
+
+export function getBoardWriteMember(): boolean {
+  return !!(trello.getContext().permissions?.board === 'write');
+}

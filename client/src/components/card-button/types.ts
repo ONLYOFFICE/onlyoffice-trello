@@ -52,6 +52,7 @@ export type EditorPayload = {
     proxyResource: string;
     proxySecret?: string;
     token: string;
+    isWriteMember: boolean;
     card: string;
     attachment: string;
     filename: string;

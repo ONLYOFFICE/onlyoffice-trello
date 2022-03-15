@@ -66,7 +66,8 @@ export function Editor({payload, setError}: {
   const init = async (): Promise<void> => {
     const isEditable = isFileEditable(getFileExt(payload.filename));
     try {
-      const signature = await generateDocKeySignature(payload.attachment, isEditable);
+      const editMode = isEditable && payload.isWriteMember;
+      const signature = await generateDocKeySignature(payload.attachment, editMode);
       const form = (document.getElementById('onlyoffice-editor-form') as HTMLFormElement);
       form.action = `${process.env.BACKEND_HOST!}/onlyoffice/editor?signature=${signature}&lang=${window.locale}`;
       (document.getElementById('onlyoffice-editor-payload') as HTMLInputElement).

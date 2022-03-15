@@ -22,7 +22,7 @@ import {useTranslation} from 'react-i18next';
 
 import {fetchDocsInfo} from 'root/api/handlers/settings';
 import {fetchSupportedFiles, getCurrentCard} from 'root/api/handlers/card';
-import {getAuth} from 'root/api/handlers/auth';
+import {getAuth, getBoardWriteMember} from 'root/api/handlers/auth';
 import {useStore} from 'root/context';
 
 import {Header} from 'components/card-button/header/Header';
@@ -88,6 +88,7 @@ const CardButton = observer(() => {
           proxyResource: btoa(
             unescape(encodeURIComponent((JSON.stringify(resource)))),
           ),
+          isWriteMember: getBoardWriteMember(),
           attachment,
           card: currentCard!.id,
           filename,

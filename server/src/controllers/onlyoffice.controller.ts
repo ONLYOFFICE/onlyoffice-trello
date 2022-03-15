@@ -207,7 +207,7 @@ export class OnlyofficeController {
               id: me.id,
               name: me.username,
             },
-            mode: validPayload.isEditable ? 'edit' : 'view',
+            mode: validPayload.isEditable && validPayload.isWriteMember ? 'edit' : 'view',
             lang,
           },
           attachment: validPayload.attachment,
