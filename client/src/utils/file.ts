@@ -97,6 +97,12 @@ const AllowedExtensions = new Map<string, FileType>([
   ['txt', genericWord],
   ['fb2', genericWord],
   ['epub', genericWord],
+  ['djvu', genericWord],
+  ['xps', genericWord],
+  ['xml', genericWord],
+  ['html', genericWord],
+  ['htm', genericWord],
+  ['mht', genericWord],
 ]);
 
 export function getFileTypeByExt(fileExt: string): string {
