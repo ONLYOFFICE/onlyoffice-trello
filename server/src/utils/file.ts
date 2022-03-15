@@ -68,6 +68,12 @@ const AllowedExtensions = new Map([
   ['txt', ONLYOFFICE_WORD],
   ['fb2', ONLYOFFICE_WORD],
   ['epub', ONLYOFFICE_WORD],
+  ['djvu', ONLYOFFICE_WORD],
+  ['xps', ONLYOFFICE_WORD],
+  ['xml', ONLYOFFICE_WORD],
+  ['html', ONLYOFFICE_WORD],
+  ['htm', ONLYOFFICE_WORD],
+  ['mht', ONLYOFFICE_WORD],
 ]);
 //
 
