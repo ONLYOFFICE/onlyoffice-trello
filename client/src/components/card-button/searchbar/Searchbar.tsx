@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-import React, {useCallback, useState} from 'react';
+import React, {useState} from 'react';
 import {useTranslation} from 'react-i18next';
 
 import {useStore} from 'root/context';
@@ -26,14 +26,17 @@ export function Searchbar(): JSX.Element {
   const {t} = useTranslation();
   const store = useStore();
   const [query, setQuery] = useState<string>('');
-  const handleQuery = useCallback(() => {
+  const handleQuery = (): void => {
     store.card.filters.search = query;
-  }, [query, store]);
+  };
   return (
       <div id='onlyoffice_searchbar-container'>
           <input
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                store.card.filters.search = e.target.value;
+              }}
               onKeyPress={handleQuery}
               id='onlyoffice_searchbar-container__input'
               type='text'
