@@ -76,15 +76,14 @@ export function File({file, openHandler, isInitialized} : {
                       />
                   </a>
               </button>
-              {limitOK && (
               <button
                   type='button'
+                  style={limitOK ? {display: 'visible'} : {visibility: 'hidden'}}
                   disabled={!isInitialized}
                   onClick={() => openHandler(file.id, file.name)}
               >
                   {t('onlyoffice.files.file.open')}
               </button>
-              )}
           </div>
       </div>
   );
