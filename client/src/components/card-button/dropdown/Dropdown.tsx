@@ -115,7 +115,7 @@ export function Dropdown(): JSX.Element {
                 control: (css) => ({
                   ...css,
                   position: 'relative',
-                  width: '10rem',
+                  width: 'auto',
                   height: '45px',
                 }),
                 valueContainer: (css) => ({
