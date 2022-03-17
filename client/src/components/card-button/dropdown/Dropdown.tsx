@@ -115,15 +115,15 @@ export function Dropdown(): JSX.Element {
                 control: (css) => ({
                   ...css,
                   position: 'relative',
-                  width: 'auto',
+                  width: '13rem',
                   height: '45px',
                 }),
                 valueContainer: (css) => ({
                   ...css,
+                  position: 'relative',
                   height: '45px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignContent: 'center',
+                  display: 'inline-block',
+                  top: '25%',
                 }),
               }}
               closeMenuOnSelect={false}
