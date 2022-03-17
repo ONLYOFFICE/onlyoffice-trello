@@ -42,6 +42,9 @@ export default function SettingsComponent(): JSX.Element {
     const handler = async (): Promise<void> => {
       await i18n.changeLanguage(window.locale);
       const data = await fetchSettings();
+      if (!data.Header) {
+        data.Header = 'Authorization';
+      }
       setSettingsData(data);
       setLoading(false);
       await trello.sizeTo('#onlyoffice_settings');
@@ -104,7 +107,7 @@ export default function SettingsComponent(): JSX.Element {
                       disabled={saving}
                       type='text'
                       placeholder={defaultHeader}
-                      value={settingsData?.Header || 'Authorization'}
+                      value={settingsData?.Header}
                       autoComplete='on'
                       onChange={(e) => setSettingsData({
                         ...settingsData,
