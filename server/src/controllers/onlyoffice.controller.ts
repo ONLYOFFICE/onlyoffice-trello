@@ -30,6 +30,7 @@ import {
 import { Throttle } from '@nestjs/throttler';
 import { Request, Response } from 'express';
 import { Observable } from 'rxjs';
+import { parse } from 'express-useragent';
 
 import { DocumentServerThrottlerGuard } from '@guards/throttler';
 
@@ -151,6 +152,8 @@ export class OnlyofficeController {
       try {
         this.logger.debug(`A new editor request: ${form.payload}`);
         this.logger.debug(req.headers);
+        const source = req.headers['user-agent'];
+        const ua = parse(source);
         const documentKey = res.getHeader(this.constants.HEADER_ONLYOFFICE_DOC_KEY).toString();
         if (!documentKey) throw new Error('malformed document key');
         const payload = Object.setPrototypeOf(
@@ -195,6 +198,7 @@ export class OnlyofficeController {
           .sign(session, process.env.POWERUP_APP_ENCRYPTION_KEY, 60 * 60 * 10);
 
         const config: Config = {
+          type: ua.isMobile ? 'mobile' : 'desktop',
           document: {
             fileType: validPayload.fileExtension,
             key: documentKey,

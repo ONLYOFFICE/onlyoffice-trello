@@ -15,6 +15,7 @@
 */
 
 export type Config = {
+    type: string,
     document: Document,
     editorConfig: EditorConfig,
     token?: string,
