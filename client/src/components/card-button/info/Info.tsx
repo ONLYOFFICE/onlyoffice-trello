@@ -68,6 +68,7 @@ export function Info(): JSX.Element | null {
                     marginLeft: '1rem',
                     marginRight: '0.5rem',
                     width: '1rem',
+                    cursor: 'default',
                   }}
                   src={info as string}
               />
