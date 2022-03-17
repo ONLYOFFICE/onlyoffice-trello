@@ -13,6 +13,7 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+import i18next from 'i18next';
 
 import {trello} from 'root/api/client';
 import {generateSettingsSignature} from 'root/api/handlers/signature';
@@ -68,14 +69,14 @@ export const fetchSettings = async (): Promise<SettingsData> => {
         },
       );
       if (response.status !== 200) {
-        throw new Error('Could not get ONLYOFFICE settings');
+        throw new Error(i18next.t('onlyoffice.configure.save.failure.fetch'));
       }
       data.Jwt = await response.text();
     }
   } catch {
     data = {};
     await trello.alert({
-      message: 'Could not fetch ONLYOFFICE settings, try again later',
+      message: i18next.t('onlyoffice.configure.save.failure.fetch'),
       duration: 15,
       display: 'error',
     });
@@ -86,7 +87,7 @@ export const fetchSettings = async (): Promise<SettingsData> => {
 export const saveSettings = async (settings: SettingsData): Promise<void> => {
   if (!settings.Jwt || !settings.Header || !settings.Address) {
     await trello.alert({
-      message: 'Could not save ONLYOFFICE settings with empty fields',
+      message: i18next.t('onlyoffice.configure.save.failure.empty'),
       duration: 15,
       display: 'error',
     });
@@ -116,7 +117,7 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
       },
     );
     if (response.status !== 200) {
-      throw new Error('Could not save ONLYOFFICE settings');
+      throw new Error(i18next.t('onlyoffice.configure.save.failure'));
     }
     const secureSecret = await response.text();
     await Promise.all([
@@ -125,14 +126,14 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
       settingsHandler.set('docsJwt', secureSecret),
     ]);
     await trello.alert({
-      message: 'ONLYOFFICE settings have been saved',
+      message: i18next.t('onlyoffice.configure.save.success'),
       duration: 15,
       display: 'info',
     });
     await trello.closePopup();
   } catch {
     await trello.alert({
-      message: 'Could not save ONLYOFFICE settings',
+      message: i18next.t('onlyoffice.configure.save.failure'),
       duration: 15,
       display: 'error',
     });
