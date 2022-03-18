@@ -15,7 +15,6 @@
 */
 
 import React, {useState, useEffect} from 'react';
-import {useTranslation} from 'react-i18next';
 
 import {MobileFile} from 'components/card-button/file/FileMobile';
 import {DesktopFile} from 'components/card-button/file/FileDesktop';
@@ -23,7 +22,7 @@ import {DesktopFile} from 'components/card-button/file/FileDesktop';
 import {Trello} from 'types/trello';
 import {OpenHandler} from 'components/card-button/file/types';
 
-import download from 'public/images/download.svg';
+import {FileControls} from './FileControls';
 import './styles.css';
 
 // TODO: Reafactoring (use store)
@@ -32,7 +31,6 @@ export function File({file, openHandler, isInitialized} : {
   openHandler: OpenHandler,
   isInitialized: boolean,
 }): JSX.Element {
-  const {t} = useTranslation();
   const [isMobile, setIsMobile] = useState(() => window.innerWidth <= 941);
 
   useEffect(() => {
@@ -46,16 +44,21 @@ export function File({file, openHandler, isInitialized} : {
     };
   }, []);
 
-  const limitOK = parseFloat((file.bytes / 1000000).toFixed(2)) <= 1.5;
-
   return (
       <div className='file_container_item'>
           {isMobile && (
-          <MobileFile
-              file={file}
-              open={openHandler}
-              isInitialized={isInitialized}
-          />
+              <>
+                  <MobileFile
+                      file={file}
+                      open={openHandler}
+                      isInitialized={isInitialized}
+                  />
+                  <FileControls
+                      file={file}
+                      openHandler={openHandler}
+                      isInitialized={isInitialized}
+                  />
+              </>
           )}
           {!isMobile && (
           <DesktopFile
@@ -64,27 +67,6 @@ export function File({file, openHandler, isInitialized} : {
               isInitialized={isInitialized}
           />
           )}
-          <div className='file_container_item__controls'>
-              <button type='button'>
-                  <a
-                      href={file.url}
-                      download={true}
-                  >
-                      <img
-                          src={download as string}
-                          alt='onlyoffice_download'
-                      />
-                  </a>
-              </button>
-              <button
-                  type='button'
-                  style={limitOK ? {display: 'visible'} : {visibility: 'hidden'}}
-                  disabled={!isInitialized}
-                  onClick={() => openHandler(file.id, file.name)}
-              >
-                  {t('onlyoffice.files.file.open')}
-              </button>
-          </div>
       </div>
   );
 }

@@ -108,6 +108,10 @@
   margin: 0 1rem 0 2rem;
 }
 
+.file_container_item__controls > button {
+  margin-top: 0;
+}
+
 .file_container_item__size {
   text-align: center;
   flex-grow: 1;

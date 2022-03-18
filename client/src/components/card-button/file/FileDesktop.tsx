@@ -23,6 +23,7 @@ import {Trello} from 'types/trello';
 import {getIconByExt} from 'root/utils/file';
 
 import {OpenHandler} from './types';
+import {FileControls} from './FileControls';
 
 // TODO: Reafactoring (use store)
 export function DesktopFile(
@@ -54,17 +55,25 @@ export function DesktopFile(
                   {file.name}
               </h2>
           </div>
-          <div style={{display: 'flex', maxWidth: '40%', marginRight: '4rem'}}>
-              <p
-                  className='file_container_item__main__text__item'
-                  style={{marginRight: '4rem'}}
-              >
+          <div
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                width: '50%',
+                alignItems: 'center',
+              }}
+          >
+              <p style={{margin: 0}}>
                   {`${fileSize} MB`}
               </p>
-              {/* eslint-disable-next-line max-len */}
-              <p className='file_container_item__main__text__item file_container_item__main__text__item_long'>
+              <p style={{margin: 0}}>
                   {dateFormat(file.date, 'dd/m/yy HH:MM')}
               </p>
+              <FileControls
+                  file={file}
+                  openHandler={open}
+                  isInitialized={isInitialized}
+              />
           </div>
       </>
   );
