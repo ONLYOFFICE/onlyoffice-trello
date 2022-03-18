@@ -40,6 +40,10 @@ Eslint-plugin-promise - Enforce best practices for JavaScript promises. (https:/
 License:        ISC
 License File:   eslint-plugin-promise.license
 
+Express-useragent - express-useragent is a simple NodeJS/ExpressJS user-agent middleware exposing user-agent details to your application and views. (https://github.com/biggora/express-useragent)
+License:        MIT
+License File:   express-useragent.license
+
 Form-data     - A library to create readable "multipart/form-data" streams. Can be used to submit forms and file uploads to other web applications. (https://github.com/form-data/form-data)
 License:        MIT
 License File:   form-data.license
