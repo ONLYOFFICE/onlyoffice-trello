@@ -44,7 +44,7 @@ Other file formats are available for viewing for those who have access to the ca
 
 **Saving changes**
 
-The changes made are saved in a new file. The new file has the same name as the original file, with a postfix added to the file name.
+The changes made are saved in a new file. The new file has the same name as the original file.
 
 ## ONLYOFFICE Docs editions 
 
