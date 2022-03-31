@@ -20,6 +20,8 @@
     "onlyoffice.files.sort.by.modified": "已修改",
     "onlyoffice.files.error.header": "系统错误",
     "onlyoffice.files.error.body": "出错了。也许，服务正忙，或者您的设置/令牌有问题。请稍后再试或联系管理员",
+    "onlyoffice.enable.info.header": "Before we start",
+    "onlyoffice.enable.info.body": "Please make sure that the integration is configured by your administrator",
     "onlyoffice.files.file.open": "用 ONLYOFFICE 打开",
     "onlyoffice.files.info.main": "ONLYOFFICE Power-Up可以处理1.5MB以下的文件",
     "onlyoffice.files.info.footer": "再也不显示",

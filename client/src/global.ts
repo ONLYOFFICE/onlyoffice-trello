@@ -17,6 +17,7 @@
 /* eslint-disable */
 import {getCardButton} from 'components/card-button/action';
 import {getSettings} from 'components/settings/action';
+import {getEnableInfo} from 'components/on-enable/action';
 
 import {Trello} from 'types/trello';
 import {ActionProps} from 'types/power-up';
@@ -31,6 +32,12 @@ TrelloPowerUp.initialize(
     'card-buttons': (t: Trello.PowerUp.IFrame) => getCardButton(t, actionProps),
     'show-settings':
       (t: Trello.PowerUp.IFrame, options: any) => getSettings(t, options),
+    'on-enable': async (t: Trello.PowerUp.IFrame, options: any) => {
+      if (options.context.permissions?.organization === 'write') {
+        return getSettings(t, options);
+      }
+      return getEnableInfo(t);
+    },
   },
   {
     appName: process.env.POWERUP_NAME,

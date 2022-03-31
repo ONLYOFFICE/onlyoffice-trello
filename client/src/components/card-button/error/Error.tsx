@@ -19,13 +19,15 @@ import {useTranslation} from 'react-i18next';
 
 import './styles.css';
 
-export function Error(): JSX.Element {
+export function Error({header, body}: {header?: string, body?: string}): JSX.Element {
   const {t} = useTranslation();
   return (
       <div className='onlyoffice_error'>
-          <p className='onlyoffice_error__header'>{t('onlyoffice.files.error.header')}</p>
+          <p className='onlyoffice_error__header'>
+              {t(header || 'onlyoffice.files.error.header')}
+          </p>
           <p className='onlyoffice_error__text'>
-              {t('onlyoffice.files.error.body')}
+              {t(body || 'onlyoffice.files.error.body')}
           </p>
           <div className='onlyoffice_error__background'/>
           <div className='onlyoffice_error__background'/>

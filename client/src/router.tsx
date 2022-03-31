@@ -18,6 +18,7 @@ import React, {Suspense} from 'react';
 import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import 'root/i18n/index';
 
+const EnableInfo = React.lazy(() => import('components/on-enable/EnableInfo'));
 const CardButton = React.lazy(
   () => import('components/card-button/CardButton'),
 );
@@ -35,6 +36,10 @@ function TrelloRouter(): JSX.Element {
                   <Route
                       path='/show-settings'
                       element={<Settings/>}
+                  />
+                  <Route
+                      path='/on-enable'
+                      element={<EnableInfo/>}
                   />
               </Routes>
           </Router>

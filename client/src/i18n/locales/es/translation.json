@@ -20,6 +20,8 @@
     "onlyoffice.files.sort.by.modified": "Modificado",
     "onlyoffice.files.error.header": "Error del sistema",
     "onlyoffice.files.error.body": "Se ha producido un error. Quizás, el servicio está ocupado o hay un problema con su configuración o token. Por favor, inténtelo de nuevo más tarde o póngase en contacto con su administrador.",
+    "onlyoffice.enable.info.header": "Before we start",
+    "onlyoffice.enable.info.body": "Please make sure that the integration is configured by your administrator",
     "onlyoffice.files.file.open": "Abrir en ONLYOFFICE",
     "onlyoffice.files.info.main": "ONLYOFFICE Power-Up puede administrar archivos de menos de 1.5 MB",
     "onlyoffice.files.info.footer": "No volver a mostrar",
