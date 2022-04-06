@@ -30,7 +30,7 @@
 /* Layout */
 .file_container {
   scrollbar-width: 1rem;
-  overflow-y: scroll;
+  overflow-y: auto;
   height: auto;
 }
 
