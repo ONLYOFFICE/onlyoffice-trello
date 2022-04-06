@@ -51,6 +51,7 @@ function Menu(props: any): JSX.Element {
                   <button
                       type='button'
                       onClick={() => handleSortOrder(SortOrder.Asc)}
+                      onTouchStart={() => handleSortOrder(SortOrder.Asc)}
                       className='onlyoffice_dropdown__button'
                   >
                       {t('onlyoffice.card.files.sort.asc')}
@@ -61,6 +62,7 @@ function Menu(props: any): JSX.Element {
                   <button
                       type='button'
                       onClick={() => handleSortOrder(SortOrder.Desc)}
+                      onTouchStart={() => handleSortOrder(SortOrder.Desc)}
                       className='onlyoffice_dropdown__button'
                   >
                       {t('onlyoffice.card.files.sort.desc')}
@@ -127,6 +129,7 @@ export function Dropdown(): JSX.Element {
                 }),
               }}
               closeMenuOnSelect={false}
+              blurInputOnSelect={false}
               options={Options}
               defaultValue={selected}
               isSearchable={false}
