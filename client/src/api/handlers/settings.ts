@@ -28,21 +28,21 @@ import {validURL} from 'root/utils/validation';
 
 const settingsHandler = {
   get: async (type: TrelloSettings): Promise<string> => {
-    return trello.get('board', 'shared', type);
+    return trello.get('organization', 'shared', type);
   },
   getPrivate: async (type: TrelloSettings): Promise<string> => {
-    return trello.get('board', 'private', type);
+    return trello.get('organization', 'private', type);
   },
   set: async (type: TrelloSettings, value: string) => {
-    await trello.set('board', 'shared', type, value);
+    await trello.set('organization', 'shared', type, value);
   },
   setPrivate: async (type: TrelloSettings, value: string) => {
-    await trello.set('board', 'private', type, value);
+    await trello.set('organization', 'private', type, value);
   },
 };
 
 export const fetchDocsInfo = async (): Promise<DocServerInfo> => {
-  return await trello.get('board', 'shared') as DocServerInfo;
+  return await trello.get('organization', 'shared') as DocServerInfo;
 };
 
 export const fetchSettings = async (): Promise<SettingsData> => {
@@ -94,8 +94,8 @@ export const saveSettings = async (settings: SettingsData): Promise<void> => {
     return;
   }
   try {
-    const formattedAddress = settings.Address.
-      endsWith('/') ? settings.Address : `${settings.Address}/`;
+    const formattedAddress = settings.Address.trim().
+      endsWith('/') ? settings.Address.trim() : `${settings.Address.trim()}/`;
     const isValid = validURL(formattedAddress);
     if (!isValid) {
       throw new Error('Invalid URL format');

@@ -39,16 +39,29 @@ TrelloPowerUp.initialize(
   {
     'card-buttons': (t: Trello.PowerUp.IFrame) => getCardButton(t, actionProps),
     'show-settings':
-      (t: Trello.PowerUp.IFrame, options: any) => getSettings(t, options),
+      async (t: Trello.PowerUp.IFrame, options: any) => {
+        try {
+          const jwt = await t.jwt({});
+          const context = decode<Context>(jwt);
+          const shouldShow = options.context.permissions?.organization === 'write'
+            && context.organizationMembership === 'admin';
+          if (shouldShow) {
+            return getSettings(t);
+          }
+          return getEnableInfo(t);
+        } catch {}
+      },
     'on-enable': async (t: Trello.PowerUp.IFrame, options: any) => {
-      const jwt = await t.jwt({});
-      const context = decode<Context>(jwt);
-      const shouldShow = options.context.permissions?.organization === 'write'
-        && context.organizationMembership === 'admin';
-      if (shouldShow) {
-        return getSettings(t, options);
-      }
-      return getEnableInfo(t);
+      try {
+        const jwt = await t.jwt({});
+        const context = decode<Context>(jwt);
+        const shouldShow = options.context.permissions?.organization === 'write'
+          && context.organizationMembership === 'admin';
+        if (shouldShow) {
+          return getSettings(t);
+        }
+        return getEnableInfo(t);
+      } catch {}
     },
   },
   {
