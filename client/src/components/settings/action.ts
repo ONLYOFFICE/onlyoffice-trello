@@ -14,14 +14,25 @@
 * limitations under the License.
 */
 
+import decode from 'jwt-decode';
+
 import {Trello} from 'types/trello';
 import {SettingsOptions} from 'components/settings/types';
 
-export function getSettings(
+type Context = {
+  organizationMembership: string;
+  [key: string]: any;
+}
+
+export async function getSettings(
   t: Trello.PowerUp.IFrame,
   options: SettingsOptions,
-): PromiseLike<void> | undefined {
-  if (options.context.permissions?.organization === 'write') {
+): Promise<void> {
+  const jwt = await t.jwt({});
+  const context = decode<Context>(jwt);
+  const shouldShow = options.context.permissions?.organization === 'write'
+    && context.organizationMembership === 'admin';
+  if (shouldShow) {
     return t.popup({
       title: 'ONLYOFFICE',
       url: './show-settings',

@@ -14,6 +14,8 @@
 * limitations under the License.
 */
 
+import decode from 'jwt-decode';
+
 /* eslint-disable */
 import {getCardButton} from 'components/card-button/action';
 import {getSettings} from 'components/settings/action';
@@ -21,6 +23,12 @@ import {getEnableInfo} from 'components/on-enable/action';
 
 import {Trello} from 'types/trello';
 import {ActionProps} from 'types/power-up';
+
+
+type Context = {
+  organizationMembership: string;
+  [key: string]: any;
+}
 
 const actionProps: ActionProps = {
   baseUrl: `${window.location.href}/64.png`,
@@ -33,7 +41,11 @@ TrelloPowerUp.initialize(
     'show-settings':
       (t: Trello.PowerUp.IFrame, options: any) => getSettings(t, options),
     'on-enable': async (t: Trello.PowerUp.IFrame, options: any) => {
-      if (options.context.permissions?.organization === 'write') {
+      const jwt = await t.jwt({});
+      const context = decode<Context>(jwt);
+      const shouldShow = options.context.permissions?.organization === 'write'
+        && context.organizationMembership === 'admin';
+      if (shouldShow) {
         return getSettings(t, options);
       }
       return getEnableInfo(t);
