@@ -1,0 +1,187 @@
+/*
+* (c) Copyright Ascensio System SIA 2022
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+.file_header {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  min-height: 3em;
+  align-items: center;
+  padding: 0.5rem 0.9rem 0.5rem 0.2rem;
+}
+
+.file_header > * {
+  margin: 0;
+}
+
+/* Layout */
+.file_container {
+  scrollbar-width: 1rem;
+  overflow-y: auto;
+  height: auto;
+}
+
+.file_container_item {
+  width: 100%;
+  min-height: 6.5rem;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid #ececec;
+  flex-wrap: wrap;
+  flex-basis: 0;
+  transition: all 0.25s ease-in-out;
+}
+
+.file_container_item:hover{
+  box-shadow: 10px 5px 5px #ececec;
+}
+
+.file_container_item > {
+  overflow-x: scroll;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.file_container_item__main {
+  display: flex;
+  align-items: center;
+  flex: 3;
+  flex-grow: 3;
+  min-width: 12.5rem;
+  margin-left: 2rem;
+}
+
+#file_container_item__main__header {
+  display: inline-block;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: calc(95%);
+  margin: 0 0 0 1rem;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+#file_container_item__main__header:hover {
+  cursor: pointer;
+}
+
+.file_container_item__main_mobile {
+  display: flex;
+  justify-self: flex-end;
+  flex-direction: column;
+  min-width: 10rem;
+  margin-right: 1rem;
+}
+
+.file_container_item__main_mobile > h2 {
+  margin: 0 0 0 1rem;
+}
+
+.file_container_item__main_mobile > div {
+  display: flex;
+}
+
+.file_container_item__main__text {
+  margin: 0 0 0 0.7rem;
+}
+
+.file_container_item__controls {
+  display: flex;
+  justify-content: flex-end;
+  flex-grow: 0;
+  flex-shrink: 1;
+  margin: 0 1rem 0 2rem;
+}
+
+.file_container_item__controls > button {
+  margin-top: 0;
+}
+
+.file_container_item__size {
+  text-align: center;
+  flex-grow: 1;
+  overflow: hidden;
+  max-width: 4rem;
+}
+
+.file_container_item__updated {
+  flex-grow: 1;
+  text-align: center;
+  overflow: hidden;
+  max-width: 4rem;
+}
+
+.file_container_item__main__text__item {
+  margin: 0 0 0 5rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 5rem;
+}
+
+.file_container_item__main__text__item_long {
+  max-width: 12.5rem;
+}
+
+@media all and (max-width: 960px) {
+  .file_container_item__main__text__item {
+    margin: 0 0 0 0.3rem;
+  }
+  .file_container_item__main_mobile > h2 {
+    display: flex;
+  }
+  .file_container_item__controls {
+    width: auto;
+  }
+}
+
+@media all and (max-width: 290px) {
+  .file_container {
+    overflow: scroll;
+  }
+}
+
+@media all and (max-width: 645px) {
+  .file_container_item {
+    justify-content: center;
+    align-content: center;
+  }
+  .file_container_item__main {
+    margin-left: 2rem;
+  }
+  .file_container_item__controls {
+    margin-bottom: 1rem;
+  }
+  .file_container_item__main__text {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media all and (max-width: 582px) {
+  .file_container_item {
+    margin-top: 1rem;
+    display: block;
+  }
+}
+
+@media all and (max-width: 355px) {
+  .file_container_item__main {
+    margin: 0;
+  }
+}

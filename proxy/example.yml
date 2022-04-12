@@ -1,0 +1,10 @@
+server:
+  host: "127.0.0.1"
+  port: 8080
+  limit: 10
+  iplimit: 1
+  key: "11111111111111111111111111111111"
+proxy:
+  to: "example.com"
+  path: "/"
+  authvalue: ""

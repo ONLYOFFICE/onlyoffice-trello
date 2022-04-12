@@ -1,0 +1,142 @@
+/*
+* (c) Copyright Ascensio System SIA 2022
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*     http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+
+.onlyoffice_info-container {
+    position: relative;
+    width: 100%;
+    flex-grow: 0;
+    flex-shrink: 0;
+    min-height: 5rem;
+    box-shadow: 0px 4px 20px rgba(9, 30, 66, 0.2);
+    border-radius: 3px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+@keyframes fade {
+    0% {
+        opacity: 1;
+    }
+    5% {
+        opacity: 0.95;
+    }
+    10% {
+        opacity: 0.9;
+    }
+    15% {
+        opacity: 0.85;
+    }
+    20%{
+        opacity: 0.80;
+    }
+    25% {
+        opacity: 0.75;
+    }
+    30%{
+        opacity: 0.7;
+    }
+    35%{
+        opacity: 0.65;
+    }
+    40% {
+        opacity: 0.6;
+    }
+    45% {
+        opacity: 0.55;
+    }
+    50%{
+        opacity: 0.5;
+    }
+    55%{
+        opacity: 0.45;
+    }
+    60%{
+        opacity: 0.4;
+    }
+    65% {
+        opacity: 0.35;
+    }
+    70%{
+        opacity: 0.3;
+    }
+    75%{
+        opacity: 0.25;
+    }
+    80% {
+        opacity: 0.2;
+    }
+    85% {
+        opacity: 0.15;
+    }
+    90% {
+        opacity: 0.1;
+    }
+    95% {
+        opacity: 0.05;
+    }
+    100% {
+        opacity: 0;
+    }
+  }
+
+.onlyoffice_info-container_close {
+    animation: fade 310ms ease-in-out;
+}
+
+.onlyoffice_info-container__top {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.onlyoffice_info-container__bottom {
+    align-self: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: #0052CC;
+}
+
+.onlyoffice_info-container__text {
+    font-size: 1rem;
+    width: 100%;
+    margin-left: 0.5rem;
+}
+
+.onlyoffice_info-container__top_icon {
+    cursor: pointer;
+}
+
+@media all and (max-width: 583px) {
+    .onlyoffice_info-container__text {
+        font-size: 0.9rem;
+    }
+}
+
+@media all and (max-width: 525px) {
+    .onlyoffice_info-container__text {
+        font-size: 0.8rem;
+    }
+}
+
+@media all and (max-width: 411px) {
+    .onlyoffice_info-container__text {
+        font-size: 0.8rem;
+    }
+}
