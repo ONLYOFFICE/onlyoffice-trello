@@ -16,7 +16,7 @@
     "@atlaskit/icon": "^21.10.1",
     "@atlaskit/spinner": "^15.1.5",
     "core-js": "^3.20.3",
-    "crypto-js": "^4.1.1",
+    "crypto-js": "^4.2.0",
     "dateformat": "^5.0.2",
     "i18next": "^21.6.10",
     "i18next-http-backend": "^1.3.2",
