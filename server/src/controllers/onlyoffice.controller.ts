@@ -91,7 +91,7 @@ export class OnlyofficeController {
     }
 
     @Post('callback')
-    @Throttle(30, 1)
+    @Throttle({ default: { limit: 30, ttl: 1 } })
     @UseGuards(DocumentServerThrottlerGuard)
     async callback(
         @Query('session') encSession: string,
