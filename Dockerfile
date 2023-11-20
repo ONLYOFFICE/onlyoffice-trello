@@ -1,13 +1,13 @@
-FROM node:current-alpine AS build-server
+FROM node:18.16.1-alpine AS build-server
 LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
 WORKDIR /usr/src/app
 COPY ./server/package*.json ./
 RUN npm install
 COPY server .
-RUN npm run build && \
+RUN yarn build && \
     mv .env_example .env
 
-FROM node:current-alpine AS build-client
+FROM node:18.16.1-alpine AS build-client
 LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
 ARG ENABLE_BUNDLE_ANALYZER
 ARG SERVER_HOST
@@ -21,7 +21,7 @@ WORKDIR /usr/src/app
 COPY ./client/package*.json ./
 RUN npm install
 COPY client .
-RUN npm run build
+RUN yarn build
 
 FROM golang:alpine AS proxy
 WORKDIR /usr/src/app
@@ -30,7 +30,7 @@ RUN go build cmd/main.go
 EXPOSE 8080
 CMD ["./main"]
 
-FROM node:current-alpine AS server
+FROM node:18.16.1-alpine AS server
 WORKDIR /usr/src/app
 COPY --from=build-server \
      /usr/src/app/dist \
