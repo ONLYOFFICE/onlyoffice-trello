@@ -2,7 +2,7 @@ FROM node:18.16.1-alpine AS build-server
 LABEL maintainer Ascensio System SIA <support@onlyoffice.com>
 WORKDIR /usr/src/app
 COPY ./server/package*.json ./
-RUN npm install
+RUN yarn
 COPY server .
 RUN yarn build && \
     mv .env_example .env
@@ -19,7 +19,7 @@ ENV ENABLE_BUNDLE_ANALYZER=$ENABLE_BUNDLE_ANALYZER \
     POWERUP_APP_KEY=$POWERUP_APP_KEY
 WORKDIR /usr/src/app
 COPY ./client/package*.json ./
-RUN npm install
+RUN yarn
 COPY client .
 RUN yarn build
 
