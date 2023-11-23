@@ -38,7 +38,7 @@ export class SettingsController {
     ) {}
 
     @Post('/encrypt')
-    @Throttle(200, 1)
+    @Throttle({ default: { limit: 200, ttl: 1 } })
     async encryptDocumentServerSecret(
         @Body() payload: SettingsEncryptionPayload,
         @Req() req: Request,
@@ -64,7 +64,7 @@ export class SettingsController {
     }
 
     @Post('/decrypt')
-    @Throttle(200, 1)
+    @Throttle({ default: { limit: 200, ttl: 1 } })
     async decryptDocumentServerSecret(
       @Body() payload: SettingsEncryptionPayload,
       @Req() req: Request,

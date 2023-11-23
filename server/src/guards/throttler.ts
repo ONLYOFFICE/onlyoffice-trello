@@ -36,14 +36,13 @@ export class DocumentServerThrottlerGuard extends ThrottlerGuard {
     ttl: number,
   ): Promise<boolean> {
     const req = context.switchToHttp().getRequest() as Request;
-    const key = this.generateKey(context, req.ips[0]);
-    const ttls = await this.storageService.getRecord(key);
+    const key = this.generateKey(context, DocumentServerThrottlerGuard.name, req.ips[0]);
+    const ttls = await this.storageService.increment(key, 1);
 
-    if (ttls.length >= limit) {
+    if (ttls.totalHits >= limit) {
       throw new ThrottlerException('rate limit exceeded');
     }
 
-    await this.storageService.addRecord(key, ttl);
     return true;
   }
 }
