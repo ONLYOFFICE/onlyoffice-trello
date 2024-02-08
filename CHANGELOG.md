@@ -1,5 +1,9 @@
 # Change Log
 
+##
+## Added
+- Brazilian translation
+
 ## 1.0.0
 ## Added
 - configuration page
