@@ -91,13 +91,17 @@ export class ValidatorUtils {
       token,
     );
 
-    const fileInfo = await axios.head(fileUrl, {
+    const fileInfo = await axios.get(fileUrl, {
       headers: {
         Authorization: header.Authorization,
+        Range: 'bytes=0-1',
       },
     });
 
-    const fileSize = parseFloat(fileInfo.headers['content-length']) / 1000000;
+    const contentRange = fileInfo.headers['content-range'];
+    const contentLength = contentRange ? parseInt(contentRange.split('/')[1], 10) : null;
+
+    const fileSize = contentLength / 1000000;
     if (fileSize > 1.6) {
       throw new Error(`file [${fileUrl}] size limit has been exceeded`);
     }

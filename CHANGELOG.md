@@ -1,5 +1,12 @@
 # Change Log
 
+## 1.0.1
+## Added
+- Brazilian translation
+
+## Changed
+- update of vulnerable dependencies
+
 ## 1.0.0
 ## Added
 - configuration page

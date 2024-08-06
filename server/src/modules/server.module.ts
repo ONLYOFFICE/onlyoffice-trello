@@ -15,12 +15,12 @@
 */
 
 import {
-  CacheModule,
   Logger,
   MiddlewareConsumer,
   Module,
   NestModule,
 } from '@nestjs/common';
+import { CacheModule } from '@nestjs/cache-manager';
 import { ConfigModule } from '@nestjs/config';
 
 import { OnlyofficeController } from '@controllers/onlyoffice.controller';
@@ -46,8 +46,7 @@ import { EventService } from '@services/event.service';
     }),
     ConventionalHandlersModule,
     ThrottlerModule.forRoot({
-      ttl: 1,
-      limit: 200,
+      throttlers: [{ name: "base", limit: 200, ttl: 1 }]
     }),
     CacheModule.register({
       ttl: 40,

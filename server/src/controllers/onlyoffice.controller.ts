@@ -91,7 +91,7 @@ export class OnlyofficeController {
     }
 
     @Post('callback')
-    @Throttle(30, 1)
+    @Throttle({ default: { limit: 30, ttl: 1 } })
     @UseGuards(DocumentServerThrottlerGuard)
     async callback(
         @Query('session') encSession: string,
@@ -160,26 +160,38 @@ export class OnlyofficeController {
           JSON.parse(form.payload),
           EditorPayload.prototype,
         ) as EditorPayload;
+        this.logger.debug("Trying to decrypt docs secret");
         const documentServerSecret = JSON.parse(this.securityService
           .decrypt(payload.dsjwt, process.env.POWERUP_APP_ENCRYPTION_KEY)) as DocumentServerSecret;
+        this.logger.debug("Docs secret successfully decrypted");
+        this.logger.debug("Validating editor payload");
         const validPayload = await this.validationUtils.validateEditorPayload(payload);
+        this.logger.debug("Editor payload is valid");
 
+        this.logger.debug("Building trello file url");
         const fileUrl = this.fileUtils.buildTrelloFileUrl(validPayload);
+        this.logger.debug(`Trello file url ${fileUrl}`);
 
+        this.logger.debug("Validating file size");
         await this.validationUtils.validateFileSize(fileUrl, validPayload.token);
+        this.logger.debug("File size is valid")
 
         if (!validPayload.proxySecret) {
           validPayload.proxySecret = this
             .getDefaultProxySecret(fileUrl, validPayload.token, documentServerSecret.secret);
         }
 
+        this.logger.debug("Trying to get me");
         const me = await this.oauthUtil.authorizedGet(`${this.constants.URL_TRELLO_API_BASE}/members/me`, validPayload.token);
+        this.logger.debug(`Me: ${me}`);
 
         if (!me.id || !me.username) throw new Error('unknown user');
 
         const encryptedSecret = this.securityService
           .encrypt(documentServerSecret.secret, process.env.POWERUP_APP_ENCRYPTION_KEY);
+        this.logger.debug("Trying to set encrypted secret");
         await this.cacheManager.set(encryptedSecret, documentServerSecret.secret);
+        this.logger.debug("Encrypted secret is set");
 
         const encToken = this.securityService
           .encrypt(validPayload.token, process.env.POWERUP_APP_ENCRYPTION_KEY);
@@ -194,8 +206,10 @@ export class OnlyofficeController {
           Card: validPayload.card,
         };
 
+        this.logger.debug("Signing enc session");
         const encSession = this.securityService
           .sign(session, process.env.POWERUP_APP_ENCRYPTION_KEY, 60 * 60 * 10);
+        this.logger.debug("Enc session is signed");
 
         const config: Config = {
           type: ua.isMobile ? 'mobile' : 'desktop',
@@ -217,7 +231,9 @@ export class OnlyofficeController {
           attachment: validPayload.attachment,
         };
 
+        this.logger.debug("Signing editor config");
         config.token = this.securityService.sign(config, documentServerSecret.secret);
+        this.logger.debug(`Editor config has been signed: ${config.token}`);
 
         res.status(200);
         res.render('editor', {

@@ -125,5 +125,5 @@ export function isExtensionSupported(fileExt: string, edit?: boolean): boolean {
 }
 
 export function getFileExt(filename: string): string {
-  return filename.split('.')[1];
+  return filename.split('.').at(-1) || filename;
 }
