@@ -4,6 +4,9 @@
 ## Added
 - Brazilian translation
 
+## Changed
+- update of vulnerable dependencies
+
 ## 1.0.0
 ## Added
 - configuration page
