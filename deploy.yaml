@@ -30,7 +30,7 @@ spec:
             weight: 100
       containers:
       - name: onlyoffice-trello-server
-        image: onlyoffice/trello-server:1.0.0
+        image: onlyoffice/trello-server:1.0.1
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -137,7 +137,7 @@ spec:
             weight: 100
       containers:
       - name: onlyoffice-trello-client
-        image: onlyoffice/trello-client:1.0.0
+        image: onlyoffice/trello-client:1.0.1
         imagePullPolicy: IfNotPresent
         resources:
           requests:
@@ -212,7 +212,7 @@ spec:
             weight: 100
       containers:
       - name: onlyoffice-trello-proxy
-        image: onlyoffice/trello-proxy:1.0.0
+        image: onlyoffice/trello-proxy:1.0.1
         imagePullPolicy: IfNotPresent
         resources:
           requests:
