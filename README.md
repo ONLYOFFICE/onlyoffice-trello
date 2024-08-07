@@ -1,6 +1,6 @@
 # ONLYOFFICE Trello Power-Up
 
-This Power-Up enables users to edit office documents in [Trello](https://trello.com/en) using ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
+This Power-Up enables users to edit office documents in [Trello](https://trello.com/en) using ONLYOFFICE Docs Cloud or ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
 ## Features
 
@@ -9,9 +9,17 @@ The app allows to:
 * View and edit text documents, spreadsheets, and presentations.
 * Co-edit documents in real-time using two co-editing modes (Fast and Strict), Track Changes, comments, built-in chat.
 
-## Installing ONLYOFFICE Docs
+## Running ONLYOFFICE Docs
 
-To be able to edit documents in Trello, you will need an instance of ONLYOFFICE Docs (Document Server). You can install free Community version or scalable Enterprise Edition.
+To be able to edit documents in Trello, you will need an instance of ONLYOFFICE Docs. You can opt for ONLYOFFICE Docs Cloud or install the self-hosted version of the editors.
+
+**ONLYOFFICE Docs Cloud**
+
+ONLYOFFICE Docs Cloud doesn't require downloading and installation.
+
+To get ONLYOFFICE Docs Cloud, [get started here](https://www.onlyoffice.com/docs-registration.aspx).
+
+**Self-hosted editors**
 
 To install free Community version, use [Docker](https://github.com/onlyoffice/Docker-DocumentServer) (recommended) or follow [these instructions](https://helpcenter.onlyoffice.com/installation/docs-community-install-ubuntu.aspx) for Debian, Ubuntu, or derivatives.  
 
@@ -24,11 +32,13 @@ Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffi
 You can configure ONLYOFFICE app via Power-Ups section within Trello (Board -> Power-Ups -> ONLYOFFICE -> Settings -> Edit Power-Up settings).
 In the Settings window, enter:
 
-* **Document Server Address**: The URL of the installed ONLYOFFICE Document Server.
+* **Document Server Address**: The URL of your ONLYOFFICE Docs Cloud or the installed ONLYOFFICE Document Server.
 
 * **JWT Secret**: Enables JWT to protect your documents from unauthorized access (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
 
 * **JWT Header**: If JWT protection is enabled, it is necessary to specify a custom header name. This header should be specified in the ONLYOFFICE Docs signature settings as well (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
+
+Please note: if you are using ONLYOFFICE Docs Cloud, all the required data/details, including JWT settings, are sent to you via the registration email, or can be found via the Docs Cloud Admin Panel.
 
 ## Using ONLYOFFICE Trello Power-Up
 
@@ -48,7 +58,7 @@ The changes made are saved in a new file. The new file has the same name as the 
 
 ## ONLYOFFICE Docs editions 
 
-ONLYOFFICE offers different versions of its online document editors that can be deployed on your own servers.
+Self-hosted ONLYOFFICE Docs offers different versions of its online document editors that can be deployed on your own servers.
 
 **ONLYOFFICE Docs** packaged as Document Server: 
 
