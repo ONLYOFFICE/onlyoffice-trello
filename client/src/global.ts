@@ -26,7 +26,7 @@ import {ActionProps} from 'types/power-up';
 
 
 type Context = {
-  organizationMembership: string;
+  boardMembership: string;
   [key: string]: any;
 }
 
@@ -39,24 +39,22 @@ TrelloPowerUp.initialize(
   {
     'card-buttons': (t: Trello.PowerUp.IFrame) => getCardButton(t, actionProps),
     'show-settings':
-      async (t: Trello.PowerUp.IFrame, options: any) => {
+      async (t: Trello.PowerUp.IFrame) => {
         try {
           const jwt = await t.jwt({});
           const context = decode<Context>(jwt);
-          const shouldShow = options.context.permissions?.organization === 'write'
-            && context.organizationMembership === 'admin';
+          const shouldShow = context.boardMembership === 'admin';
           if (shouldShow) {
             return getSettings(t);
           }
           return getEnableInfo(t);
         } catch {}
       },
-    'on-enable': async (t: Trello.PowerUp.IFrame, options: any) => {
+    'on-enable': async (t: Trello.PowerUp.IFrame) => {
       try {
         const jwt = await t.jwt({});
         const context = decode<Context>(jwt);
-        const shouldShow = options.context.permissions?.organization === 'write'
-          && context.organizationMembership === 'admin';
+        const shouldShow = context.boardMembership === 'admin';
         if (shouldShow) {
           return getSettings(t);
         }
