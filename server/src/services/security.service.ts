@@ -111,7 +111,7 @@ export class SecurityService {
           const decoded = (verify(token, key) as any);
           return [
             JSON.parse(decoded.state),
-            decoded.organizationMembership,
+            decoded.boardMembership,
             decoded.idOrganization,
           ];
         } catch (err) {
