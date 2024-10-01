@@ -26,6 +26,7 @@ import {ActionProps} from 'types/power-up';
 
 
 type Context = {
+  organizationMembership: string;
   boardMembership: string;
   [key: string]: any;
 }
@@ -43,7 +44,8 @@ TrelloPowerUp.initialize(
         try {
           const jwt = await t.jwt({});
           const context = decode<Context>(jwt);
-          const shouldShow = context.boardMembership === 'admin';
+          const shouldShow = context.boardMembership === 'admin'
+            || context.organizationMembership === 'admin';
           if (shouldShow) {
             return getSettings(t);
           }
@@ -54,7 +56,8 @@ TrelloPowerUp.initialize(
       try {
         const jwt = await t.jwt({});
         const context = decode<Context>(jwt);
-        const shouldShow = context.boardMembership === 'admin';
+        const shouldShow = context.boardMembership === 'admin'
+          || context.organizationMembership === 'admin';
         if (shouldShow) {
           return getSettings(t);
         }
