@@ -46,6 +46,7 @@ type Context = {
 type AdminType = 'organization' | 'board';
 
 const defaultAddress = 'https://<host>/';
+const defaultSecret = 'secret';
 const defaultHeader = 'Authorization';
 
 export default function SettingsComponent(): JSX.Element {
@@ -56,6 +57,7 @@ export default function SettingsComponent(): JSX.Element {
   const [hasShared, setHasShared] = useState<boolean>(false);
   const [asLocal, setAsLocal] = useState<boolean>(false);
   const [hideSecret, setHideSecret] = useState(true);
+  const [hideHeader, setHideHeader] = useState(true);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   useEffect(() => {
@@ -74,9 +76,6 @@ export default function SettingsComponent(): JSX.Element {
         setAsLocal(true);
       }
       const data = await fetchSettings();
-      if (!data.Header) {
-        data.Header = 'Authorization';
-      }
       setHasShared(hasSharedData);
       setSettingsData(data);
       setLoading(false);
@@ -93,85 +92,128 @@ export default function SettingsComponent(): JSX.Element {
                   <Spinner size='large'/>
               </div>
               )}
-              {hasShared && adminType === 'board' && (
-              <>
-                  <p>{t('onlyoffice.configure.local.description')}</p>
-                  <label htmlFor='localSetting'>
-                      <input
-                          disabled={saving}
-                          type='checkbox'
-                          id='localSetting'
-                          checked={asLocal}
-                          onChange={(e) => {
-                            setSettingsData({
-                              Address: '',
-                              Jwt: '',
-                              Header: '',
-                            });
-                            setAsLocal(e.target.checked);
-                          }}
-                      />
-                      {t('onlyoffice.configure.local.checkbox')}
-                  </label>
-              </>
-              )}
               {!loading && (
-              <form>
-                  <p className='onlyoffice_settings_container__header'>
-                      {t('onlyoffice.configure.header')}
-                  </p>
-                  <p>{t('onlyoffice.ds.address')}</p>
-                  <input
-                      disabled={saving || (!asLocal && adminType === 'board')}
-                      type='text'
-                      placeholder={defaultAddress}
-                      value={settingsData?.Address}
-                      autoComplete='on'
-                      onChange={(e) => setSettingsData({
-                        ...settingsData,
-                        Address: e.target.value,
-                      })}
-                  />
-                  <p>{t('onlyoffice.ds.jwt.secret')}</p>
-                  <div style={{display: 'flex'}}>
+              <form style={{display: 'flex', flexDirection: 'column', rowGap: '16px'}}>
+                  <p style={{margin: '0'}}>{t('onlyoffice.configure.header')}</p>
+                  {hasShared && adminType === 'board' && (
+                  <div>
+                      <p style={{margin: '0 0 6px'}}>
+                          {t('onlyoffice.configure.local.description')}
+                      </p>
+                      <label
+                          htmlFor='localSetting'
+                          style={{display: 'flex', margin: '0'}}
+                      >
+                          <input
+                              style={{margin: '0 4px 0 0', boxShadow: 'none'}}
+                              disabled={saving}
+                              type='checkbox'
+                              id='localSetting'
+                              checked={asLocal}
+                              onChange={(e) => {
+                                setSettingsData({
+                                  Address: '',
+                                  Jwt: '',
+                                  Header: '',
+                                });
+                                setAsLocal(e.target.checked);
+                              }}
+                          />
+                          <span>{t('onlyoffice.configure.local.checkbox')}</span>
+                      </label>
+                  </div>
+                  )}
+                  <div>
+                      <p style={{margin: '0 0 8px'}}>{t('onlyoffice.ds.address')}</p>
                       <input
+                          style={{margin: '0'}}
                           disabled={saving || (!asLocal && adminType === 'board')}
-                          type={hideSecret ? 'password' : 'text'}
-                          placeholder='secret'
-                          value={settingsData?.Jwt}
+                          type='text'
+                          placeholder={defaultAddress}
+                          value={settingsData?.Address}
                           autoComplete='on'
                           onChange={(e) => setSettingsData({
                             ...settingsData,
-                            Jwt: e.target.value,
+                            Address: e.target.value,
                           })}
                       />
-                      <Button
-                          style={{marginTop: '0.125rem', marginLeft: '0.5rem'}}
-                          iconAfter={(
-                              <ShowIcon
-                                  label='show'
-                                  size='small'
-                              />
-                          )}
-                          onMouseDown={() => setHideSecret(false)}
-                          onMouseUp={() => setHideSecret(true)}
-                      />
                   </div>
-                  <p>{t('onlyoffice.ds.jwt.header')}</p>
-                  <input
-                      disabled={saving || (!asLocal && adminType === 'board')}
-                      type='text'
-                      placeholder={defaultHeader}
-                      value={settingsData?.Header}
-                      autoComplete='on'
-                      onChange={(e) => setSettingsData({
-                        ...settingsData,
-                        Header: e.target.value,
-                      })}
-                  />
+                  <div>
+                      <p style={{margin: '0 0 8px'}}>{t('onlyoffice.ds.jwt.secret')}</p>
+                      <div style={{position: 'relative'}}>
+                          <input
+                              style={{margin: '0'}}
+                              disabled={saving || (!asLocal && adminType === 'board')}
+                              type={hideSecret ? 'password' : 'text'}
+                              placeholder={defaultSecret}
+                              value={settingsData?.Jwt}
+                              autoComplete='on'
+                              onChange={(e) => setSettingsData({
+                                ...settingsData,
+                                Jwt: e.target.value,
+                              })}
+                          />
+                          <Button
+                              style={{
+                                position: 'absolute',
+                                top: '0',
+                                right: '0',
+                                marginTop: '0.125rem',
+                                backgroundColor: '#ffffff00',
+                              }}
+                              iconAfter={(
+                                  <ShowIcon
+                                      label='show'
+                                      size='small'
+                                  />
+                              )}
+                              onMouseDown={() => setHideSecret(false)}
+                              onMouseUp={() => setHideSecret(true)}
+                          />
+                      </div>
+                  </div>
+                  <div>
+                      <p style={{margin: '0 0 8px'}}>{t('onlyoffice.ds.jwt.header')}</p>
+
+                      <div style={{position: 'relative'}}>
+                          <input
+                              style={{margin: '0'}}
+                              disabled={saving || (!asLocal && adminType === 'board')}
+                              type={hideHeader ? 'password' : 'text'}
+                              placeholder={defaultHeader}
+                              value={settingsData?.Header}
+                              autoComplete='on'
+                              onChange={(e) => setSettingsData({
+                                ...settingsData,
+                                Header: e.target.value,
+                              })}
+                          />
+                          <Button
+                              style={{
+                                position: 'absolute',
+                                top: '0',
+                                right: '0',
+                                marginTop: '0.125rem',
+                                backgroundColor: '#ffffff00',
+                              }}
+                              iconAfter={(
+                                  <ShowIcon
+                                      label='show'
+                                      size='small'
+                                  />
+                              )}
+                              onMouseDown={() => setHideHeader(false)}
+                              onMouseUp={() => setHideHeader(true)}
+                          />
+                      </div>
+                  </div>
                   {adminType === 'organization' && (
-                  <label htmlFor='sharedSettings'>
+                  <label
+                      htmlFor='sharedSettings'
+                      style={{display: 'flex', margin: '0'}}
+                  >
                       <input
+                          style={{margin: '0 4px 0 0', boxShadow: 'none'}}
                           disabled={saving}
                           type='checkbox'
                           id='sharedSettings'
@@ -180,12 +222,14 @@ export default function SettingsComponent(): JSX.Element {
                             setAsShared(e.target.checked);
                           }}
                       />
-                      {t('onlyoffice.configure.share.checkbox')}
+                      <span>{t('onlyoffice.configure.share.checkbox')}</span>
                   </label>
                   )}
                   <Info/>
-                  <button
-                      disabled={saving}
+                  <Button
+                      style={{margin: '0', width: 'fit-content'}}
+                      appearance='primary'
+                      isDisabled={saving}
                       type='button'
                       // eslint-disable-next-line @typescript-eslint/no-misused-promises
                       onClick={async () => {
@@ -203,7 +247,7 @@ export default function SettingsComponent(): JSX.Element {
                       }}
                   >
                       {t('onlyoffice.configure.button')}
-                  </button>
+                  </Button>
               </form>
               )}
           </div>

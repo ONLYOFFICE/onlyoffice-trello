@@ -44,24 +44,32 @@ TrelloPowerUp.initialize(
         try {
           const jwt = await t.jwt({});
           const context = decode<Context>(jwt);
-          const shouldShow = context.boardMembership === 'admin'
-            || context.organizationMembership === 'admin';
-          if (shouldShow) {
-            return getSettings(t);
+          if (context.boardMembership === "none") {
+            return getEnableInfo(t);
+          } else {
+            const shouldShow = context.boardMembership === "admin"
+              || context.organizationMembership === "admin";
+            if (shouldShow) {
+              return getSettings(t);
+            }
+            return getEnableInfo(t);
           }
-          return getEnableInfo(t);
         } catch {}
       },
     'on-enable': async (t: Trello.PowerUp.IFrame) => {
       try {
         const jwt = await t.jwt({});
         const context = decode<Context>(jwt);
-        const shouldShow = context.boardMembership === 'admin'
-          || context.organizationMembership === 'admin';
-        if (shouldShow) {
-          return getSettings(t);
+        if (context.boardMembership === "none") {
+          return getEnableInfo(t);
+        } else {
+          const shouldShow = context.boardMembership === "admin"
+            || context.organizationMembership === "admin";
+          if (shouldShow) {
+            return getSettings(t);
+          }
+          return getEnableInfo(t);
         }
-        return getEnableInfo(t);
       } catch {}
     },
   },
