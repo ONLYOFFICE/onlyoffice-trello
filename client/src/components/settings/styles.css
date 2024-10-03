@@ -47,6 +47,10 @@
     transition: background-color 300ms ease-in-out;
 }
 
+#onlyoffice_settings input:disabled {
+    opacity: 0.4;
+}
+
 .onlyoffice_settings__info__button:hover,
 .onlyoffice_settings__info__button:active,
 .onlyoffice_settings__info__button:focus {

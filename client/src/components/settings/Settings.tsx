@@ -62,10 +62,14 @@ export default function SettingsComponent(): JSX.Element {
   const [saving, setSaving] = useState(false);
   useEffect(() => {
     const handler = async (): Promise<void> => {
+      await i18n.changeLanguage(window.locale);
+
       const jwt = await trello.jwt({});
       const context = decode<Context>(jwt);
       setAdminType(context.organizationMembership === 'admin' ? 'organization' : 'board');
-      await i18n.changeLanguage(window.locale);
+
+      const data = await fetchSettings();
+
       // eslint-disable-next-line react-hooks/rules-of-hooks
       const useShared = await useSharedSettings();
       const hasSharedData = await hasSharedSettings();
@@ -74,8 +78,11 @@ export default function SettingsComponent(): JSX.Element {
       }
       if (!useShared || !hasSharedData) {
         setAsLocal(true);
+      } else {
+        data.Jwt = '••••••';
+        data.Header = '••••••';
       }
-      const data = await fetchSettings();
+
       setHasShared(hasSharedData);
       setSettingsData(data);
       setLoading(false);
@@ -111,11 +118,16 @@ export default function SettingsComponent(): JSX.Element {
                               id='localSetting'
                               checked={asLocal}
                               onChange={(e) => {
-                                setSettingsData({
+                                const data = {
                                   Address: '',
                                   Jwt: '',
                                   Header: '',
-                                });
+                                };
+                                if (!e.target.checked) {
+                                  data.Jwt = '••••••';
+                                  data.Header = '••••••';
+                                }
+                                setSettingsData(data);
                                 setAsLocal(e.target.checked);
                               }}
                           />
