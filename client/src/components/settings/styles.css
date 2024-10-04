@@ -18,6 +18,14 @@
     padding: 4px;
 }
 
+.onlyoffice_board_access {
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
 .onlyoffice_settings_container__loader {
     display: flex;
     justify-content: center;
