@@ -91,8 +91,8 @@ export default function SettingsComponent(): JSX.Element {
       <div id='onlyoffice_settings'>
           {adminType === 'none' ? (
               <div className='onlyoffice_board_access'>
-                  <p style={{margin: '0'}}>You don&apos;t have access</p>
-                  <p style={{margin: '0'}}>Please Join this board and try again</p>
+                  <p style={{margin: '0'}}>{t('onlyoffice.configure.access.title')}</p>
+                  <p style={{margin: '0'}}>{t('onlyoffice.configure.access.description')}</p>
               </div>
           ) : (
               <div className='onlyoffice_settings_container'>

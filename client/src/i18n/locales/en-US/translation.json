@@ -13,6 +13,8 @@
     "onlyoffice.configure.local.description": "Workspace admin has already configured the connector. Do you want to change the settings?",
     "onlyoffice.configure.local.checkbox": "Change settings",
     "onlyoffice.configure.share.checkbox": "Apply settings to all boards",
+    "onlyoffice.configure.access.title": "You don't have access",
+    "onlyoffice.configure.access.description": "Please Join this board and try again",
     "onlyoffice.card.files.header": "Files",
     "onlyoffice.card.files.sort.placeholder": "Sorting",
     "onlyoffice.card.files.sort.asc": "Ascending",
