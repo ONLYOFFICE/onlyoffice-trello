@@ -211,6 +211,7 @@ export const saveSharedSettings = async (settings: SettingsData): Promise<void> 
         settingsHandler.removeOrganization('docsHeader'),
         settingsHandler.removeOrganization('docsJwt'),
         settingsHandler.setOrganization('docsHasShared', JSON.stringify(false)),
+        settingsHandler.setBoard('docsUseShared', JSON.stringify(false)),
       ]);
       await successSaveAlert();
       return;
@@ -226,6 +227,7 @@ export const saveSharedSettings = async (settings: SettingsData): Promise<void> 
       settingsHandler.setOrganization('docsHeader', settings.Header),
       settingsHandler.setOrganization('docsJwt', docsJwt),
       settingsHandler.setOrganization('docsHasShared', JSON.stringify(true)),
+      settingsHandler.setBoard('docsUseShared', JSON.stringify(true)),
     ]);
     await successSaveAlert();
   } catch {
