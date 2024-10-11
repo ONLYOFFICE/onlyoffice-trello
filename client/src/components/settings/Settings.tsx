@@ -41,6 +41,7 @@ import './styles.css';
 type Context = {
   organizationMembership: string;
   boardMembership: string;
+  idMember: string;
 }
 
 type AdminType = 'organization' | 'board' | 'none';
@@ -66,8 +67,15 @@ export default function SettingsComponent(): JSX.Element {
 
       const jwt = await trello.jwt({});
       const context = decode<Context>(jwt);
-      if (context.boardMembership !== 'none') {
-        setAdminType(context.organizationMembership === 'admin' ? 'organization' : 'board');
+      const {memberships} = await trello.board('memberships');
+      const member = memberships.find((m) => m.idMember === context.idMember);
+
+      const isBoardAdmin = member?.memberType === 'admin';
+      const isBoardMember = member?.memberType === 'admin' || member?.memberType === 'normal';
+      const isOrganizationAdmin = context.organizationMembership === 'admin';
+
+      if ((isOrganizationAdmin && isBoardMember) || isBoardAdmin) {
+        setAdminType(isOrganizationAdmin ? 'organization' : 'board');
         const data = await fetchSettings();
         // eslint-disable-next-line react-hooks/rules-of-hooks
         const useShared = await useSharedSettings();
