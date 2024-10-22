@@ -1,5 +1,9 @@
 # Change Log
 
+##
+## Added
+- the board administrator has access to the app settings
+
 ## 1.0.1
 ## Added
 - Brazilian translation
