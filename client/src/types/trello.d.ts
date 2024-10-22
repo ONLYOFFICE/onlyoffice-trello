@@ -14,7 +14,7 @@ declare global {
     }
 }
 
-export type TrelloSettings = 'docsAddress' | 'docsJwt' | 'docsHeader';
+export type TrelloSettings = 'docsAddress' | 'docsJwt' | 'docsHeader' | 'docsHasShared' | 'docsUseShared';
 
 export namespace Trello {
     namespace Callback {
