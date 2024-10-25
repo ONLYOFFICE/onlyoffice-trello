@@ -229,6 +229,9 @@ export class OnlyofficeController {
             lang,
           },
           attachment: validPayload.attachment,
+          events: {
+            onOutdatedVersion: () => window.location.reload(),
+          },
         };
 
         this.logger.debug("Signing editor config");
