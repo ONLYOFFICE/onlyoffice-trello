@@ -20,6 +20,7 @@ export type Config = {
     editorConfig: EditorConfig,
     token?: string,
     attachment: string,
+    events: Events,
 };
 
 type Document = {
@@ -39,4 +40,8 @@ type EditorConfig = {
 type User = {
     id: string,
     name: string,
+};
+
+type Events = {
+    onOutdatedVersion: Function,
 };
