@@ -27,7 +27,8 @@ import {ActionProps} from 'types/power-up';
 
 type Context = {
   organizationMembership: string;
-  [key: string]: any;
+  boardMembership: string;
+  idMember: string;
 }
 
 const actionProps: ActionProps = {
@@ -39,28 +40,36 @@ TrelloPowerUp.initialize(
   {
     'card-buttons': (t: Trello.PowerUp.IFrame) => getCardButton(t, actionProps),
     'show-settings':
-      async (t: Trello.PowerUp.IFrame, options: any) => {
+      async (t: Trello.PowerUp.IFrame) => {
         try {
           const jwt = await t.jwt({});
           const context = decode<Context>(jwt);
-          const shouldShow = options.context.permissions?.organization === 'write'
-            && context.organizationMembership === 'admin';
-          if (shouldShow) {
+          const {memberships} = await t.board('memberships');
+          const member = memberships.find((m) => m.idMember === context.idMember);
+          if (context.organizationMembership === "admin") {
             return getSettings(t);
+          } else {
+            if (member && member.memberType === "admin") {
+              return getSettings(t);
+            }
+            return getEnableInfo(t); 
           }
-          return getEnableInfo(t);
         } catch {}
       },
-    'on-enable': async (t: Trello.PowerUp.IFrame, options: any) => {
+    'on-enable': async (t: Trello.PowerUp.IFrame) => {
       try {
         const jwt = await t.jwt({});
         const context = decode<Context>(jwt);
-        const shouldShow = options.context.permissions?.organization === 'write'
-          && context.organizationMembership === 'admin';
-        if (shouldShow) {
+        const {memberships} = await t.board('memberships');
+        const member = memberships.find((m) => m.idMember === context.idMember);
+        if (context.organizationMembership === "admin") {
           return getSettings(t);
+        } else {
+          if (member && member.memberType === "admin") {
+            return getSettings(t);
+          }
+          return getEnableInfo(t); 
         }
-        return getEnableInfo(t);
       } catch {}
     },
   },
