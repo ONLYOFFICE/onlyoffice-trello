@@ -1,1 +1,1 @@
-ONLYOFFICE Trello Power-Up Proxy side
+ONLYOFFICE Power-Up for Trello Proxy side

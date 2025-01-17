@@ -1,4 +1,4 @@
-ONLYOFFICE Trello Power-Up uses code from the following 3rd party projects:
+ONLYOFFICE Power-Up for Trello uses code from the following 3rd party projects:
 
 Commitizen    - When you commit with Commitizen, you'll be prompted to fill out any required commit fields at commit time. (https://github.com/commitizen/cz-cli)
 License:        MIT

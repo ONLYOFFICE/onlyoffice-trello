@@ -1,4 +1,4 @@
-ONLYOFFICE Trello Power-Up Client uses code from the following 3rd party projects:
+ONLYOFFICE Power-Up for Trello Client uses code from the following 3rd party projects:
 
 Atlaskit/button - A button triggers an event or action. They let users know what will happen next. (https://www.npmjs.com/package/@atlaskit/button)
 License:        Apache-2.0

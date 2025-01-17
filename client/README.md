@@ -1,1 +1,1 @@
-ONLYOFFICE Trello Power-Up Client side
+ONLYOFFICE Power-Up for Trello Client side

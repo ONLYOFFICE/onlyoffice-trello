@@ -1,4 +1,4 @@
-# ONLYOFFICE Trello Power-Up
+# ONLYOFFICE Power-Up for Trello
 
 This Power-Up enables users to edit office documents in [Trello](https://trello.com/en) using ONLYOFFICE Docs Cloud or ONLYOFFICE Docs packaged as Document Server - [Community or Enterprise Edition](#onlyoffice-docs-editions).
 
@@ -27,7 +27,7 @@ To install Enterprise Edition, follow the instructions [here](https://helpcenter
 
 Community Edition vs Enterprise Edition comparison can be found [here](#onlyoffice-docs-editions).
 
-## Configuring ONLYOFFICE Trello Power-Up
+## Configuring ONLYOFFICE Power-Up for Trello
 
 You can configure ONLYOFFICE app via Power-Ups section within Trello (Board -> Power-Ups -> ONLYOFFICE -> Settings -> Edit Power-Up settings).
 In the Settings window, enter:
@@ -40,7 +40,7 @@ In the Settings window, enter:
 
 Please note: if you are using ONLYOFFICE Docs Cloud, all the required data/details, including JWT settings, are sent to you via the registration email, or can be found via the Docs Cloud Admin Panel.
 
-## Using ONLYOFFICE Trello Power-Up
+## Using ONLYOFFICE Power-Up for Trello
 
 Users are able to view, edit, and co-author documents uploaded to Trello board cards. The editor opens by clicking on the ONLYOFFICE button on the right Power-Ups panel. 
 

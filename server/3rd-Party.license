@@ -1,4 +1,4 @@
-ONLYOFFICE Trello Power-Up Server uses code from the following 3rd party projects:
+ONLYOFFICE Power-Up for Trello Server uses code from the following 3rd party projects:
 
 Axios         - Promise based HTTP client for the browser and node.js. (https://github.com/axios/axios)
 License:        MIT

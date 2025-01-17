@@ -1,4 +1,4 @@
-ONLYOFFICE Trello Power-Up Proxy uses code from the following 3rd party projects:
+ONLYOFFICE Power-Up for Trello Proxy uses code from the following 3rd party projects:
 
 Go-envconfig  - A Go library for parsing struct tags from environment variables. (https://github.com/sethvargo/go-envconfig)
 License:        Apache-2.0
