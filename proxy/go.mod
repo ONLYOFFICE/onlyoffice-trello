@@ -1,8 +1,7 @@
 module github.com/ONLYOFFICE/onlyoffice-trello
 
 go 1.21
-
-toolchain go1.21.0
+toolchain go1.23.7
 
 require (
 	github.com/go-playground/validator/v10 v10.17.0
@@ -13,7 +12,7 @@ require (
 	github.com/sethvargo/go-limiter v0.7.2
 	github.com/spf13/viper v1.18.2
 	go.uber.org/zap v1.26.0
-	golang.org/x/net v0.23.0
+	golang.org/x/net v0.36.0
 )
 
 require (
@@ -35,10 +34,10 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
-	golang.org/x/crypto v0.21.0 // indirect
+	golang.org/x/crypto v0.35.0 // indirect
 	golang.org/x/exp v0.0.0-20240112132812-db7319d0e0e3 // indirect
-	golang.org/x/sys v0.18.0 // indirect
-	golang.org/x/text v0.14.0 // indirect
+	golang.org/x/sys v0.30.0 // indirect
+	golang.org/x/text v0.22.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect
 	gopkg.in/natefinch/lumberjack.v2 v2.2.1 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
