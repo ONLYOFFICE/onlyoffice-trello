@@ -34,9 +34,9 @@ In the Settings window, enter:
 
 * **Document Server Address**: The URL of your ONLYOFFICE Docs Cloud or the installed ONLYOFFICE Document Server.
 
-* **JWT Secret**: Enables JWT to protect your documents from unauthorized access (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
+* **JWT Secret**: Enables JWT to protect your documents from unauthorized access (further information can be found [here](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/)).
 
-* **JWT Header**: If JWT protection is enabled, it is necessary to specify a custom header name. This header should be specified in the ONLYOFFICE Docs signature settings as well (further information can be found [here](https://api.onlyoffice.com/editors/signature/)).
+* **JWT Header**: If JWT protection is enabled, it is necessary to specify a custom header name. This header should be specified in the ONLYOFFICE Docs signature settings as well (further information can be found [here](https://api.onlyoffice.com/docs/docs-api/additional-api/signature/)).
 
 Please note: if you are using ONLYOFFICE Docs Cloud, all the required data/details, including JWT settings, are sent to you via the registration email, or can be found via the Docs Cloud Admin Panel.
 
