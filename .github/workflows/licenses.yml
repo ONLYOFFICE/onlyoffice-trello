@@ -1,0 +1,46 @@
+name: Licenses
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main, develop]
+
+jobs:
+  licences:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+      - name: Install NodeJS
+        uses: actions/setup-node@v6
+        with:
+          node-version: 22
+      - name: Install Dependencies - Root
+        run: yarn install
+      - name: Install Dependencies - Client
+        run: npm install
+        working-directory: ./client
+      - name: Install Dependencies - Server
+        run: yarn install
+        working-directory: ./server
+      - name: Check Licenses - Root
+        uses: ONLYOFFICE/check-licenses@v1
+        with:
+          project_license: Apache-2.0
+      - name: Check Licenses - Client
+        uses: ONLYOFFICE/check-licenses@v1
+        with:
+          project_license: Apache-2.0
+          working_directory: ./client
+      - name: Check Licenses - Proxy
+        uses: ONLYOFFICE/check-licenses@v1
+        with:
+          project_license: Apache-2.0
+          working_directory: ./proxy
+      - name: Check Licenses - Server
+        uses: ONLYOFFICE/check-licenses@v1
+        with:
+          project_license: Apache-2.0
+          working_directory: ./server
