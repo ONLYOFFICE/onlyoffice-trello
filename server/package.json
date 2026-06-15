@@ -30,7 +30,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.0",
     "express-useragent": "^1.0.15",
-    "form-data": "^3.0.1",
+    "form-data": "^3.0.5",
     "hbs": "^4.1.2",
     "helmet": "^4.6.0",
     "joi": "^17.5.0",
